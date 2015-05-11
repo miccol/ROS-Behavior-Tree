@@ -1,4 +1,4 @@
-#include <amazon_challenge_bt_core/DecoratorRetryNode.h>
+#include <DecoratorRetryNode.h>
 
 using namespace BT;
 
