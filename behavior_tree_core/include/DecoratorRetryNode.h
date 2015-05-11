@@ -1,7 +1,7 @@
 #ifndef DECORATORRETRYNODE_H
 #define DECORATORRETRYNODE_H
 
-#include <amazon_challenge_bt_core/ControlNode.h>
+#include <ControlNode.h>
 
 namespace BT
 {
