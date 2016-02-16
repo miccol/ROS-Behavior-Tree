@@ -8,7 +8,7 @@
 
   <buildtool_depend>catkin</buildtool_depend>
   <run_depend>behavior_tree_core</run_depend>
-  <run_depend>behavior_tree_actions</run_depend>
+  <run_depend>behavior_tree_leaves</run_depend>
 
   <export>
     <metapackage/>
