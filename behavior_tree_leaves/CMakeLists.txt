@@ -73,7 +73,7 @@ add_definitions(-Wall -g -O0 -Wno-deprecated -static -Bstatic -std=gnu++0x)
 ## Generate actions in the 'action' folder
 add_action_files(
   DIRECTORY action
-  FILES BT.action ObjectsList.action Detector.action
+  FILES BT.action
 )
 
 
