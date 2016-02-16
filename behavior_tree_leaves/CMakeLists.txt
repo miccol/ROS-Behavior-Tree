@@ -5,8 +5,9 @@ project(behavior_tree_leaves)
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
 ## is used, also find other catkin packages
 find_package(catkin REQUIRED COMPONENTS
-  actionlib
+  genmsg
   actionlib_msgs
+  actionlib
   message_generation
   roscpp
   roslib
