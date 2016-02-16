@@ -1,8 +1,0 @@
-#goal definition
-int32 parameter 
----
-#result definition # we don't need that now. But let's keep it.
-int32 status
----
-#feedback
-int32 status 
