@@ -1,8 +1,0 @@
-#goal definition
-int32 parameter #1 remove the current object from the list, 3 postopone the current objecty 
----
-#result definition # we don't need that now. But let's keep it.
-int32 status
----
-#feedback
-int32 status 
