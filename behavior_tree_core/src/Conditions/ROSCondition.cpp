@@ -21,11 +21,11 @@ void ROSCondition::Exec()
 
    // ROS_INFO("Waiting For the Acutator %s to start", Name);
 
-    actionlib::SimpleActionClient<behavior_tree_leaves::BTAction> ac(Name, true);
+    actionlib::SimpleActionClient<behavior_tree_core::BTAction> ac(Name, true);
     ac.waitForServer(); //will wait for infinite time until the server starts
     //ROS_INFO("Actuator %s Started", Name);
 
-    behavior_tree_leaves::BTGoal goal;
+    behavior_tree_core::BTGoal goal;
     while(true)
     {
 	

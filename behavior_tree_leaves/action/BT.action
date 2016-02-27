@@ -1,8 +1,0 @@
-#goal definition
-int32 parameter #no goal needed for BT tick. But It could be useful to have a parameter for action (e.g.goto x,y)
----
-#result definition RUNNING = 0, SUCCESS = 1, FAILURE = 2
-int32 status
----
-#feedback
-int32 status 

@@ -1,15 +1,14 @@
 <package>
-  <name>amazon_challenge_bt</name>
+  <name>behavior_tree</name>
   <version>0.0.0</version>
-  <description>BT for CVAP team Amazon Challenge</description>
+  <description>BehaviorTree</description>
   <maintainer email="michele.colledanchise@gmail.com">Michele Colledanchise</maintainer>
   <license>BSD</license>
-  <url type="website">https://bitbucket.org/cvapgoestoseattle/amazon_challenge_bt</url>
+
 
   <buildtool_depend>catkin</buildtool_depend>
-  <run_depend>amazon_challenge_bt_core</run_depend>
-  <run_depend>amazon_challenge_bt_actions</run_depend>
-
+  <run_depend>behavior_tree_leaves</run_depend>
+  <run_depend>behavior_tree_core</run_depend>
   <export>
     <metapackage/>
   </export>

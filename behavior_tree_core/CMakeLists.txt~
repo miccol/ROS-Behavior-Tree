@@ -6,12 +6,14 @@ project(behavior_tree_core)
 find_package(catkin REQUIRED COMPONENTS
   actionlib
   actionlib_msgs
-  behavior_tree_leaves
+  #behavior_tree_leaves
   message_generation
   roscpp
   rospy
   std_msgs
   roslaunch
+  genmsg
+
 )
 
 
@@ -24,9 +26,8 @@ add_action_files(
 
 
 generate_messages(
-  DEPENDENCIES actionlib_msgs std_msgs  # Or other packages containing msgs
+  DEPENDENCIES actionlib_msgs std_msgs #behavior_tree_leaves # Or other packages containing msgs
 )
-
 
 
 add_definitions(-Wall -lglut -lGL)
@@ -61,10 +62,7 @@ endif(NOT OPENGL_FOUND)
 
 INCLUDE_DIRECTORIES(${catkin_INCLUDE_DIRS} include)
 
-
-
 file(GLOB_RECURSE BTHeadLibrary include/*.h)
-
 
 set(BTSrcLibrary
 src/ActionNode.cpp
@@ -85,7 +83,6 @@ src/SequenceStarNode.cpp
 src/TreeNode.cpp
 src/Actions/ActionTestNode.cpp
 src/Conditions/ConditionTestNode.cpp
-
 src/Actions/ROSAction.cpp
 src/Conditions/ROSCondition.cpp
 )
@@ -99,8 +96,5 @@ add_dependencies(test behavior_tree_actions_generate_messages_cpp)
 add_executable(tree src/tree.cpp ${BTSrcLibrary} ${BTHeadLibrary})
 target_link_libraries(tree ${catkin_LIBRARIES} ${OPENGL_LIBRARIES} ${GLUT_LIBRARY})
 add_dependencies(tree behavior_tree_actions_generate_messages_cpp)
-
-
-
 
 

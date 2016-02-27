@@ -14,6 +14,7 @@ find_package(catkin REQUIRED COMPONENTS
   tf
   rospy
   std_msgs
+  behavior_tree_core
 )
 
 ## System dependencies are found with CMake's conventions
@@ -71,10 +72,10 @@ add_definitions(-Wall -g -O0 -Wno-deprecated -static -Bstatic -std=gnu++0x)
 # )
 
 ## Generate actions in the 'action' folder
-add_action_files(
-  DIRECTORY action
-  FILES BT.action
-)
+#add_action_files(
+#  DIRECTORY action
+#  FILES BT.action
+#)
 
 
 
@@ -88,9 +89,9 @@ add_action_files(
 ## Generate added messages and services with any dependencies listed here
 
 
-generate_messages(
-  DEPENDENCIES actionlib_msgs std_msgs  # Or other packages containing msgs
-)
+#generate_messages(
+#  DEPENDENCIES actionlib_msgs std_msgs behavior_tree_core# Or other packages containing msgs
+#)
 
 
 # generate_messages(
@@ -135,7 +136,7 @@ include_directories(
 #   src/${PROJECT_NAME}/learning_actionlib.cpp
 # )
 
-set(COMMON_LIB ${catkin_LIBRARIES} ${Boost_LIBRARIES} ${ALPROXIES_LIBRARIES} ${ALCOMMON_LIBRARIES} ${ALVALUE_LIBRARIES})
+set(COMMON_LIB ${catkin_LIBRARIES} ${Boost_LIBRARIES})
 
 
 add_executable(ActionClient src/ActionClient.cpp)
@@ -149,10 +150,12 @@ add_dependencies(
  ActionClient
   ${behavior_tree_leaves_EXPORTED_TARGETS}
   ${PROJECT_NAME}_generate_messages_cpp
+  behavior_tree_core_generate_messages_cpp
 )
 
 
 add_executable(ConditionClient src/ConditionClient.cpp)
+
 
 target_link_libraries(
   ConditionClient
@@ -163,6 +166,8 @@ add_dependencies(
  ConditionClient
   ${behavior_tree_leaves_EXPORTED_TARGETS}
   ${PROJECT_NAME}_generate_messages_cpp
+  behavior_tree_core_generate_messages_cpp
+
 )
 
 
@@ -178,6 +183,7 @@ add_dependencies(
  ActionExample
   ${behavior_tree_leaves_EXPORTED_TARGETS}
   ${PROJECT_NAME}_generate_messages_cpp
+  behavior_tree_core_generate_messages_cpp
 )
 
 
@@ -192,6 +198,7 @@ add_dependencies(
  ConditionExample
   ${behavior_tree_leaves_EXPORTED_TARGETS}
   ${PROJECT_NAME}_generate_messages_cpp
+  behavior_tree_core_generate_messages_cpp
 )
 
 

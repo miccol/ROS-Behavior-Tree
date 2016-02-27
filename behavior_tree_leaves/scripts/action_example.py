@@ -5,7 +5,7 @@ import rospy
 
 import actionlib
 
-import behavior_tree_leaves.msg
+import behavior_tree_core.msg
 
 
 

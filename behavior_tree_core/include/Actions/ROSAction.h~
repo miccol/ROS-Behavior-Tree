@@ -5,7 +5,7 @@
 
 #include <actionlib/client/simple_action_client.h>
 #include <actionlib/client/terminal_state.h>
-#include <behavior_tree_leaves/BTAction.h>
+#include <behavior_tree_core/BTAction.h>
 namespace BT
 {
     class ROSAction : public ActionNode
@@ -23,8 +23,8 @@ namespace BT
 
   	//actionlib::SimpleActionClient<bt_actions::BTAction> ac();
 
-	  behavior_tree_actions::BTResult node_result;
-          behavior_tree_actions::BTGoal goal;
+	  behavior_tree_leaves::BTResult node_result;
+          behavior_tree_leaves::BTGoal goal;
     };
 }
 

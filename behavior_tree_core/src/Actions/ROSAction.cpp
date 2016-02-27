@@ -25,12 +25,12 @@ void ROSAction::Exec()
 	  // true causes the client to spin its own thread
     ROS_INFO("Waiting For the Acutator %s to start", Name.c_str());
 
-      actionlib::SimpleActionClient<behavior_tree_leaves::BTAction> ac(Name, true);
+      actionlib::SimpleActionClient<behavior_tree_core::BTAction> ac(Name, true);
 
       ac.waitForServer(); //will wait for infinite time until the server starts
       ROS_INFO("Tthe Acutator %s has started", Name.c_str());
 
-      behavior_tree_leaves::BTGoal goal;
+      behavior_tree_core::BTGoal goal;
       node_result.status = RUNNING;//
     while(true)
     {

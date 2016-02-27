@@ -1,6 +1,6 @@
 #include <ros/ros.h>
 #include <actionlib/server/simple_action_server.h>//actionlib
-#include <behavior_tree_leaves/BTAction.h>//Definition of action. see /scr/action
+#include <behavior_tree_core/BTAction.h>
 
 
 
@@ -14,11 +14,11 @@ protected:
 
   ros::NodeHandle nh_;
   // NodeHandle instance must be created before this line. Otherwise strange error may occur.
-  actionlib::SimpleActionServer<behavior_tree_leaves::BTAction> as_;
+  actionlib::SimpleActionServer<behavior_tree_core::BTAction> as_;
   std::string action_name_;
   // create messages that are used to published feedback/result
-  behavior_tree_leaves::BTFeedback feedback_;
-  behavior_tree_leaves::BTResult result_;
+  behavior_tree_core::BTFeedback feedback_;
+  behavior_tree_core::BTResult result_;
 
 
 
@@ -39,7 +39,7 @@ public:
   {
 
   }
-  void executeCB(const behavior_tree_leaves::BTGoalConstPtr &goal)
+  void executeCB(const behavior_tree_core::BTGoalConstPtr &goal)
   {
     if(true){
     setStatus(SUCCESS);

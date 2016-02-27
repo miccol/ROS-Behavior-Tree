@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <package>
-  <name>behavior_tree_actions</name>
+  <name>behavior_tree_leaves</name>
   <version>0.0.0</version>
   <description>The behavior_tree_actions package</description>
 

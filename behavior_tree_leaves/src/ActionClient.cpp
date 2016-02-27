@@ -1,7 +1,7 @@
 #include <ros/ros.h>
 #include <actionlib/client/simple_action_client.h>
 #include <actionlib/client/terminal_state.h>
-#include <behavior_tree_leaves/BTAction.h>
+#include <behavior_tree_core/BTAction.h>
 
 
 int main (int argc, char **argv)
@@ -10,13 +10,13 @@ int main (int argc, char **argv)
 
   // create the action client
   // true causes the client to spin its own thread
-  actionlib::SimpleActionClient<behavior_tree_leaves::BTAction> ac("action", true);
-    behavior_tree_leaves::BTResult node_result;
+  actionlib::SimpleActionClient<behavior_tree_core::BTAction> ac("action", true);
+    behavior_tree_core::BTResult node_result;
   ROS_INFO("Waiting for action server to start.");
   // wait for the action server to start
   ac.waitForServer(); //will wait for infinite time
 
-  behavior_tree_leaves::BTGoal goal;
+  behavior_tree_core::BTGoal goal;
   //goal.order = 20;
 
 
