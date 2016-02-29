@@ -12,8 +12,8 @@ import behavior_tree_core.msg
 
 class BTAction(object):
   # create messages that are used to publish feedback/result
-  _feedback = behavior_tree_leaves.msg.BTFeedback()
-  _result   = behavior_tree_leaves.msg.BTResult()
+  _feedback = behavior_tree_core.msg.BTFeedback()
+  _result   = behavior_tree_core.msg.BTResult()
 
   def __init__(self, name):
     self._action_name = name
