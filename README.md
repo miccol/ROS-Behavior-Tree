@@ -1,7 +1,7 @@
 ROS-Behavior-Tree ![License MIT](https://img.shields.io/dub/l/vibe-d.svg)
 ====
 ![Version](https://img.shields.io/badge/version-v1.1-orange.svg) <br/> 
-A ROS behavior tree library. The leaf node (user defined) can be either in `C++` or `python`.
+A ROS behavior tree library. The leaf nodes (user defined) can be either in `C++` or `python`.
 
 
 INFO
@@ -12,7 +12,7 @@ behavior_tree_core: Contains the core BT source code.
 
 behavior_tree_leaves: Contains action and condition specifications for BT leaf nodes
 
-User manual available in the project folder.
+User manual available in the project folder (BTUserManual.pdf):
 
 
 
@@ -65,7 +65,6 @@ BT NODES SUPPORT
 **Condition:** A Condition node determines if a desired condition `c` has been met. Conditions are technically a subset of the Actions, but are given a separate category and graphical symbol to improve readability of the BT and emphasize the fact that they never return running and do not change any internal states/variables of the BT.
 
 
-User manual available in the project folder (BTUserManual.pdf):
 
 
 
@@ -76,7 +75,7 @@ The first step to use BT++ is to retrieve its source code. You can either downlo
 here (https://github.com/miccol/Behavior-Tree) or clone the repository:
 
 `$ cd /path/to/catkin_ws/src` <br/>
-`$ git clone https://github.com/miccol/ROS-Behavior-Tree.git`
+`$ git clone https://github.com/miccol/ROS-Behavior-Tree.git`<br/>
 `$ mv Behavior−Tree behavior_tree` <br/>
 
 Once you have the repository. Compile the library:
