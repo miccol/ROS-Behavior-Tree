@@ -25,7 +25,7 @@ add_action_files(
 
 
 generate_messages(
-  DEPENDENCIES actionlib_msgs std_msgs #behavior_tree_leaves # Or other packages containing msgs
+  DEPENDENCIES actionlib_msgs std_msgs # Or other packages containing msgs
 )
 
 
