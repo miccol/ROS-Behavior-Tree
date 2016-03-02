@@ -6,7 +6,7 @@ project(behavior_tree_core)
 find_package(catkin REQUIRED COMPONENTS
   actionlib
   actionlib_msgs
-  #behavior_tree_leaves
+  behavior_tree_leaves#needed for roslaunch test on jekins
   message_generation
   roscpp
   rospy
@@ -16,8 +16,8 @@ find_package(catkin REQUIRED COMPONENTS
 
 )
 
-
 roslaunch_add_file_check(launch)
+
 
 add_action_files(
   DIRECTORY action
