@@ -1,5 +1,0 @@
-<launch>
-  <node name="action" pkg="behavior_tree_leaves" type="ActionExample" />
-  <node name="condition" pkg="behavior_tree_leaves" type="ConditionExample" />
-  <node name="tree" pkg="behavior_tree_core" type="tree" />
-</launch>
