@@ -5,7 +5,8 @@
   This package provides a behavior trees framework in ROS.
   </description>
   <maintainer email="michele.colledanchise@gmail.com">Michele Colledanchise</maintainer>
-  <license>BSD</license>
+  <license>MIT</license>
+  <author>Michele Colledanchise</author>
 
   <buildtool_depend>catkin</buildtool_depend>
   <build_depend>message_generation</build_depend>
