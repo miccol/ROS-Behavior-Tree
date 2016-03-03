@@ -72,7 +72,7 @@ SETUP
 -----------
 
 The first step to use BT++ is to retrieve its source code. You can either download it 
-here (https://github.com/miccol/Behavior-Tree) or clone the repository:
+here (https://github.com/miccol/ROS-Behavior-Tree) or clone the repository:
 
 `$ cd /path/to/catkin_ws/src` <br/>
 `$ git clone https://github.com/miccol/ROS-Behavior-Tree.git`<br/>
@@ -85,7 +85,7 @@ Once you have the repository. Compile the library:
 
 Check the installation by launching an example.
 
-`$ roslaunch behavior_tree_core test_behavior_tree.launch` <br/>
+`$ roslaunch behavior_tree_leaves test_behavior_tree.launch` <br/>
 
 LICENSE
 -------
