@@ -15,6 +15,8 @@ find_package(catkin REQUIRED COMPONENTS
   rospy
   std_msgs
   behavior_tree_core
+  roslaunch
+
 )
 roslaunch_add_file_check(launch)
 ## System dependencies are found with CMake's conventions
