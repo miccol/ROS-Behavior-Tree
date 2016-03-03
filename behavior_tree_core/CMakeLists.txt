@@ -15,8 +15,6 @@ find_package(catkin REQUIRED COMPONENTS
 
 )
 
-roslaunch_add_file_check(launch)
-
 
 add_action_files(
   DIRECTORY action
