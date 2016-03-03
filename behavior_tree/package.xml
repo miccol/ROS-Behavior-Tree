@@ -4,6 +4,7 @@
   <description>BehaviorTree</description>
   <maintainer email="michele.colledanchise@gmail.com">Michele Colledanchise</maintainer>
   <license>BSD</license>
+  <author>Michele Colledanchise</author>
 
 
   <buildtool_depend>catkin</buildtool_depend>
