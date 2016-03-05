@@ -2,10 +2,12 @@
   <name>behavior_tree</name>
   <version>1.0.0</version>
   <description>A ROS behavior tree library. The leaf nodes (user defined) can be either in C++ or python</description>
+
   <maintainer email="michele.colledanchise@gmail.com">Michele Colledanchise</maintainer>
   <license>MIT</license>
   <author>Michele Colledanchise</author>
-
+  <author>Rocco Santomo</author>
+  <author>Petter Ögren</author>
 
   <buildtool_depend>catkin</buildtool_depend>
   <run_depend>behavior_tree_core</run_depend>
