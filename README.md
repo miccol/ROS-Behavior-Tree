@@ -29,13 +29,13 @@ BUILD STATUS
   </tr>
     <td><b>Release</b></td>
     <td align="center">
-      <img src="https://img.shields.io/travis/rust-lang/rust.svg"/>
+      <img src="http://build.ros.org/view/Jdev/job/Jdev__behavior_tree__ubuntu_trusty_amd64/badge/icon"/>
     </td>
     <td align="center">
-      <img src="https://img.shields.io/travis/rust-lang/rust.svg"/>
+      <img src="http://build.ros.org/view/Jdev/job/Jdev__behavior_tree__ubuntu_trusty_amd64/badge/icon"/>
     </td>
     <td align="center">
-      <img src="https://img.shields.io/travis/rust-lang/rust.svg"/>
+      <img src="http://build.ros.org/view/Jdev/job/Jdev__behavior_tree__ubuntu_trusty_amd64/badge/icon"/>
     </td>
 </tr>
 </table>
