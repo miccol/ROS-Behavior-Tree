@@ -13,11 +13,11 @@ protected:
 
   ros::NodeHandle nh_;
   // NodeHandle instance must be created before this line. Otherwise strange error may occur.
-  actionlib::SimpleActionServer<behavior_tree_leaves::BTAction> as_;
+  actionlib::SimpleActionServer<behavior_tree_core::BTAction> as_;
   std::string action_name_;
   // create messages that are used to published feedback/result
-  behavior_tree_leaves::BTFeedback feedback_; //action feedback (SUCCESS, FAILURE)
-  behavior_tree_leaves::BTResult result_;//action feedback  (same as feedback for us)
+  behavior_tree_core::BTFeedback feedback_; //action feedback (SUCCESS, FAILURE)
+  behavior_tree_core::BTResult result_;//action feedback  (same as feedback for us)
 
 
 public:
@@ -39,7 +39,7 @@ public:
 
   }
 
-  void executeCB(const behavior_tree_leaves::BTGoalConstPtr &goal)
+  void executeCB(const behavior_tree_core::BTGoalConstPtr &goal)
   {
 
     // publish info to the console for the user
