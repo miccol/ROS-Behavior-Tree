@@ -13,7 +13,7 @@ protected:
 
   ros::NodeHandle nh_;
   // NodeHandle instance must be created before this line. Otherwise strange error may occur.
-  actionlib::SimpleActionServer<amazon_challenge_behavior_tree_leaves::BTAction> as_;
+  actionlib::SimpleActionServer<behavior_tree_leaves::BTAction> as_;
   std::string action_name_;
   // create messages that are used to published feedback/result
   behavior_tree_leaves::BTFeedback feedback_; //action feedback (SUCCESS, FAILURE)
