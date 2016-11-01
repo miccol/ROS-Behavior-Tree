@@ -9,8 +9,8 @@ int main(int argc, char **argv)
     {
         int TickPeriod_milliseconds = 1000;
 
-        ROSAction* action = new ROSAction("action");
-        ROSCondition* condition = new ROSCondition("condition");
+        ActionTestNode* action = new ActionTestNode("action");
+        ActionTestNode* condition = new ActionTestNode("condition");
 
 
          SequenceNode* sequence1 = new SequenceNode("seq1");

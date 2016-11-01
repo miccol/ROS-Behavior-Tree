@@ -73,6 +73,10 @@ namespace BT
         // (and to synchronize fathers and children)
         NodeSemaphore Semaphore;
 
+        //position and offset for horizontal positioning when drawing
+        float x_shift_, x_pose_;
+
+
         // The constructor and the distructor
         TreeNode(std::string Name);
         ~TreeNode();
@@ -97,6 +101,16 @@ namespace BT
         virtual bool WriteState(NodeState StateToBeSet) = 0;
         virtual void ResetColorState() = 0;
         virtual int GetDepth() = 0;
+
+
+        void SetXPose(float x_pose);
+        float GetXPose();
+
+        void SetXShift(float x_shift);
+        float GetXShift();
+
+        std::string get_name();
+
 
     };
 }

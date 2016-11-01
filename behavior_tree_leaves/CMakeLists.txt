@@ -174,7 +174,7 @@ add_dependencies(
 
 
 
-add_executable(ActionExample src/ActionExample.cpp)
+add_executable(ActionExample example_nodes/cpp/ActionExample.cpp)
 
 target_link_libraries(
   ActionExample
@@ -189,7 +189,7 @@ add_dependencies(
 )
 
 
-add_executable(ConditionExample src/ConditionExample.cpp)
+add_executable(ConditionExample example_nodes/cpp/ConditionExample.cpp)
 
 target_link_libraries(
   ConditionExample

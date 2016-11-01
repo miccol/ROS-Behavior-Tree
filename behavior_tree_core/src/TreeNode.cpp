@@ -82,5 +82,40 @@ void TreeNode::SetColorState(NodeState ColorStateToBeSet)
 }
 
 
+float TreeNode::GetXPose()
+{
 
+return x_pose_;
+}
+
+
+void TreeNode::SetXPose(float x_pose)
+{
+
+x_pose_ = x_pose;
+}
+
+
+
+float TreeNode::GetXShift()
+{
+
+return x_shift_;
+}
+
+
+void TreeNode::SetXShift(float x_shift)
+{
+
+x_shift_ = x_shift;
+}
+
+
+
+std::string TreeNode::get_name()
+{
+
+return Name;
+
+}
 
