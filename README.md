@@ -1,6 +1,6 @@
 ROS-Behavior-Tree ![License MIT](https://img.shields.io/dub/l/vibe-d.svg)
 ====
-![Version](https://img.shields.io/badge/version-v1.1-orange.svg) <br/> 
+![Version](https://img.shields.io/badge/version-v1.2-orange.svg) <br/> 
 A ROS behavior tree library. The leaf nodes (user defined) can be either in `C++` or `python`.
 
 
