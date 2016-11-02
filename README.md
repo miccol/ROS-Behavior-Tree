@@ -1,6 +1,8 @@
+NEWS: Version 1.2 available in beta (version1.2 branch). with better visualization and use of Google code styling.
+
 ROS-Behavior-Tree ![License MIT](https://img.shields.io/dub/l/vibe-d.svg)
 ====
-![Version](https://img.shields.io/badge/version-v1.2-orange.svg) <br/> 
+![Version](https://img.shields.io/badge/version-v1.1-orange.svg) <br/> 
 A ROS behavior tree library. The leaf nodes (user defined) can be either in `C++` or `python`.
 
 
