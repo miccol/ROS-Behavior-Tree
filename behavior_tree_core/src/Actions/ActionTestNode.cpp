@@ -2,9 +2,9 @@
 
 BT::ActionTestNode::ActionTestNode(std::string name) : ActionNode::ActionNode(name)
 {
-    type_ = BT::Action;
-    // Thread start
-    Thread = boost::thread(&ActionTestNode::Exec, this);
+    type_ = BT::ACTION_NODE;
+    // thread_ start
+    thread_ = boost::thread(&ActionTestNode::Exec, this);
 }
 
 BT::ActionTestNode::~ActionTestNode() {}
@@ -18,9 +18,9 @@ void BT::ActionTestNode::Exec()
     {
 
         // Waiting for a tick to come
-        Semaphore.Wait();
+        tick_engine.wait();
 
-        if(ReadState() == Exit)
+        if(ReadState() == BT::EXIT)
         {    //SetColorState(Idle);
 
             // The behavior tree is going to be destroied
@@ -28,18 +28,18 @@ void BT::ActionTestNode::Exec()
         }
 
         // Running state
-        SetNodeState(BT::Running);
-        std::cout << get_name() << " returning " << BT::Running << "!" << std::endl;
+        SetNodeState(BT::RUNNING);
+        std::cout << get_name() << " returning " << BT::RUNNING << "!" << std::endl;
 
         // Perform action...
         int i = 0;
-        while(ReadState() == BT::Running and i++<5)
+        while(ReadState() == BT::RUNNING and i++<5)
         {
             std::cout << get_name() << " working!" << std::endl;
             boost::this_thread::sleep(boost::posix_time::milliseconds(800));
         }
 
-        if(ReadState() == BT::Exit)
+        if(ReadState() == BT::EXIT)
         {
             // The behavior tree is going to be destroied
             return;
@@ -55,20 +55,20 @@ void BT::ActionTestNode::Exec()
                 std::cout << get_name() << " Halted!" << std::endl;
 
                 // Resetting the state
-                WriteState(Idle);
+                WriteState(BT::IDLE);
 
                 // Next loop
                 continue;
             }
 
-            std::cout << get_name() << " returning " << BT::Success << "!" << std::endl;
+            std::cout << get_name() << " returning " << BT::SUCCESS << "!" << std::endl;
         }
 
         // Synchronization
         // (my father is telling me that it has read my new state)
-        Semaphore.Wait();
+        tick_engine.wait();
 
-        if(ReadState() == BT::Exit)
+        if(ReadState() == BT::EXIT)
         {
 
             // The behavior tree is going to be destroied
@@ -76,23 +76,23 @@ void BT::ActionTestNode::Exec()
         }
 
         // Resetting the state
-        WriteState(BT::Idle);
+        WriteState(BT::IDLE);
     }
 }
 
 bool BT::ActionTestNode::Halt()
 {
     // Lock acquistion
-    boost::lock_guard<boost::mutex> LockGuard(StateMutex);
+    boost::lock_guard<boost::mutex> LockGuard(state_mutex_);
 
     // Checking for "Running" correctness
-    if (State != BT::Running)
+    if (state_ != BT::RUNNING)
     {
         return false;
     }
     //SetColorState(Idle);
 
-    State = Halted;
+    state_ = BT::HALTED;
     return true;
 }
 

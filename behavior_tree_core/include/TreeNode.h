@@ -8,18 +8,15 @@
 #include <boost/thread.hpp>
 #include <boost/date_time/posix_time/posix_time.hpp>
 
-#include <NodeSemaphore.h>
+#include <TickEngine.h>
 #include <Exceptions.h>
 
 namespace BT
 {
-    // Enumerates the possible types of a node:
-    // - "Parallel" indicates that this node and its predecessor are children
-    //   (not necessary direct ones!) of a parallel node;
-    // - "Selector" indicates that the two node are children of a selector node;
-    // - "Sequence" same as above, but with a sequence node as father;
-    enum NodeType {Action, Condition, Control};
-    enum ColorNodeType {PARALLEL, SELECTOR, SEQUENCE, SEQUENCESTAR, SELECTORSTAR, ACTION, CONDITION,DECORATOR};
+    // Enumerates the possible types of a node, for drawinf we have do discriminate whoich control node it is:
+
+    enum NodeType {ACTION_NODE, CONDITION_NODE, CONTROL_NODE};
+    enum DrawNodeType {PARALLEL, SELECTOR, SEQUENCE, SEQUENCESTAR, SELECTORSTAR, ACTION, CONDITION,DECORATOR};
     // Enumerates the states every node can be in after execution during a particular
     // time step:
     // - "Success" indicates that the node has completed running during this time step;
@@ -29,23 +26,23 @@ namespace BT
     //   time step, but the task is not yet complete;
     // - "Idle" indicates that the node hasn't run yet.
     // - "Halted" indicates that the node has been halted by its father.
-    enum NodeState {Success, Failure, Running, Idle, Halted, Exit};
+    enum NodeState {SUCCESS, FAILURE, RUNNING, IDLE, HALTED, EXIT};
 
     // Enumerates the options for when a parallel node is considered to have failed:
-    // - "FailOnOne" indicates that the node will return failure as soon as one of
+    // - "FAIL_ON_ONE" indicates that the node will return failure as soon as one of
     //   its children fails;
-    // - "FailOnAll" indicates that all of the node's children must fail before it
+    // - "FAIL_ON_ALL" indicates that all of the node's children must fail before it
     //   returns failure.
-    enum FailurePolicy {FailOnOne, FailOnAll};
+    enum FailurePolicy {FAIL_ON_ONE, FAIL_ON_ALL};
 
     // Enumerates the options for when a parallel node is considered to have succeeded:
-    // - "SucceedOnOne" indicates that the node will return success as soon as one
+    // - "SUCCEED_ON_ONE" indicates that the node will return success as soon as one
     //   of its children succeeds;
-    // - "SucceedOnAll" indicates that all of the node's children must succeed before
+    // - "BT::SUCCEED_ON_ALL" indicates that all of the node's children must succeed before
     //   it returns success.
-    enum SuccessPolicy {SucceedOnOne, SucceedOnAll};
+    enum SuccessPolicy {SUCCEED_ON_ONE, SUCCEED_ON_ALL};
 
-    // If "FailOnOne" and "SucceedOnOne" are both active and are both trigerred in the
+    // If "BT::FAIL_ON_ONE" and "BT::SUCCEED_ON_ONE" are both active and are both trigerred in the
     // same time step, failure will take precedence.
 
     // Abstract base class for Behavior Tree Nodes
@@ -59,27 +56,28 @@ namespace BT
 
     protected:
         // The node state that must be treated in a thread-safe way
-        bool StateUpdated;
-        NodeState State;
-        NodeState ColorState;
-        boost::mutex StateMutex;
-        boost::mutex ColorStateMutex;
-        boost::condition_variable StateConditionVariable;
+        bool is_state_updated_;
+        NodeState state_;
+        NodeState color_state_;
+        boost::mutex state_mutex_;
+        boost::mutex color_state_mutex_;
+        boost::condition_variable state_condition_variable_;
         // Node type
         NodeType type_;
+        //position and offset for horizontal positioning when drawing
+        float x_shift_, x_pose_;
 
     public:
 
 
         // The thread that will execute the node
-        boost::thread Thread;
+        boost::thread thread_;
 
         // Node semaphore to simulate the tick
         // (and to synchronize fathers and children)
-        NodeSemaphore Semaphore;
+        TickEngine tick_engine;
 
-        //position and offset for horizontal positioning when drawing
-        float x_shift_, x_pose_;
+
 
 
         // The constructor and the distructor
@@ -102,17 +100,18 @@ namespace BT
         // conditional waiting (only mutual access)
         NodeState ReadState();
         NodeState ReadColorState();
-        virtual int GetType() = 0;
+        virtual int DrawType() = 0;
         virtual bool WriteState(NodeState StateToBeSet) = 0;
         virtual void ResetColorState() = 0;
-        virtual int GetDepth() = 0;
+        virtual int Depth() = 0;
 
 
-        void SetXPose(float x_pose);
-        float GetXPose();
+        //Getters and setters
+        void set_x_pose(float x_pose);
+        float get_x_pose();
 
-        void SetXShift(float x_shift);
-        float GetXShift();
+        void set_x_shift(float x_shift);
+        float get_x_shift();
 
         std::string get_name();
         NodeType get_type();

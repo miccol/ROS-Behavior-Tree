@@ -21,7 +21,7 @@ namespace BT
         // Update states vector
         std::vector<bool> ChildStatesUpdated;
 
-        // State update
+        // state_ update
         bool StateUpdate;
     public:
         // Constructor
@@ -31,7 +31,7 @@ namespace BT
         // the method used to set N
         void SetThreshold(unsigned int N);
         // Method that retuns the type
-        int GetType();
+        int DrawType();
         // The method that is going to be executed by the thread
         void Exec();
     };

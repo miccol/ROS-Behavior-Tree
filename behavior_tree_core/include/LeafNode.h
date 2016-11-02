@@ -14,7 +14,7 @@ namespace BT
         LeafNode(std::string name);
         ~LeafNode();
     void ResetColorState();
-    int GetDepth();
+    int Depth();
     };
 }
 

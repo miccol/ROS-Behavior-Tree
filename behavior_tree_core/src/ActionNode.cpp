@@ -4,7 +4,7 @@
 
 BT::ActionNode::ActionNode(std::string name) : LeafNode::LeafNode(name)
 {
-    type_ = Action;
+    type_ = BT::ACTION_NODE;
 }
 
 BT::ActionNode::~ActionNode() {}
@@ -12,24 +12,24 @@ BT::ActionNode::~ActionNode() {}
 bool BT::ActionNode::WriteState(NodeState StateToBeSet)
 {
 
-    if(StateToBeSet != Idle)
+    if(StateToBeSet != BT::IDLE)
     {
         SetColorState(StateToBeSet);
     }
     // Lock acquistion
-    boost::lock_guard<boost::mutex> LockGuard(StateMutex);
+    boost::lock_guard<boost::mutex> LockGuard(state_mutex_);
 
     // Check for spourios "Halted"
-    if (State == Halted && StateToBeSet != Idle && StateToBeSet != Exit)
+    if (state_ == BT::HALTED && StateToBeSet != BT::IDLE && StateToBeSet != BT::EXIT)
     {
         return false;
     }
 
-    State = StateToBeSet;
+    state_ = StateToBeSet;
     return true;
 }
 
-int BT::ActionNode::GetType()
+int BT::ActionNode::DrawType()
 {
     // Lock acquistion
 

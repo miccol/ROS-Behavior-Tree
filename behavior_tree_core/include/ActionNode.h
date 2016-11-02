@@ -22,7 +22,7 @@ namespace BT
         // Methods used to access the node state without the
         // conditional waiting (only mutual access)
         bool WriteState(NodeState StateToBeSet);
-	int GetType();
+    int DrawType();
     };
 }
 

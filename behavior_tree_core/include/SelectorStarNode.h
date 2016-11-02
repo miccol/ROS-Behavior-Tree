@@ -11,7 +11,7 @@ namespace BT
         // Constructor
         SelectorStarNode(std::string name);
         ~SelectorStarNode();
-        int GetType();
+        int DrawType();
         // The method that is going to be executed by the thread
         void Exec();
     };

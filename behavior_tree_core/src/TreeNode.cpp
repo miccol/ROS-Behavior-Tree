@@ -1,11 +1,11 @@
 #include <TreeNode.h>
 
-BT::TreeNode::TreeNode(std::string name) : Semaphore(0)
+BT::TreeNode::TreeNode(std::string name) : tick_engine(0)
 {
     // Initialization
     name_ = name;
-    StateUpdated = false;
-    State = BT::Idle;
+    is_state_updated_ = false;
+    state_ = BT::IDLE;
 }
 
 BT::TreeNode::~TreeNode() {}
@@ -14,20 +14,20 @@ BT::NodeState BT::TreeNode::GetNodeState()
 {
     NodeState ReadState;
     // Lock acquistion
-    boost::unique_lock<boost::mutex> UniqueLock(StateMutex);
+    boost::unique_lock<boost::mutex> UniqueLock(state_mutex_);
 
     // Wait until the state is updated by the node thread
-    while(StateUpdated == false)
-        StateConditionVariable.wait(UniqueLock);
+    while(is_state_updated_ == false)
+        state_condition_variable_.wait(UniqueLock);
 
-    // Reset the StateUpdated flag
-    StateUpdated = false;
+    // Reset the is_state_updated_ flag
+    is_state_updated_ = false;
 
-    // State save
-    ReadState = State;
+    // state_ save
+    ReadState = state_;
 
     // Releasing the node thread;
-    StateConditionVariable.notify_all();
+    state_condition_variable_.notify_all();
 
     // Take the state and unlock the mutex
     return ReadState;
@@ -36,31 +36,31 @@ BT::NodeState BT::TreeNode::GetNodeState()
 void BT::TreeNode::SetNodeState(NodeState StateToBeSet)
 {
 
-    if(StateToBeSet != BT::Idle)
+    if(StateToBeSet != BT::IDLE)
     {
         SetColorState(StateToBeSet);
     }
 
     // Lock acquistion
-    boost::unique_lock<boost::mutex> UniqueLock(StateMutex);
+    boost::unique_lock<boost::mutex> UniqueLock(state_mutex_);
 
-    // State update
-    State = StateToBeSet;
-    StateUpdated = true;
+    // state_ update
+    state_ = StateToBeSet;
+    is_state_updated_ = true;
 
     // Notification and unlock of the mutex
-    StateConditionVariable.notify_all();
+    state_condition_variable_.notify_all();
 
     // Waiting for the father to read the state
-    StateConditionVariable.wait(UniqueLock);
+    state_condition_variable_.wait(UniqueLock);
 }
 
 BT::NodeState BT::TreeNode::ReadState()
 {
     // Lock acquistion
-    boost::lock_guard<boost::mutex> LockGuard(StateMutex);
+    boost::lock_guard<boost::mutex> LockGuard(state_mutex_);
 
-    return State;
+    return state_;
 }
 
 
@@ -68,26 +68,26 @@ BT::NodeState BT::TreeNode::ReadColorState()
 {
     // Lock acquistion
 
-    return ColorState;
+    return color_state_;
 }
 
 void BT::TreeNode::SetColorState(NodeState ColorStateToBeSet)
 {
     // Lock acquistion
 
-    // State update
-    ColorState = ColorStateToBeSet;
+    // state_ update
+    color_state_ = ColorStateToBeSet;
 }
 
 
-float BT::TreeNode::GetXPose()
+float BT::TreeNode::get_x_pose()
 {
 
 return x_pose_;
 }
 
 
-void BT::TreeNode::SetXPose(float x_pose)
+void BT::TreeNode::set_x_pose(float x_pose)
 {
 
 x_pose_ = x_pose;
@@ -95,14 +95,14 @@ x_pose_ = x_pose;
 
 
 
-float BT::TreeNode::GetXShift()
+float BT::TreeNode::get_x_shift()
 {
 
 return x_shift_;
 }
 
 
-void BT::TreeNode::SetXShift(float x_shift)
+void BT::TreeNode::set_x_shift(float x_shift)
 {
 
 x_shift_ = x_shift;

@@ -3,7 +3,7 @@
 
 BT::ConditionNode::ConditionNode(std::string name) : LeafNode::LeafNode(name)
 {
-    type_ = Condition;
+    type_ = BT::CONDITION_NODE;
 }
 
 BT::ConditionNode::~ConditionNode() {}
@@ -13,17 +13,17 @@ bool BT::ConditionNode::Halt() { return true;}
 bool BT::ConditionNode::WriteState(NodeState StateToBeSet)
 {
 
-    if(StateToBeSet != BT::Idle)
+    if(StateToBeSet != BT::IDLE)
     {
         SetColorState(StateToBeSet);
     }
     // Lock acquistion
-    boost::lock_guard<boost::mutex> LockGuard(StateMutex);
+    boost::lock_guard<boost::mutex> LockGuard(state_mutex_);
 
-    State = StateToBeSet;
+    state_ = StateToBeSet;
     return true;
 }
-int BT::ConditionNode::GetType()
+int BT::ConditionNode::DrawType()
 {
     // Lock acquistion
 

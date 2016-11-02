@@ -3,13 +3,13 @@
 
 
 
-enum Status {RUNNING,SUCCESS, FAILURE};
+enum Status {ROS_RUNNING,ROS_SUCCESS, ROS_FAILURE};
 
 BT::ROSAction::ROSAction(std::string name) : ActionNode::ActionNode(name)
 {
-    type_ = BT::Action;
-    // Thread start
-    Thread = boost::thread(&ROSAction::Exec, this);
+    type_ = BT::ACTION_NODE;
+    // thread_ start
+    thread_ = boost::thread(&ROSAction::Exec, this);
 
 }
 
@@ -30,99 +30,99 @@ void BT::ROSAction::Exec()
       ROS_INFO("Tthe Acutator %s has started", get_name().c_str());
 
       behavior_tree_core::BTGoal goal;
-      node_result.status = RUNNING;//
+      node_result.status = ROS_RUNNING;//
     while(true)
     {
         // Waiting for a tick to come
-        Semaphore.Wait();
+        tick_engine.wait();
 
-        if(ReadState() == Exit)
+        if(ReadState() == BT::EXIT)
         {
             // The behavior tree is going to be destroied
             return;
         }
 
         // Running state
-        SetNodeState(BT::Running);
-        std::cout << get_name() << " returning " << Running << "!" << std::endl;
-        node_result.status = RUNNING;
+        SetNodeState(BT::RUNNING);
+        std::cout << get_name() << " returning " << BT::RUNNING << "!" << std::endl;
+        node_result.status = ROS_RUNNING;
         // Perform action...
         ROS_INFO("I am running the request to %s",get_name().c_str());
         ac.sendGoal(goal);
         do
         {
             node_result = *(ac.getResult());//checking the result
-        } while(node_result.status == RUNNING && ReadState() == Running);
+        } while(node_result.status == ROS_RUNNING && ReadState() == BT::RUNNING);
             ROS_INFO("The Server Has Replied Or I the node is halted");
 
         std::cout << get_name() << " RETURNING " << node_result.status << "!" << std::endl;
 
-        if(ReadState() == Exit)
+        if(ReadState() == BT::EXIT)
         {
             // The behavior tree is going to be destroied
             return;
         }
 
 
-        if (node_result.status == SUCCESS)
+        if (node_result.status == ROS_SUCCESS)
         {
             // trying to set the outcome state:
-            if (WriteState(Success) != true)
+            if (WriteState(BT::SUCCESS) != true)
             {
                 // meanwhile, my father halted me!
                 std::cout << get_name() << " Halted!" << std::endl;
                 ROS_INFO("I am cancelling the request");
                 ac.cancelGoal();
                 // Resetting the state
-                WriteState(Idle);
+                WriteState(BT::IDLE);
                 continue;
             }
 
-            std::cout << get_name() << " returning Success " << BT::Success << "!" << std::endl;
+            std::cout << get_name() << " returning Success " << BT::SUCCESS << "!" << std::endl;
         }
-        else if( node_result.status == FAILURE)
+        else if( node_result.status == ROS_FAILURE)
         {
             // trying to set the outcome state:
-            if (WriteState(Failure) != true)
+            if (WriteState(BT::FAILURE) != true)
             {
                 // meanwhile, my father halted me!
                 std::cout << get_name() << " Halted!" << std::endl;
                 ROS_INFO("I am cancelling the request");
                 ac.cancelGoal();
                 // Resetting the state
-                WriteState(Idle);
+                WriteState(BT::IDLE);
                 continue;
             }
 
-            std::cout << get_name() << " returning Failure" << BT::Failure << "!" << std::endl;
+            std::cout << get_name() << " returning Failure" << BT::FAILURE << "!" << std::endl;
         }else{//it means that the parent has halted the node
 
             std::cout << get_name() << " Halted!" << std::endl;
             ROS_INFO("I am cancelling the request");
             ac.cancelGoal();
             // Resetting the state
-            WriteState(BT::Idle);
+            WriteState(BT::IDLE);
             continue;
 
-            std::cout << get_name() << " returning NOTHING (HALTED)" << BT::Failure << "!" << std::endl;
+            std::cout << get_name() << " returning NOTHING (HALTED)" << BT::FAILURE << "!" << std::endl;
         }
 
 
-            std::cout << get_name() << " returning " << BT::Success << "!" << std::endl;
+            std::cout << get_name() << " returning " << BT::SUCCESS << "!" << std::endl;
 
 
         // Synchronization
         // (my father is telling me that it has read my new state)
-        Semaphore.Wait();
+        tick_engine.wait();
 
-        if(ReadState() == BT::Exit)
+        if(ReadState() == BT::EXIT)
         {
             // The behavior tree is going to be destroied
             return;
         }
 
         // Resetting the state
-        WriteState(BT::Idle);
+        WriteState(BT::IDLE);
     }
 }
 
@@ -131,14 +131,14 @@ bool BT::ROSAction::Halt()
 
         ROS_INFO("I am Halting the client");
     // Lock acquistion
-    boost::lock_guard<boost::mutex> LockGuard(StateMutex);
+    boost::lock_guard<boost::mutex> LockGuard(state_mutex_);
 
     // Checking for "Running" correctness
-    if (State != BT::Running)
+    if (state_ != BT::RUNNING)
     {
         return false;
     }
 
-    State = Halted;
+    state_ = BT::HALTED;
     return true;
 }

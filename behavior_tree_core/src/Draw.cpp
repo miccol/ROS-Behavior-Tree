@@ -181,14 +181,14 @@ float get_x_pos_at(BT::TreeNode* tree, int depth)
 {
     if (depth == 0)
     {
-    return tree->GetXPose();
+    return tree->get_x_pose();
     }
     else
     {
         BT::ControlNode* d = dynamic_cast<BT::ControlNode*> (tree);
         if (d == NULL)
         {
-            return tree->GetXPose();
+            return tree->get_x_pose();
 
         }
         else
@@ -207,7 +207,7 @@ float get_x_pos_at(BT::TreeNode* tree, int depth)
 void setpositions(BT::TreeNode* tree, GLfloat x_pos, GLfloat y_pos, GLfloat x_offset, GLfloat y_offset )
 {
 
-    //x_offset*pow(2,tree->GetDepth()-1)
+    //x_offset*pow(2,tree->Depth()-1)
 
     BT::ControlNode* d = dynamic_cast<BT::ControlNode*> (tree);
     if (d == NULL)
@@ -221,7 +221,7 @@ void setpositions(BT::TreeNode* tree, GLfloat x_pos, GLfloat y_pos, GLfloat x_of
 
      //   std::cout << "setting position of " << tree->name << " as " << x_pos + 2*NODE_WIDTH + x_space << std::endl;
 
-        tree->SetXPose(x_pos + 2*NODE_WIDTH + x_space);
+        tree->set_x_pose(x_pos + 2*NODE_WIDTH + x_space);
     }
     else
     {//if it is a control flow node, draw it and its children
@@ -237,7 +237,7 @@ void setpositions(BT::TreeNode* tree, GLfloat x_pos, GLfloat y_pos, GLfloat x_of
 
             if (i > 0)
             {
-                x_shift = get_x_pos_at(children[i - 1], children[i]->GetDepth());
+                x_shift = get_x_pos_at(children[i - 1], children[i]->Depth());
 
             }
             setpositions(children[i], x_shift, y_pos - y_offset , x_offset  ,y_offset );
@@ -252,23 +252,23 @@ void setpositions(BT::TreeNode* tree, GLfloat x_pos, GLfloat y_pos, GLfloat x_of
         {//odd number of children , the node goes on top the middle node
 
             int middle_child = ceil(children.size()/2);
-            tree->SetXPose(children[middle_child]->GetXPose());
+            tree->set_x_pose(children[middle_child]->get_x_pose());
 
         }
         else
         {
-            x_min = children.front()->GetXPose();
-            x_max = children.back()->GetXPose();
-            tree->SetXPose((x_min+x_max)/2);
+            x_min = children.front()->get_x_pose();
+            x_max = children.back()->get_x_pose();
+            tree->set_x_pose((x_min+x_max)/2);
 
         }
-        //draw_node((GLfloat) (x_min+x_max)/2, (GLfloat) y_pos, tree->GetType(), tree->name.c_str(), tree->ReadColorState());
+        //draw_node((GLfloat) (x_min+x_max)/2, (GLfloat) y_pos, tree->DrawType(), tree->name.c_str(), tree->ReadColorState());
 
         //return x_shift_new + (x_min+x_max)/2;
 
     }
 
-   // std::cout << "position of " << tree->name << " is " << tree->GetXPose() << std::endl;
+   // std::cout << "position of " << tree->name << " is " << tree->get_x_pose() << std::endl;
 }
 
 
@@ -279,7 +279,7 @@ void setpositions(BT::TreeNode* tree, GLfloat x_pos, GLfloat y_pos, GLfloat x_of
 void updateTree(BT::TreeNode* tree, GLfloat x_pos, GLfloat y_pos, GLfloat y_offset )
 {
 
-    //x_offset*pow(2,tree->GetDepth()-1)
+    //x_offset*pow(2,tree->Depth()-1)
    // GLfloat x_space = 0.01;
 
     BT::ControlNode* d = dynamic_cast<BT::ControlNode*> (tree);
@@ -287,7 +287,7 @@ void updateTree(BT::TreeNode* tree, GLfloat x_pos, GLfloat y_pos, GLfloat y_offs
     {//if it is a leaf node, draw it
 
 
-        draw_node((GLfloat) tree->GetXPose() , (GLfloat) y_pos, tree->GetType(), tree->get_name().c_str(), tree->ReadColorState());
+        draw_node((GLfloat) tree->get_x_pose() , (GLfloat) y_pos, tree->DrawType(), tree->get_name().c_str(), tree->ReadColorState());
 
     }
     else
@@ -303,13 +303,13 @@ void updateTree(BT::TreeNode* tree, GLfloat x_pos, GLfloat y_pos, GLfloat y_offs
         for (int i = 0; i < M; i++)
         {
              updateTree(children[i], x_shift, y_pos - y_offset  ,y_offset );
-             draw_edge(tree->GetXPose(), y_pos, 0.02, children[i]->GetXPose() , y_pos - y_offset, 0.02);
+             draw_edge(tree->get_x_pose(), y_pos, 0.02, children[i]->get_x_pose() , y_pos - y_offset, 0.02);
 
 
         }
 
 
-        draw_node((GLfloat) tree->GetXPose(), (GLfloat) y_pos, tree->GetType(), tree->get_name().c_str(), tree->ReadColorState());
+        draw_node((GLfloat) tree->get_x_pose(), (GLfloat) y_pos, tree->DrawType(), tree->get_name().c_str(), tree->ReadColorState());
 
         //return x_shift_new + (x_min+x_max)/2;
 
@@ -433,7 +433,7 @@ void drawTree(BT::ControlNode* tree_)
         init = true;
     }
     tree = tree_;
-    depth = tree->GetDepth();
+    depth = tree->Depth();
 
     glutInitWindowSize(1024,860);
 

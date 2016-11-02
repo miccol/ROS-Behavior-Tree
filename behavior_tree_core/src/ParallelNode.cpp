@@ -7,8 +7,8 @@ BT::ParallelNode::ParallelNode(std::string name) : ControlNode::ControlNode(name
     N = std::numeric_limits<unsigned int>::max();
     StateUpdate = false;
 
-    // Thread start
-    Thread = boost::thread(&ParallelNode::Exec, this);
+    // thread_ start
+    thread_ = boost::thread(&ParallelNode::Exec, this);
 }
 
 BT::ParallelNode::~ParallelNode() {}
@@ -29,7 +29,7 @@ void BT::ParallelNode::SetThreshold(unsigned int N)
     this->N = N;
 
     // First tick for the thread
-    Semaphore.Signal();
+    tick_engine.tick();
 }
 
 void BT::ParallelNode::Exec()
@@ -37,7 +37,7 @@ void BT::ParallelNode::Exec()
     unsigned int i;
 
     // Waiting for a first tick to come
-    Semaphore.Wait();
+    tick_engine.wait();
 
     // Checking N correctness
     if (N == std::numeric_limits<unsigned int>::max())
@@ -54,9 +54,9 @@ void BT::ParallelNode::Exec()
     while(true)
     {
         // Waiting for a tick to come
-        Semaphore.Wait();
+        tick_engine.wait();
 
-        if(ReadState() == Exit)
+        if(ReadState() == BT::EXIT)
         {
             // The behavior tree is going to be destroied
             return;
@@ -71,7 +71,7 @@ void BT::ParallelNode::Exec()
         }
 
         // Checking if i was halted
-        if (ReadState() != BT::Halted)
+        if (ReadState() != BT::HALTED)
         {
             std::cout << get_name() << " ticked, ticking actions..." << std::endl;
 
@@ -79,30 +79,30 @@ void BT::ParallelNode::Exec()
             // be immediatelly returned.
             for(i = 0; i<M; i++)
             {
-                if (ChildNodes[i]->get_type() != BT::Action)
+                if (ChildNodes[i]->get_type() != BT::ACTION_NODE)
                 {
                     continue;
                 }
 
                 ChildStates[i] = ChildNodes[i]->ReadState();
 
-                if (ChildStates[i] == BT::Success)
+                if (ChildStates[i] == BT::SUCCESS)
                 {
                     // The action node has finished, sync
-                    ChildNodes[i]->Semaphore.Signal();
+                    ChildNodes[i]->tick_engine.tick();
 
                     Successes++;
                     ChildStatesUpdated[i] = true;
                 }
-                else if (ChildStates[i] == BT::Failure)
+                else if (ChildStates[i] == BT::FAILURE)
                 {
                     // The action node has finished, sync
-                    ChildNodes[i]->Semaphore.Signal();
+                    ChildNodes[i]->tick_engine.tick();
 
                     Failures++;
                     ChildStatesUpdated[i] = true;
                 }
-                else if (ChildStates[i] == BT::Running)
+                else if (ChildStates[i] == BT::RUNNING)
                 {
                     Runnings++;
                     ChildStatesUpdated[i] = true;
@@ -111,7 +111,7 @@ void BT::ParallelNode::Exec()
                 if (Successes >= N)
                 {
                     // Returning success
-                    SetNodeState(BT::Success);
+                    SetNodeState(BT::SUCCESS);
                     std::cout << get_name() << " returning Success! " << std::endl;
                     StateUpdate = true;
 
@@ -121,7 +121,7 @@ void BT::ParallelNode::Exec()
                 else if (Failures > M - N)
                 {
                     // Returning failure
-                    SetNodeState(Failure);
+                    SetNodeState(BT::FAILURE);
                     std::cout << get_name() << " returning Failure! " << std::endl;
                     StateUpdate = true;
 
@@ -132,7 +132,7 @@ void BT::ParallelNode::Exec()
                 {
                     // Neither a Success nor a Failure could be returned
                     // Returning Running
-                    SetNodeState(BT::Running);
+                    SetNodeState(BT::RUNNING);
                     std::cout << get_name() << " returning Running! " << std::endl;
                     StateUpdate = true;
 
@@ -146,12 +146,12 @@ void BT::ParallelNode::Exec()
                 // If it is known what to return...
                 std::cout << get_name() << " knows what to return... " << std::endl;
 
-                if (ReadState() == BT::Success || ReadState() == BT::Failure)
+                if (ReadState() == BT::SUCCESS || ReadState() == BT::FAILURE)
                 {
                     // Halting the running actions
                     for (i=0; i<M; i++)
                     {
-                        if (ChildStatesUpdated[i] == false || ChildStates[i] != BT::Running)
+                        if (ChildStatesUpdated[i] == false || ChildStates[i] != BT::RUNNING)
                         {
                             continue;
                         }
@@ -163,7 +163,7 @@ void BT::ParallelNode::Exec()
                             // this means that, before this node could set its child state
                             // to "Halted", the child had already written the action outcome;
                             // sync with him ignoring its state;
-                            ChildNodes[i]->Semaphore.Signal();
+                            ChildNodes[i]->tick_engine.tick();
 
                             std::cout << get_name() << " halting of child number " << i << " failed!" << std::endl;
                         }
@@ -173,7 +173,7 @@ void BT::ParallelNode::Exec()
                         }
 
                         // updating its vector cell;
-                        ChildStates[i] = BT::Idle;
+                        ChildStates[i] = BT::IDLE;
                     }
 
                     // Ticking the other children, but halting them if they
@@ -188,11 +188,11 @@ void BT::ParallelNode::Exec()
                         }
 
                         // ticking it;
-                        ChildNodes[i]->Semaphore.Signal();
+                        ChildNodes[i]->tick_engine.tick();
 
                         // retrive its state as soon as it is available;
                         ChildStates[i] = ChildNodes[i]->GetNodeState();
-                        if (ChildStates[i] == BT::Running)
+                        if (ChildStates[i] == BT::RUNNING)
                         {
                             std::cout << get_name() << " halting (control) child number " << i << "..." << std::endl;
 
@@ -200,18 +200,18 @@ void BT::ParallelNode::Exec()
                             ChildNodes[i]->Halt();
 
                             // sync with it (it's waiting on the semaphore);
-                            ChildNodes[i]->Semaphore.Signal();
+                            ChildNodes[i]->tick_engine.tick();
                         }
 
                         // updating its vector cell;
-                        ChildStates[i] = BT::Idle;
+                        ChildStates[i] = BT::IDLE;
                         ChildStatesUpdated[i] = true;
                     }
 
                     // Resetting the node state
-                    if (ReadState() != BT::Halted)
+                    if (ReadState() != BT::HALTED)
                     {
-                        WriteState(BT::Idle);
+                        WriteState(BT::IDLE);
                     }
 
                     // Next cicle
@@ -231,34 +231,34 @@ void BT::ParallelNode::Exec()
                             continue;
                         }
 
-                        if (ChildNodes[i]->get_type() == BT::Action)
+                        if (ChildNodes[i]->get_type() == BT::ACTION_NODE)
                         {
                             // if it's an action:
                             // read its state;
                             NodeState ActionState = ChildNodes[i]->ReadState();
 
-                            if (ActionState == BT::Idle)
+                            if (ActionState == BT::IDLE)
                             {
                                 // if it's "Idle":
                                 // ticking it;
-                                ChildNodes[i]->Semaphore.Signal();
+                                ChildNodes[i]->tick_engine.tick();
 
                                 // retriving its state as soon as it is available;
                                 ChildStates[i] = ChildNodes[i]->GetNodeState();
                             }
-                            else if (ActionState == BT::Running)
+                            else if (ActionState == BT::RUNNING)
                             {
                                 // It's ok, it can continue running
-                                ChildStates[i] = BT::Running;
+                                ChildStates[i] = BT::RUNNING;
                             }
                             else
                             {
                                 // if it's "Success" of "Failure" (it can't be "Halted"!):
                                 // sync with it;
-                                ChildNodes[i]->Semaphore.Signal();
+                                ChildNodes[i]->tick_engine.tick();
 
                                 // ticking it;
-                                ChildNodes[i]->Semaphore.Signal();
+                                ChildNodes[i]->tick_engine.tick();
 
                                 // retriving its state as soon as it is available;
                                 ChildStates[i] = ChildNodes[i]->GetNodeState();
@@ -268,7 +268,7 @@ void BT::ParallelNode::Exec()
                         {
                             // if it's not an action:
                             // ticking it;
-                            ChildNodes[i]->Semaphore.Signal();
+                            ChildNodes[i]->tick_engine.tick();
 
                             // retrive its state as soon as it is available;
                             ChildStates[i] = ChildNodes[i]->GetNodeState();
@@ -300,17 +300,17 @@ void BT::ParallelNode::Exec()
                 }
 
                 // ticking it;
-                ChildNodes[i]->Semaphore.Signal();
+                ChildNodes[i]->tick_engine.tick();
 
                 // retrive its state as soon as it is available;
                 ChildStates[i] = ChildNodes[i]->GetNodeState();
 
-                if (ChildStates[i] == BT::Success)
+                if (ChildStates[i] == BT::SUCCESS)
                 {
                     Successes++;
                     ChildStatesUpdated[i] = true;
                 }
-                else if (ChildStates[i] == BT::Failure)
+                else if (ChildStates[i] == BT::FAILURE)
                 {
                     Failures++;
                     ChildStatesUpdated[i] = true;
@@ -324,7 +324,7 @@ void BT::ParallelNode::Exec()
                 if (Successes >= N)
                 {
                     // Returning success
-                    SetNodeState(BT::Success);
+                    SetNodeState(BT::SUCCESS);
                     std::cout << get_name() << " returning Success! " << std::endl;
                     StateUpdate = true;
 
@@ -334,7 +334,7 @@ void BT::ParallelNode::Exec()
                 else if (Failures > M - N)
                 {
                     // Returning failure
-                    SetNodeState(BT::Failure);
+                    SetNodeState(BT::FAILURE);
                     std::cout << get_name() << " returning Failure! " << std::endl;
                     StateUpdate = true;
 
@@ -345,7 +345,7 @@ void BT::ParallelNode::Exec()
                 {
                     // Neither a Success nor a Failure could be returned
                     // Returning Running
-                    SetNodeState(BT::Running);
+                    SetNodeState(BT::RUNNING);
                     std::cout << get_name() << " returning Running! " << std::endl;
                     StateUpdate = true;
 
@@ -354,19 +354,19 @@ void BT::ParallelNode::Exec()
                 }
             }
 
-            if (StateUpdate == true && ReadState() != BT::Running)
+            if (StateUpdate == true && ReadState() != BT::RUNNING)
             {
                 std::cout << get_name() << " knows what to return... " << std::endl;
 
                 // Halting all the running nodes (that have been ticked!)
                 for (i=0; i<M; i++)
                 {
-                    if (ChildStatesUpdated[i] == false || ChildStates[i] != BT::Running)
+                    if (ChildStatesUpdated[i] == false || ChildStates[i] != BT::RUNNING)
                     {
                         continue;
                     }
 
-                    if (ChildNodes[i]->get_type() == BT::Action)
+                    if (ChildNodes[i]->get_type() == BT::ACTION_NODE)
                     {
                         std::cout << get_name() << " trying halting (action) child number " << i << "..." << std::endl;
 
@@ -375,7 +375,7 @@ void BT::ParallelNode::Exec()
                             // this means that, before this node could set its child state
                             // to "Halted", the child had already written the action outcome;
                             // sync with him ignoring its state;
-                            ChildNodes[i]->Semaphore.Signal();
+                            ChildNodes[i]->tick_engine.tick();
 
                             std::cout << get_name() << " halting of child number " << i << " failed!" << std::endl;
                         }
@@ -390,13 +390,13 @@ void BT::ParallelNode::Exec()
                         ChildNodes[i]->Halt();
 
                         // sync with it (it's waiting on the semaphore);
-                        ChildNodes[i]->Semaphore.Signal();
+                        ChildNodes[i]->tick_engine.tick();
 
                         std::cout << get_name() << " halting child number " << i << "!" << std::endl;
                     }
 
                     // updating its vector cell;
-                    ChildStates[i] = BT::Idle;
+                    ChildStates[i] = BT::IDLE;
                 }
 
                 // Ticking the other children, but halting them is they
@@ -411,12 +411,12 @@ void BT::ParallelNode::Exec()
                     }
 
                     // ticking it;
-                    ChildNodes[i]->Semaphore.Signal();
+                    ChildNodes[i]->tick_engine.tick();
 
                     // retrive its state as soon as it is available
                     ChildStates[i] = ChildNodes[i]->GetNodeState();
 
-                    if (ChildStates[i] == BT::Running)
+                    if (ChildStates[i] == BT::RUNNING)
                     {
                         std::cout << get_name() << " halting (control) child number " << i << "..." << std::endl;
 
@@ -424,17 +424,17 @@ void BT::ParallelNode::Exec()
                         ChildNodes[i]->Halt();
 
                         // sync with it (it's waiting on the semaphore);
-                        ChildNodes[i]->Semaphore.Signal();
+                        ChildNodes[i]->tick_engine.tick();
 
                         // updating its vector cell;
-                        ChildStates[i] = BT::Idle;
+                        ChildStates[i] = BT::IDLE;
                     }
                 }
 
                 // Resetting the node state
-                if (ReadState() != BT::Halted)
+                if (ReadState() != BT::HALTED)
                 {
-                    WriteState(BT::Idle);
+                    WriteState(BT::IDLE);
                 }
             }
             else if (StateUpdate == true && Runnings + Failures + Successes < M)
@@ -452,7 +452,7 @@ void BT::ParallelNode::Exec()
                     }
 
                     // ticking it;
-                    ChildNodes[i]->Semaphore.Signal();
+                    ChildNodes[i]->tick_engine.tick();
 
                     // state sync;
                     ChildStates[i] = ChildNodes[i]->GetNodeState();
@@ -461,7 +461,7 @@ void BT::ParallelNode::Exec()
             else if (StateUpdate == false)
             {
                 // Returning running!
-                SetNodeState(BT::Running);
+                SetNodeState(BT::RUNNING);
                 std::cout << get_name() << " returning Running! " << std::endl;
                 StateUpdate = true;
             }
@@ -480,7 +480,7 @@ void BT::ParallelNode::Exec()
                     ChildNodes[i]->Halt();
 
                     // sync with it (it's waiting on the semaphore);
-                    ChildNodes[i]->Semaphore.Signal();
+                    ChildNodes[i]->tick_engine.tick();
 
                     std::cout << name << " halting child number " << i << "!" << std::endl;
                 }
@@ -495,7 +495,7 @@ void BT::ParallelNode::Exec()
                         // this means that, before this node could set its child state
                         // to "Halted", the child had already written the action outcome;
                         // sync with him ignoring its state;
-                        ChildNodes[i]->Semaphore.Signal();
+                        ChildNodes[i]->tick_engine.tick();
 
                         std::cout << name << " halting of child number " << i << " failed!" << std::endl;
                     }
@@ -508,7 +508,7 @@ void BT::ParallelNode::Exec()
                 {
                     // if it's a action node that has finished its job:
                     // ticking it without saving its returning state;
-                    ChildNodes[i]->Semaphore.Signal();
+                    ChildNodes[i]->tick_engine.tick();
                 }
 
                 // updating its vector cell
@@ -517,13 +517,13 @@ void BT::ParallelNode::Exec()
 */
             HaltChildren(0);
             // Resetting the node state
-            WriteState(BT::Idle);
+            WriteState(BT::IDLE);
         }
     }
 }
 
 
-int BT::ParallelNode::GetType()
+int BT::ParallelNode::DrawType()
 {
     // Lock acquistion
 

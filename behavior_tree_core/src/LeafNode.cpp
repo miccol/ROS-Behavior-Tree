@@ -10,10 +10,10 @@ void BT::LeafNode::ResetColorState()
 {
     // Lock acquistion
 
-    ColorState = BT::Idle;
+    color_state_ = BT::IDLE;
 }
 
-int BT::LeafNode::GetDepth()
+int BT::LeafNode::Depth()
 {
     return 0;
 }

@@ -33,7 +33,7 @@ namespace BT
         bool Halt();
         void ResetColorState();
         void HaltChildren(int i);
-        int GetDepth();
+        int Depth();
 
         // Methods used to access the node state without the
         // conditional waiting (only mutual access)

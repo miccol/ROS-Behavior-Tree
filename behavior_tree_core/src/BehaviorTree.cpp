@@ -15,11 +15,11 @@ void Execute(BT::ControlNode* root,int TickPeriod_milliseconds)
         std::cout << "Ticking the root node !" << std::endl << std::endl;
 
         // Ticking the root node
-        root->Semaphore.Signal();
+        root->tick_engine.tick();
         // Printing its state
         root->GetNodeState();
 
-        if(root->ReadState() != BT::Running  )
+        if(root->ReadState() != BT::RUNNING  )
         {
             //when the root returns a status it resets the colors of the tree
             root->ResetColorState();

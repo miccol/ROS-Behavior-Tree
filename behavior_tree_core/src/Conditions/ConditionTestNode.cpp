@@ -3,10 +3,10 @@
 
 BT::ConditionTestNode::ConditionTestNode(std::string name) : ConditionNode::ConditionNode(name)
 {
-    type_ = BT::Condition;
+    type_ = BT::CONDITION_NODE;
 
-    // Thread start
-    Thread = boost::thread(&ConditionTestNode::Exec, this);
+    // thread_ start
+    thread_ = boost::thread(&ConditionTestNode::Exec, this);
 }
 
 BT::ConditionTestNode::~ConditionTestNode() {}
@@ -18,9 +18,9 @@ void BT::ConditionTestNode::Exec()
     {
 	
         // Waiting for a tick to come
-        Semaphore.Wait();
+        tick_engine.wait();
 
-        if(ReadState() == BT::Exit)
+        if(ReadState() == BT::EXIT)
         {
             // The behavior tree is going to be destroied
             return;
@@ -30,22 +30,22 @@ void BT::ConditionTestNode::Exec()
         i++;
         if (i < 5)
         {
-            SetNodeState(BT::Success);
-            std::cout << get_name() << " returning Success" << BT::Success << "!" << std::endl;
+            SetNodeState(BT::SUCCESS);
+            std::cout << get_name() << " returning Success" << BT::SUCCESS << "!" << std::endl;
         }
         else if( i<10)
         {
-            SetNodeState(BT::Failure);
-            std::cout << get_name() << " returning Failure" << BT::Failure << "!" << std::endl;
+            SetNodeState(BT::FAILURE);
+            std::cout << get_name() << " returning Failure" << BT::FAILURE << "!" << std::endl;
         } else
 	{
             std::cout << get_name() << " reset i!" << std::endl;
-            SetNodeState(BT::Failure);
+            SetNodeState(BT::FAILURE);
 	i=0;
 	}
 	
 
         // Resetting the state
-        WriteState(BT::Idle);
+        WriteState(BT::IDLE);
     }
 }

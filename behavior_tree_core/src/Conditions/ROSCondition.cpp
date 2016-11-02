@@ -1,15 +1,15 @@
 #include <Conditions/ROSCondition.h>
 
 
-enum Status {RUNNING,SUCCESS, FAILURE};
+enum Status {RUNNING,ROS_SUCCESS, ROS_FAILURE};
 
 
 BT::ROSCondition::ROSCondition(std::string name) : ConditionNode::ConditionNode(name)
 {
-    type_ = BT::Condition;
+    type_ = BT::CONDITION_NODE;
 
-    // Thread start
-    Thread = boost::thread(&ROSCondition::Exec, this);
+    // thread_ start
+    thread_ = boost::thread(&ROSCondition::Exec, this);
 }
 
 BT::ROSCondition::~ROSCondition() {}
@@ -28,13 +28,13 @@ void BT::ROSCondition::Exec()
     {
 	
         // Waiting for a tick to come
-        Semaphore.Wait();
+        tick_engine.wait();
         node_result.status = 0;
 
         ROS_INFO("I am running the request");
 
 
-        if(ReadState() == Exit)
+        if(ReadState() == BT::EXIT)
         {
             // The behavior tree is going to be destroied
             return;
@@ -51,23 +51,23 @@ void BT::ROSCondition::Exec()
 
        // }while(node_result.status != 2 && node_result.status != 1 ); //if it is not halted and has not returned a status
 
-        if (node_result.status == SUCCESS)
+        if (node_result.status == ROS_SUCCESS)
         {
-            SetNodeState(BT::Success);
-           std::cout << get_name() << " returning Success" << BT::Success << "!" << std::endl;
+            SetNodeState(BT::SUCCESS);
+           std::cout << get_name() << " returning Success" << BT::SUCCESS << "!" << std::endl;
         }
-        else if( node_result.status == FAILURE)
+        else if( node_result.status == ROS_FAILURE)
         {
-            SetNodeState(BT::Failure);
-            std::cout << get_name() << " returning Failure" << BT::Failure << "!" << std::endl;
+            SetNodeState(BT::FAILURE);
+            std::cout << get_name() << " returning Failure" << BT::FAILURE << "!" << std::endl;
         }else{
-            SetNodeState(BT::Failure);
-            std::cout << get_name() << " returning NOTHING" << BT::Failure << "!" << std::endl;
+            SetNodeState(BT::FAILURE);
+            std::cout << get_name() << " returning NOTHING" << BT::FAILURE << "!" << std::endl;
         }
 
 	
 
         // Resetting the state
-        WriteState(BT::Idle);
+        WriteState(BT::IDLE);
     }
 }
