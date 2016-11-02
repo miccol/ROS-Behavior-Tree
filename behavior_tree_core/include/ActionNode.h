@@ -10,7 +10,7 @@ namespace BT
     {
     public:
         // Constructor
-        ActionNode(std::string Name);
+        ActionNode(std::string name);
         ~ActionNode();
 
         // The method that is going to be executed by the thread

@@ -1,7 +1,7 @@
 #include <DecoratorNegationNode.h>
 
 
-BT::DecoratorNegationNode::DecoratorNegationNode(std::string Name) : ControlNode::ControlNode(Name)
+BT::DecoratorNegationNode::DecoratorNegationNode(std::string name) : ControlNode::ControlNode(name)
 {
     // Thread start
     Thread = boost::thread(&DecoratorNegationNode::Exec, this);
@@ -37,7 +37,7 @@ void BT::DecoratorNegationNode::Exec()
         if (ReadState() != BT::Halted)
         {
             // If not, the children can be ticked
-            std::cout << Name << " ticked, ticking children..." << std::endl;
+            std::cout << get_name() << " ticked, ticking children..." << std::endl;
 
 
 
@@ -92,7 +92,7 @@ void BT::DecoratorNegationNode::Exec()
                     // 3.2) resetting the state;
                     WriteState(BT::Idle);
 
-                    std::cout << Name << " returning " << Failure << "!" << std::endl;
+                    std::cout << get_name() << " returning " << Failure << "!" << std::endl;
                 }
                 else if(ChildStates[0] == BT::Failure)
                 {
@@ -102,7 +102,7 @@ void BT::DecoratorNegationNode::Exec()
                     // 4.2) state reset;
                     WriteState(Idle);
 
-                    std::cout << Name << " returning " << Success << "!" << std::endl;
+                    std::cout << get_name() << " returning " << Success << "!" << std::endl;
 
                 } else
                 // 5) if the child state is  running
@@ -118,7 +118,7 @@ void BT::DecoratorNegationNode::Exec()
         else
         {
             // If it was halted, all the "busy" children must be halted too
-            std::cout << Name << " halted! Halting all the children..." << std::endl;
+            std::cout << get_name() << " halted! Halting all the children..." << std::endl;
 
                 if (ChildNodes[0]->Type != BT::Action && ChildStates[0] == BT::Running)
                 {
@@ -129,11 +129,11 @@ void BT::DecoratorNegationNode::Exec()
                     // sync with it (it's waiting on the semaphore);
                     ChildNodes[0]->Semaphore.Signal();
 
-                    std::cout << Name << " halting child  "  << "!" << std::endl;
+                    std::cout << get_name() << " halting child  "  << "!" << std::endl;
                 }
                 else if (ChildNodes[0]->Type == Action && ChildNodes[0]->ReadState() == BT::Running)
                 {
-                    std::cout << Name << " trying halting child  "  << "..." << std::endl;
+                    std::cout << get_name() << " trying halting child  "  << "..." << std::endl;
 
                     // if it's a action node that hasn't finished its job:
                     // trying to halt it:
@@ -144,10 +144,10 @@ void BT::DecoratorNegationNode::Exec()
                         // sync with him ignoring its state;
                         ChildNodes[0]->Semaphore.Signal();
 
-                        std::cout << Name << " halting of child  "  << " failed!" << std::endl;
+                        std::cout << get_name() << " halting of child  "  << " failed!" << std::endl;
                     }
 
-                    std::cout << Name << " halting of child  "  << " succedeed!" << std::endl;
+                    std::cout << get_name() << " halting of child  "  << " succedeed!" << std::endl;
                 }
                 else if (ChildNodes[0]->Type == BT::Action && ChildNodes[0]->ReadState() != BT::Idle)
                 {

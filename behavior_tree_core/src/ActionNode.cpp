@@ -2,7 +2,7 @@
 
 
 
-BT::ActionNode::ActionNode(std::string Name) : LeafNode::LeafNode(Name)
+BT::ActionNode::ActionNode(std::string name) : LeafNode::LeafNode(name)
 {
     Type = Action;
 }

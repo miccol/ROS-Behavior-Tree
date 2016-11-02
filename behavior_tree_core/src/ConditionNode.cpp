@@ -1,7 +1,7 @@
 #include <ConditionNode.h>
 
 
-BT::ConditionNode::ConditionNode(std::string Name) : LeafNode::LeafNode(Name)
+BT::ConditionNode::ConditionNode(std::string name) : LeafNode::LeafNode(name)
 {
     Type = Condition;
 }

@@ -1,7 +1,7 @@
 #include <SequenceNode.h>
 
 
-BT::SequenceNode::SequenceNode(std::string Name) : ControlNode::ControlNode(Name)
+BT::SequenceNode::SequenceNode(std::string name) : ControlNode::ControlNode(name)
 {
     // Thread start
     Thread = boost::thread(&SequenceNode::Exec, this);
@@ -37,7 +37,7 @@ void BT::SequenceNode::Exec()
         if (ReadState() != BT::Halted)
         {
             // If not, the children can be ticked
-            std::cout << Name << " ticked, ticking children..." << std::endl;
+            std::cout << get_name() << " ticked, ticking children..." << std::endl;
 
             // For each child:
             for (i = 0; i<M; i++)
@@ -95,7 +95,7 @@ void BT::SequenceNode::Exec()
                     // 3.3) all the next action or control child nodes must be halted:
                     HaltChildren(i+1);
 
-                    std::cout << Name << " returning " << ChildStates[i] << "!" << std::endl;
+                    std::cout << get_name() << " returning " << ChildStates[i] << "!" << std::endl;
 
                     // 3.4) the "for" loop must end here.
                     break;
@@ -111,13 +111,13 @@ void BT::SequenceNode::Exec()
                 // 4.2) resetting the state;
                 WriteState(BT::Idle);
 
-                std::cout << Name << " returning " << BT::Success << "!" << std::endl;
+                std::cout << get_name() << " returning " << BT::Success << "!" << std::endl;
             }
         }
         else
         {
             // If it was halted, all the "busy" children must be halted too
-            std::cout << Name << " halted! Halting all the children..." << std::endl;
+            std::cout << get_name() << " halted! Halting all the children..." << std::endl;
 
             HaltChildren(0);
             // Resetting the node state

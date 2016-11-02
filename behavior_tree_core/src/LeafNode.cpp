@@ -1,7 +1,7 @@
 #include <LeafNode.h>
 
 
-BT::LeafNode::LeafNode(std::string Name) : TreeNode(Name) {}
+BT::LeafNode::LeafNode(std::string name) : TreeNode(name) {}
 
 BT::LeafNode::~LeafNode() {}
 

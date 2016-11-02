@@ -1,7 +1,7 @@
 #include <Conditions/ConditionTestNode.h>
 
 
-BT::ConditionTestNode::ConditionTestNode(std::string Name) : ConditionNode::ConditionNode(Name)
+BT::ConditionTestNode::ConditionTestNode(std::string name) : ConditionNode::ConditionNode(name)
 {
     Type = BT::Condition;
 
@@ -31,15 +31,15 @@ void BT::ConditionTestNode::Exec()
         if (i < 5)
         {
             SetNodeState(BT::Success);
-            std::cout << Name << " returning Success" << BT::Success << "!" << std::endl;
+            std::cout << get_name() << " returning Success" << BT::Success << "!" << std::endl;
         }
         else if( i<10)
         {
             SetNodeState(BT::Failure);
-            std::cout << Name << " returning Failure" << BT::Failure << "!" << std::endl;
+            std::cout << get_name() << " returning Failure" << BT::Failure << "!" << std::endl;
         } else
 	{
-            std::cout << Name << " reset i!" << std::endl;
+            std::cout << get_name() << " reset i!" << std::endl;
             SetNodeState(BT::Failure);
 	i=0;
 	}

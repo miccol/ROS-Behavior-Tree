@@ -9,7 +9,7 @@ namespace BT
     {
     public:
         // Constructor
-        SequenceStarNode(std::string Name);
+        SequenceStarNode(std::string name);
         ~SequenceStarNode();
 	int GetType();
         // The method that is going to be executed by the thread

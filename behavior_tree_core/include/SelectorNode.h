@@ -9,7 +9,7 @@ namespace BT
     {
     public:
         // Constructor
-        SelectorNode(std::string Name);
+        SelectorNode(std::string name);
         ~SelectorNode();
 	int GetType();
         // The method that is going to be executed by the thread

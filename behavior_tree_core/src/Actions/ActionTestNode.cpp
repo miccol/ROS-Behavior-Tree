@@ -1,6 +1,6 @@
 #include <Actions/ActionTestNode.h>
 
-BT::ActionTestNode::ActionTestNode(std::string Name) : ActionNode::ActionNode(Name)
+BT::ActionTestNode::ActionTestNode(std::string name) : ActionNode::ActionNode(name)
 {
     Type = BT::Action;
     // Thread start
@@ -29,13 +29,13 @@ void BT::ActionTestNode::Exec()
 
         // Running state
         SetNodeState(BT::Running);
-        std::cout << Name << " returning " << BT::Running << "!" << std::endl;
+        std::cout << get_name() << " returning " << BT::Running << "!" << std::endl;
 
         // Perform action...
         int i = 0;
         while(ReadState() == BT::Running and i++<5)
         {
-            std::cout << Name << " working!" << std::endl;
+            std::cout << get_name() << " working!" << std::endl;
             boost::this_thread::sleep(boost::posix_time::milliseconds(800));
         }
 
@@ -52,7 +52,7 @@ void BT::ActionTestNode::Exec()
             if (WriteState(status_) != true)
             {
                 // meanwhile, my father halted me!
-                std::cout << Name << " Halted!" << std::endl;
+                std::cout << get_name() << " Halted!" << std::endl;
 
                 // Resetting the state
                 WriteState(Idle);
@@ -61,7 +61,7 @@ void BT::ActionTestNode::Exec()
                 continue;
             }
 
-            std::cout << Name << " returning " << BT::Success << "!" << std::endl;
+            std::cout << get_name() << " returning " << BT::Success << "!" << std::endl;
         }
 
         // Synchronization

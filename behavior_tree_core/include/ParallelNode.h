@@ -25,7 +25,7 @@ namespace BT
         bool StateUpdate;
     public:
         // Constructor
-        ParallelNode(std::string Name);
+        ParallelNode(std::string name);
         ~ParallelNode();
 
         // the method used to set N

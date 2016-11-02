@@ -9,7 +9,7 @@ namespace BT
     {
     public:
         // Constructor
-        ConditionNode(std::string Name);
+        ConditionNode(std::string name);
         ~ConditionNode();
 
         // The method that is going to be executed by the thread

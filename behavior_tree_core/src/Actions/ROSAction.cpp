@@ -5,7 +5,7 @@
 
 enum Status {RUNNING,SUCCESS, FAILURE};
 
-BT::ROSAction::ROSAction(std::string Name) : ActionNode::ActionNode(Name)
+BT::ROSAction::ROSAction(std::string name) : ActionNode::ActionNode(name)
 {
     Type = BT::Action;
     // Thread start
@@ -22,12 +22,12 @@ void BT::ROSAction::Exec()
     //bool hasReturned = false;
 	  // create the action client
 	  // true causes the client to spin its own thread
-    ROS_INFO("Waiting For the Acutator %s to start", Name.c_str());
+    ROS_INFO("Waiting For the Acutator %s to start", get_name().c_str());
 
-      actionlib::SimpleActionClient<behavior_tree_core::BTAction> ac(Name, true);
+      actionlib::SimpleActionClient<behavior_tree_core::BTAction> ac(get_name(), true);
 
       ac.waitForServer(); //will wait for infinite time until the server starts
-      ROS_INFO("Tthe Acutator %s has started", Name.c_str());
+      ROS_INFO("Tthe Acutator %s has started", get_name().c_str());
 
       behavior_tree_core::BTGoal goal;
       node_result.status = RUNNING;//
@@ -44,10 +44,10 @@ void BT::ROSAction::Exec()
 
         // Running state
         SetNodeState(BT::Running);
-        std::cout << Name << " returning " << Running << "!" << std::endl;
+        std::cout << get_name() << " returning " << Running << "!" << std::endl;
         node_result.status = RUNNING;
         // Perform action...
-        ROS_INFO("I am running the request to %s",Name.c_str());
+        ROS_INFO("I am running the request to %s",get_name().c_str());
         ac.sendGoal(goal);
         do
         {
@@ -55,7 +55,7 @@ void BT::ROSAction::Exec()
         } while(node_result.status == RUNNING && ReadState() == Running);
             ROS_INFO("The Server Has Replied Or I the node is halted");
 
-        std::cout << Name << " RETURNING " << node_result.status << "!" << std::endl;
+        std::cout << get_name() << " RETURNING " << node_result.status << "!" << std::endl;
 
         if(ReadState() == Exit)
         {
@@ -70,7 +70,7 @@ void BT::ROSAction::Exec()
             if (WriteState(Success) != true)
             {
                 // meanwhile, my father halted me!
-                std::cout << Name << " Halted!" << std::endl;
+                std::cout << get_name() << " Halted!" << std::endl;
                 ROS_INFO("I am cancelling the request");
                 ac.cancelGoal();
                 // Resetting the state
@@ -78,7 +78,7 @@ void BT::ROSAction::Exec()
                 continue;
             }
 
-            std::cout << Name << " returning Success " << BT::Success << "!" << std::endl;
+            std::cout << get_name() << " returning Success " << BT::Success << "!" << std::endl;
         }
         else if( node_result.status == FAILURE)
         {
@@ -86,7 +86,7 @@ void BT::ROSAction::Exec()
             if (WriteState(Failure) != true)
             {
                 // meanwhile, my father halted me!
-                std::cout << Name << " Halted!" << std::endl;
+                std::cout << get_name() << " Halted!" << std::endl;
                 ROS_INFO("I am cancelling the request");
                 ac.cancelGoal();
                 // Resetting the state
@@ -94,21 +94,21 @@ void BT::ROSAction::Exec()
                 continue;
             }
 
-            std::cout << Name << " returning Failure" << BT::Failure << "!" << std::endl;
+            std::cout << get_name() << " returning Failure" << BT::Failure << "!" << std::endl;
         }else{//it means that the parent has halted the node
 
-            std::cout << Name << " Halted!" << std::endl;
+            std::cout << get_name() << " Halted!" << std::endl;
             ROS_INFO("I am cancelling the request");
             ac.cancelGoal();
             // Resetting the state
             WriteState(BT::Idle);
             continue;
 
-            std::cout << Name << " returning NOTHING (HALTED)" << BT::Failure << "!" << std::endl;
+            std::cout << get_name() << " returning NOTHING (HALTED)" << BT::Failure << "!" << std::endl;
         }
 
 
-            std::cout << Name << " returning " << BT::Success << "!" << std::endl;
+            std::cout << get_name() << " returning " << BT::Success << "!" << std::endl;
 
 
         // Synchronization

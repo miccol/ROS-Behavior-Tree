@@ -214,12 +214,12 @@ void setpositions(BT::TreeNode* tree, GLfloat x_pos, GLfloat y_pos, GLfloat x_of
     {//if it is a leaf node, draw it
 
         float NODE_WIDTH = 0.03;
-        std::string st(tree->Name,0, 15);
+        std::string st(tree->get_name(),0, 15);
         NODE_WIDTH = 0.01;
         for (unsigned int i = 0; i < st.size(); i++)
           NODE_WIDTH +=  0.01;
 
-     //   std::cout << "setting position of " << tree->Name << " as " << x_pos + 2*NODE_WIDTH + x_space << std::endl;
+     //   std::cout << "setting position of " << tree->name << " as " << x_pos + 2*NODE_WIDTH + x_space << std::endl;
 
         tree->SetXPose(x_pos + 2*NODE_WIDTH + x_space);
     }
@@ -262,13 +262,13 @@ void setpositions(BT::TreeNode* tree, GLfloat x_pos, GLfloat y_pos, GLfloat x_of
             tree->SetXPose((x_min+x_max)/2);
 
         }
-        //draw_node((GLfloat) (x_min+x_max)/2, (GLfloat) y_pos, tree->GetType(), tree->Name.c_str(), tree->ReadColorState());
+        //draw_node((GLfloat) (x_min+x_max)/2, (GLfloat) y_pos, tree->GetType(), tree->name.c_str(), tree->ReadColorState());
 
         //return x_shift_new + (x_min+x_max)/2;
 
     }
 
-   // std::cout << "position of " << tree->Name << " is " << tree->GetXPose() << std::endl;
+   // std::cout << "position of " << tree->name << " is " << tree->GetXPose() << std::endl;
 }
 
 
@@ -309,7 +309,7 @@ void updateTree(BT::TreeNode* tree, GLfloat x_pos, GLfloat y_pos, GLfloat y_offs
         }
 
 
-        draw_node((GLfloat) tree->GetXPose(), (GLfloat) y_pos, tree->GetType(), tree->Name.c_str(), tree->ReadColorState());
+        draw_node((GLfloat) tree->GetXPose(), (GLfloat) y_pos, tree->GetType(), tree->get_name().c_str(), tree->ReadColorState());
 
         //return x_shift_new + (x_min+x_max)/2;
 

@@ -12,7 +12,7 @@ namespace BT
     {
     public:
         // Constructor
-        ROSAction(std::string Name);
+        ROSAction(std::string name);
         ~ROSAction();
 
         // The method that is going to be executed by the thread

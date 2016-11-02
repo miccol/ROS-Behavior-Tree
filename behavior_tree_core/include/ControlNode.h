@@ -20,7 +20,7 @@ namespace BT
         unsigned int M;
     public:
         // Constructor
-        ControlNode(std::string Name);
+        ControlNode(std::string name);
         ~ControlNode();
 
         // The method used to fill the child vector

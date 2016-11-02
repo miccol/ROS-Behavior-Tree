@@ -4,7 +4,7 @@
 enum Status {RUNNING,SUCCESS, FAILURE};
 
 
-BT::ROSCondition::ROSCondition(std::string Name) : ConditionNode::ConditionNode(Name)
+BT::ROSCondition::ROSCondition(std::string name) : ConditionNode::ConditionNode(name)
 {
     Type = BT::Condition;
 
@@ -17,11 +17,11 @@ BT::ROSCondition::~ROSCondition() {}
 void BT::ROSCondition::Exec()
 {
 
-   // ROS_INFO("Waiting For the Acutator %s to start", Name);
+   // ROS_INFO("Waiting For the Acutator %s to start", name);
 
-    actionlib::SimpleActionClient<behavior_tree_core::BTAction> ac(Name, true);
+    actionlib::SimpleActionClient<behavior_tree_core::BTAction> ac(get_name(), true);
     ac.waitForServer(); //will wait for infinite time until the server starts
-    //ROS_INFO("Actuator %s Started", Name);
+    //ROS_INFO("Actuator %s Started", get_name());
 
     behavior_tree_core::BTGoal goal;
     while(true)
@@ -54,15 +54,15 @@ void BT::ROSCondition::Exec()
         if (node_result.status == SUCCESS)
         {
             SetNodeState(BT::Success);
-           std::cout << Name << " returning Success" << BT::Success << "!" << std::endl;
+           std::cout << get_name() << " returning Success" << BT::Success << "!" << std::endl;
         }
         else if( node_result.status == FAILURE)
         {
             SetNodeState(BT::Failure);
-            std::cout << Name << " returning Failure" << BT::Failure << "!" << std::endl;
+            std::cout << get_name() << " returning Failure" << BT::Failure << "!" << std::endl;
         }else{
             SetNodeState(BT::Failure);
-            std::cout << Name << " returning NOTHING" << BT::Failure << "!" << std::endl;
+            std::cout << get_name() << " returning NOTHING" << BT::Failure << "!" << std::endl;
         }
 
 	

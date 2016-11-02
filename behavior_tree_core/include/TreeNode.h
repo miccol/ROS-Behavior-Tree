@@ -51,6 +51,12 @@ namespace BT
     // Abstract base class for Behavior Tree Nodes
     class TreeNode
     {
+    private:
+        // Node name
+        std::string name_;
+
+
+
     protected:
         // The node state that must be treated in a thread-safe way
         bool StateUpdated;
@@ -59,10 +65,8 @@ namespace BT
         boost::mutex StateMutex;
         boost::mutex ColorStateMutex;
         boost::condition_variable StateConditionVariable;
-    public:
-        // Node name
-        std::string Name;
 
+    public:
         // Node type
         NodeType Type;
 
@@ -78,7 +82,7 @@ namespace BT
 
 
         // The constructor and the distructor
-        TreeNode(std::string Name);
+        TreeNode(std::string name);
         ~TreeNode();
 
         // The method that is going to be executed by the thread

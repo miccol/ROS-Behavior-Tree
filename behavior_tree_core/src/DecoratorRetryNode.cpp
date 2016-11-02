@@ -1,7 +1,7 @@
 #include <DecoratorRetryNode.h>
 
 
-BT::DecoratorRetryNode::DecoratorRetryNode(std::string Name, unsigned int NTries) : ControlNode::ControlNode(Name)
+BT::DecoratorRetryNode::DecoratorRetryNode(std::string name, unsigned int NTries) : ControlNode::ControlNode(name)
 {
     // Thread start
     NTries_ = NTries;
@@ -38,7 +38,7 @@ void BT::DecoratorRetryNode::Exec()
         if (ReadState() != BT::Halted)
         {
             // If not, the children can be ticked
-            std::cout << Name << " ticked, ticking children..." << std::endl;
+            std::cout << get_name() << " ticked, ticking children..." << std::endl;
 
             TryIndx_ = 0;
             // For each child:
@@ -93,7 +93,7 @@ void BT::DecoratorRetryNode::Exec()
                     // 4.2) resetting the state;
                     WriteState(Idle);
 
-                    std::cout << Name << " returning " << BT::Success << "!" << std::endl;
+                    std::cout << get_name() << " returning " << BT::Success << "!" << std::endl;
                 }
                 else
                 {
@@ -116,7 +116,7 @@ void BT::DecoratorRetryNode::Exec()
                         SetNodeState(ChildStates[0]);
                         // 3.2) state reset;
                         WriteState(BT::Idle);
-                        std::cout << Name << " returning " << ChildStates[0] << "!" << std::endl;
+                        std::cout << get_name() << " returning " << ChildStates[0] << "!" << std::endl;
 
                     }
                 }
@@ -126,7 +126,7 @@ void BT::DecoratorRetryNode::Exec()
         else
         {
             // If it was halted, all the "busy" children must be halted too
-            std::cout << Name << " halted! Halting all the children..." << std::endl;
+            std::cout << get_name() << " halted! Halting all the children..." << std::endl;
 
                 if (ChildNodes[0]->Type != Action && ChildStates[0] == BT::Running)
                 {
@@ -137,11 +137,11 @@ void BT::DecoratorRetryNode::Exec()
                     // sync with it (it's waiting on the semaphore);
                     ChildNodes[0]->Semaphore.Signal();
 
-                    std::cout << Name << " halting child  "  << "!" << std::endl;
+                    std::cout << get_name() << " halting child  "  << "!" << std::endl;
                 }
                 else if (ChildNodes[0]->Type == Action && ChildNodes[0]->ReadState() == BT::Running)
                 {
-                    std::cout << Name << " trying halting child  "  << "..." << std::endl;
+                    std::cout << get_name() << " trying halting child  "  << "..." << std::endl;
 
                     // if it's a action node that hasn't finished its job:
                     // trying to halt it:
@@ -152,10 +152,10 @@ void BT::DecoratorRetryNode::Exec()
                         // sync with him ignoring its state;
                         ChildNodes[0]->Semaphore.Signal();
 
-                        std::cout << Name << " halting of child  "  << " failed!" << std::endl;
+                        std::cout << get_name() << " halting of child  "  << " failed!" << std::endl;
                     }
 
-                    std::cout << Name << " halting of child  "  << " succedeed!" << std::endl;
+                    std::cout << get_name() << " halting of child  "  << " succedeed!" << std::endl;
                 }
                 else if (ChildNodes[0]->Type == BT::Action && ChildNodes[0]->ReadState() != BT::Idle)
                 {

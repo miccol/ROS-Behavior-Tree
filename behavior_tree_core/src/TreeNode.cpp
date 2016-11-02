@@ -1,9 +1,9 @@
 #include <TreeNode.h>
 
-BT::TreeNode::TreeNode(std::string Name) : Semaphore(0)
+BT::TreeNode::TreeNode(std::string name) : Semaphore(0)
 {
     // Initialization
-    this->Name = Name;
+    name_ = name;
     StateUpdated = false;
     State = BT::Idle;
 }
@@ -113,7 +113,7 @@ x_shift_ = x_shift;
 std::string BT::TreeNode::get_name()
 {
 
-return Name;
+return name_;
 
 }
 

@@ -1,7 +1,7 @@
 #include <ParallelNode.h>
 
 
-BT::ParallelNode::ParallelNode(std::string Name) : ControlNode::ControlNode(Name)
+BT::ParallelNode::ParallelNode(std::string name) : ControlNode::ControlNode(name)
 {
     // Initializations
     N = std::numeric_limits<unsigned int>::max();
@@ -22,7 +22,7 @@ void BT::ParallelNode::SetThreshold(unsigned int N)
     if (N > M)
     {
         std::stringstream S;
-        S << "Wrong N threshold for '" << Name << "'. M=" << M << " while N=" << N << ". N should be <= M.";
+        S << "Wrong N threshold for '" << get_name() << "'. M=" << M << " while N=" << N << ". N should be <= M.";
         throw BehaviorTreeException(S.str());
     }
 
@@ -42,7 +42,7 @@ void BT::ParallelNode::Exec()
     // Checking N correctness
     if (N == std::numeric_limits<unsigned int>::max())
     {
-        throw BehaviorTreeException("'" + Name + "' has no valid N threashold set. You should set it before ticking the node.");
+        throw BehaviorTreeException("'" + get_name() + "' has no valid N threashold set. You should set it before ticking the node.");
     }
 
     // Vector construction
@@ -73,7 +73,7 @@ void BT::ParallelNode::Exec()
         // Checking if i was halted
         if (ReadState() != BT::Halted)
         {
-            std::cout << Name << " ticked, ticking actions..." << std::endl;
+            std::cout << get_name() << " ticked, ticking actions..." << std::endl;
 
             // If not, before ticking the children, checking if a state can
             // be immediatelly returned.
@@ -112,7 +112,7 @@ void BT::ParallelNode::Exec()
                 {
                     // Returning success
                     SetNodeState(BT::Success);
-                    std::cout << Name << " returning Success! " << std::endl;
+                    std::cout << get_name() << " returning Success! " << std::endl;
                     StateUpdate = true;
 
                     // Exit the for loop
@@ -122,7 +122,7 @@ void BT::ParallelNode::Exec()
                 {
                     // Returning failure
                     SetNodeState(Failure);
-                    std::cout << Name << " returning Failure! " << std::endl;
+                    std::cout << get_name() << " returning Failure! " << std::endl;
                     StateUpdate = true;
 
                     // Exit the for loop
@@ -133,7 +133,7 @@ void BT::ParallelNode::Exec()
                     // Neither a Success nor a Failure could be returned
                     // Returning Running
                     SetNodeState(BT::Running);
-                    std::cout << Name << " returning Running! " << std::endl;
+                    std::cout << get_name() << " returning Running! " << std::endl;
                     StateUpdate = true;
 
                     // Exit the for loop
@@ -144,7 +144,7 @@ void BT::ParallelNode::Exec()
             if (StateUpdate == true)
             {
                 // If it is known what to return...
-                std::cout << Name << " knows what to return... " << std::endl;
+                std::cout << get_name() << " knows what to return... " << std::endl;
 
                 if (ReadState() == BT::Success || ReadState() == BT::Failure)
                 {
@@ -156,7 +156,7 @@ void BT::ParallelNode::Exec()
                             continue;
                         }
 
-                        std::cout << Name << " trying halting (action) child number " << i << "..." << std::endl;
+                        std::cout << get_name() << " trying halting (action) child number " << i << "..." << std::endl;
 
                         if (ChildNodes[i]->Halt() == false)
                         {
@@ -165,11 +165,11 @@ void BT::ParallelNode::Exec()
                             // sync with him ignoring its state;
                             ChildNodes[i]->Semaphore.Signal();
 
-                            std::cout << Name << " halting of child number " << i << " failed!" << std::endl;
+                            std::cout << get_name() << " halting of child number " << i << " failed!" << std::endl;
                         }
                         else
                         {
-                            std::cout << Name << " halting of child number " << i << " succedeed!" << std::endl;
+                            std::cout << get_name() << " halting of child number " << i << " succedeed!" << std::endl;
                         }
 
                         // updating its vector cell;
@@ -178,7 +178,7 @@ void BT::ParallelNode::Exec()
 
                     // Ticking the other children, but halting them if they
                     // return Running.
-                    std::cout << Name << " ticking the remaining children... " << std::endl;
+                    std::cout << get_name() << " ticking the remaining children... " << std::endl;
 
                     for(i = 0; i<M; i++)
                     {
@@ -194,7 +194,7 @@ void BT::ParallelNode::Exec()
                         ChildStates[i] = ChildNodes[i]->GetNodeState();
                         if (ChildStates[i] == BT::Running)
                         {
-                            std::cout << Name << " halting (control) child number " << i << "..." << std::endl;
+                            std::cout << get_name() << " halting (control) child number " << i << "..." << std::endl;
 
                             // if it is running, halting it;
                             ChildNodes[i]->Halt();
@@ -221,7 +221,7 @@ void BT::ParallelNode::Exec()
                 {
                     // Returning running! But some children haven't been ticked yet!
 
-                    std::cout << Name << " ticking the remaining children and ignoring their state... " << std::endl;
+                    std::cout << get_name() << " ticking the remaining children and ignoring their state... " << std::endl;
 
                     // Ticking the remaining children (ignoring their states)
                     for(i = 0; i<M; i++)
@@ -289,7 +289,7 @@ void BT::ParallelNode::Exec()
             // by considerating only the action nodes, the remaining children
             // must be ticked and their state must be considered
 
-            std::cout << Name << " doesn't know yet what to return, ticking the remaining children..." << std::endl;
+            std::cout << get_name() << " doesn't know yet what to return, ticking the remaining children..." << std::endl;
 
             // For each remained child (conditions and controls):
             for(i = 0; i<M; i++)
@@ -325,7 +325,7 @@ void BT::ParallelNode::Exec()
                 {
                     // Returning success
                     SetNodeState(BT::Success);
-                    std::cout << Name << " returning Success! " << std::endl;
+                    std::cout << get_name() << " returning Success! " << std::endl;
                     StateUpdate = true;
 
                     // Exit the for loop
@@ -335,7 +335,7 @@ void BT::ParallelNode::Exec()
                 {
                     // Returning failure
                     SetNodeState(BT::Failure);
-                    std::cout << Name << " returning Failure! " << std::endl;
+                    std::cout << get_name() << " returning Failure! " << std::endl;
                     StateUpdate = true;
 
                     // Exit the for loop
@@ -346,7 +346,7 @@ void BT::ParallelNode::Exec()
                     // Neither a Success nor a Failure could be returned
                     // Returning Running
                     SetNodeState(BT::Running);
-                    std::cout << Name << " returning Running! " << std::endl;
+                    std::cout << get_name() << " returning Running! " << std::endl;
                     StateUpdate = true;
 
                     // Exit the for loop
@@ -356,7 +356,7 @@ void BT::ParallelNode::Exec()
 
             if (StateUpdate == true && ReadState() != BT::Running)
             {
-                std::cout << Name << " knows what to return... " << std::endl;
+                std::cout << get_name() << " knows what to return... " << std::endl;
 
                 // Halting all the running nodes (that have been ticked!)
                 for (i=0; i<M; i++)
@@ -368,7 +368,7 @@ void BT::ParallelNode::Exec()
 
                     if (ChildNodes[i]->Type == BT::Action)
                     {
-                        std::cout << Name << " trying halting (action) child number " << i << "..." << std::endl;
+                        std::cout << get_name() << " trying halting (action) child number " << i << "..." << std::endl;
 
                         if (ChildNodes[i]->Halt() == false)
                         {
@@ -377,11 +377,11 @@ void BT::ParallelNode::Exec()
                             // sync with him ignoring its state;
                             ChildNodes[i]->Semaphore.Signal();
 
-                            std::cout << Name << " halting of child number " << i << " failed!" << std::endl;
+                            std::cout << get_name() << " halting of child number " << i << " failed!" << std::endl;
                         }
                         else
                         {
-                            std::cout << Name << " halting of child number " << i << " succedeed!" << std::endl;
+                            std::cout << get_name() << " halting of child number " << i << " succedeed!" << std::endl;
                         }
                     }
                     else
@@ -392,7 +392,7 @@ void BT::ParallelNode::Exec()
                         // sync with it (it's waiting on the semaphore);
                         ChildNodes[i]->Semaphore.Signal();
 
-                        std::cout << Name << " halting child number " << i << "!" << std::endl;
+                        std::cout << get_name() << " halting child number " << i << "!" << std::endl;
                     }
 
                     // updating its vector cell;
@@ -401,7 +401,7 @@ void BT::ParallelNode::Exec()
 
                 // Ticking the other children, but halting them is they
                 // return Running.
-                std::cout << Name << " ticking the remaining children... " << std::endl;
+                std::cout << get_name() << " ticking the remaining children... " << std::endl;
 
                 for(i = 0; i<M; i++)
                 {
@@ -418,7 +418,7 @@ void BT::ParallelNode::Exec()
 
                     if (ChildStates[i] == BT::Running)
                     {
-                        std::cout << Name << " halting (control) child number " << i << "..." << std::endl;
+                        std::cout << get_name() << " halting (control) child number " << i << "..." << std::endl;
 
                         // if it is running, halting it;
                         ChildNodes[i]->Halt();
@@ -441,7 +441,7 @@ void BT::ParallelNode::Exec()
             {
                 // Returning running, but there still children to be ticked
 
-                std::cout << Name << " ticking the remaining children and ignoring their state... " << std::endl;
+                std::cout << get_name() << " ticking the remaining children and ignoring their state... " << std::endl;
 
                 // Ticking the remaining children (ignoring their states)
                 for(i = 0; i<M; i++)
@@ -462,14 +462,14 @@ void BT::ParallelNode::Exec()
             {
                 // Returning running!
                 SetNodeState(BT::Running);
-                std::cout << Name << " returning Running! " << std::endl;
+                std::cout << get_name() << " returning Running! " << std::endl;
                 StateUpdate = true;
             }
         }
         else
         {
             // If it was halted, all the "busy" children must be halted too
-            std::cout << Name << " halted! Halting all the children..." << std::endl;
+            std::cout << get_name() << " halted! Halting all the children..." << std::endl;
 
      /*       for(i=0; i<M; i++)
             {
@@ -482,11 +482,11 @@ void BT::ParallelNode::Exec()
                     // sync with it (it's waiting on the semaphore);
                     ChildNodes[i]->Semaphore.Signal();
 
-                    std::cout << Name << " halting child number " << i << "!" << std::endl;
+                    std::cout << name << " halting child number " << i << "!" << std::endl;
                 }
                 else if (ChildNodes[i]->Type == Action && ChildNodes[i]->ReadState() == Running)
                 {
-                    std::cout << Name << " trying halting child number " << i << "..." << std::endl;
+                    std::cout << name << " trying halting child number " << i << "..." << std::endl;
 
                     // if it's a action node that hasn't finished its job:
                     // trying to halt it:
@@ -497,11 +497,11 @@ void BT::ParallelNode::Exec()
                         // sync with him ignoring its state;
                         ChildNodes[i]->Semaphore.Signal();
 
-                        std::cout << Name << " halting of child number " << i << " failed!" << std::endl;
+                        std::cout << name << " halting of child number " << i << " failed!" << std::endl;
                     }
                     else
                     {
-                        std::cout << Name << " halting of child number " << i << " succedeed!" << std::endl;
+                        std::cout << name << " halting of child number " << i << " succedeed!" << std::endl;
                     }
                 }
                 else if (ChildNodes[i]->Type == Action && ChildNodes[i]->ReadState() != Idle)

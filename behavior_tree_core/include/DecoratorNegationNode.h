@@ -9,7 +9,7 @@ namespace BT
     {
     public:
         // Constructor
-        DecoratorNegationNode(std::string Name);
+        DecoratorNegationNode(std::string name);
         ~DecoratorNegationNode();
 	int GetType();
         // The method that is going to be executed by the thread

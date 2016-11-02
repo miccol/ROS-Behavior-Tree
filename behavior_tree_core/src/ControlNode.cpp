@@ -1,7 +1,7 @@
 #include <ControlNode.h>
 
 
-BT::ControlNode::ControlNode(std::string Name) : TreeNode::TreeNode(Name)
+BT::ControlNode::ControlNode(std::string name) : TreeNode::TreeNode(name)
 {
     Type = Control;
 }
@@ -15,7 +15,7 @@ void BT::ControlNode::AddChild(TreeNode* Child)
     {
         if (ChildNodes[i] == Child)
         {
-            throw BehaviorTreeException("'" + Child->Name + "' is already a '" + Name + "' child.");
+            throw BehaviorTreeException("'" + Child->get_name() + "' is already a '" + get_name() + "' child.");
         }
     }
 
@@ -75,11 +75,11 @@ void BT::ControlNode::HaltChildren(int i){
             // sync with it (it's waiting on the semaphore);
             ChildNodes[j]->Semaphore.Signal();
 
-            std::cout << Name << " halting child number " << j << "!" << std::endl;
+            std::cout << get_name() << " halting child number " << j << "!" << std::endl;
         }
         else if (ChildNodes[j]->Type == BT::Action && ChildNodes[j]->ReadState() == BT::Running)
         {
-            std::cout << Name << " trying halting child number " << j << "..." << std::endl;
+            std::cout << get_name() << " trying halting child number " << j << "..." << std::endl;
 
             // if it's a action node that hasn't finished its job:
             // trying to halt it:
@@ -90,10 +90,10 @@ void BT::ControlNode::HaltChildren(int i){
                 // sync with him ignoring its state;
                 ChildNodes[j]->Semaphore.Signal();
 
-                std::cout << Name << " halting of child number " << j << " failed!" << std::endl;
+                std::cout << get_name() << " halting of child number " << j << " failed!" << std::endl;
             }
 
-            std::cout << Name << " halting of child number " << j << " succedeed!" << std::endl;
+            std::cout << get_name() << " halting of child number " << j << " succedeed!" << std::endl;
         }
         else if (ChildNodes[j]->Type == BT::Action && ChildNodes[j]->ReadState() != BT::Idle)
         {

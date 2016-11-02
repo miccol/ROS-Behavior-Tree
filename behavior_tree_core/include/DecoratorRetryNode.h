@@ -9,7 +9,7 @@ namespace BT
     {
     public:
         // Constructor
-        DecoratorRetryNode(std::string Name, unsigned int NTries);
+        DecoratorRetryNode(std::string name, unsigned int NTries);
         ~DecoratorRetryNode();
 	int GetType();
         // The method that is going to be executed by the thread
