@@ -45,7 +45,7 @@ void BT::SequenceStarNode::Exec()
             // For each child:
             while (i<M)
             {
-                if (ChildNodes[i]->Type == BT::Action)
+                if (ChildNodes[i]->get_type() == BT::Action)
                 {
                     // 1) if it's an action:
                     // 1.1) read its state;

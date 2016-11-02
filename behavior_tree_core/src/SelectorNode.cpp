@@ -42,7 +42,7 @@ void BT::SelectorNode::Exec()
             // For each child:
             for (i = 0; i<M; i++)
             {
-                if (ChildNodes[i]->Type == BT::Action)
+                if (ChildNodes[i]->get_type() == BT::Action)
                 {
                     // 1) if it's an action:
                     // 1.1) read its state;

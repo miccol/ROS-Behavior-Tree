@@ -3,7 +3,7 @@
 
 BT::ConditionNode::ConditionNode(std::string name) : LeafNode::LeafNode(name)
 {
-    Type = Condition;
+    type_ = Condition;
 }
 
 BT::ConditionNode::~ConditionNode() {}

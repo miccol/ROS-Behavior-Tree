@@ -2,7 +2,7 @@
 
 BT::ActionTestNode::ActionTestNode(std::string name) : ActionNode::ActionNode(name)
 {
-    Type = BT::Action;
+    type_ = BT::Action;
     // Thread start
     Thread = boost::thread(&ActionTestNode::Exec, this);
 }

@@ -44,7 +44,7 @@ void BT::DecoratorRetryNode::Exec()
             // For each child:
             //for (i = 0; i<M; i++)
             {
-                if (ChildNodes[0]->Type == BT::Action)
+                if (ChildNodes[0]->get_type() == BT::Action)
                 {
                     // 1) if it's an action:
                     // 1.1) read its state;
@@ -128,7 +128,7 @@ void BT::DecoratorRetryNode::Exec()
             // If it was halted, all the "busy" children must be halted too
             std::cout << get_name() << " halted! Halting all the children..." << std::endl;
 
-                if (ChildNodes[0]->Type != Action && ChildStates[0] == BT::Running)
+                if (ChildNodes[0]->get_type() != Action && ChildStates[0] == BT::Running)
                 {
                     // if the control node was running:
                     // halting it;
@@ -139,7 +139,7 @@ void BT::DecoratorRetryNode::Exec()
 
                     std::cout << get_name() << " halting child  "  << "!" << std::endl;
                 }
-                else if (ChildNodes[0]->Type == Action && ChildNodes[0]->ReadState() == BT::Running)
+                else if (ChildNodes[0]->get_type() == Action && ChildNodes[0]->ReadState() == BT::Running)
                 {
                     std::cout << get_name() << " trying halting child  "  << "..." << std::endl;
 
@@ -157,7 +157,7 @@ void BT::DecoratorRetryNode::Exec()
 
                     std::cout << get_name() << " halting of child  "  << " succedeed!" << std::endl;
                 }
-                else if (ChildNodes[0]->Type == BT::Action && ChildNodes[0]->ReadState() != BT::Idle)
+                else if (ChildNodes[0]->get_type() == BT::Action && ChildNodes[0]->ReadState() != BT::Idle)
                 {
                     // if it's a action node that has finished its job:
                     // ticking it without saving its returning state;

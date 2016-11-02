@@ -65,10 +65,11 @@ namespace BT
         boost::mutex StateMutex;
         boost::mutex ColorStateMutex;
         boost::condition_variable StateConditionVariable;
+        // Node type
+        NodeType type_;
 
     public:
-        // Node type
-        NodeType Type;
+
 
         // The thread that will execute the node
         boost::thread Thread;
@@ -114,6 +115,7 @@ namespace BT
         float GetXShift();
 
         std::string get_name();
+        NodeType get_type();
 
 
     };

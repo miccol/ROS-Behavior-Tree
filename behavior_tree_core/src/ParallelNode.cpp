@@ -79,7 +79,7 @@ void BT::ParallelNode::Exec()
             // be immediatelly returned.
             for(i = 0; i<M; i++)
             {
-                if (ChildNodes[i]->Type != BT::Action)
+                if (ChildNodes[i]->get_type() != BT::Action)
                 {
                     continue;
                 }
@@ -231,7 +231,7 @@ void BT::ParallelNode::Exec()
                             continue;
                         }
 
-                        if (ChildNodes[i]->Type == BT::Action)
+                        if (ChildNodes[i]->get_type() == BT::Action)
                         {
                             // if it's an action:
                             // read its state;
@@ -366,7 +366,7 @@ void BT::ParallelNode::Exec()
                         continue;
                     }
 
-                    if (ChildNodes[i]->Type == BT::Action)
+                    if (ChildNodes[i]->get_type() == BT::Action)
                     {
                         std::cout << get_name() << " trying halting (action) child number " << i << "..." << std::endl;
 
@@ -473,7 +473,7 @@ void BT::ParallelNode::Exec()
 
      /*       for(i=0; i<M; i++)
             {
-                if (ChildNodes[i]->Type != Action && ChildStates[i] == Running)
+                if (ChildNodes[i]->get_type() != Action && ChildStates[i] == Running)
                 {
                     // if the control node was running:
                     // halting it;
@@ -484,7 +484,7 @@ void BT::ParallelNode::Exec()
 
                     std::cout << name << " halting child number " << i << "!" << std::endl;
                 }
-                else if (ChildNodes[i]->Type == Action && ChildNodes[i]->ReadState() == Running)
+                else if (ChildNodes[i]->get_type() == Action && ChildNodes[i]->ReadState() == Running)
                 {
                     std::cout << name << " trying halting child number " << i << "..." << std::endl;
 
@@ -504,7 +504,7 @@ void BT::ParallelNode::Exec()
                         std::cout << name << " halting of child number " << i << " succedeed!" << std::endl;
                     }
                 }
-                else if (ChildNodes[i]->Type == Action && ChildNodes[i]->ReadState() != Idle)
+                else if (ChildNodes[i]->get_type() == Action && ChildNodes[i]->ReadState() != Idle)
                 {
                     // if it's a action node that has finished its job:
                     // ticking it without saving its returning state;

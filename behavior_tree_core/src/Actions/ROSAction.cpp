@@ -7,7 +7,7 @@ enum Status {RUNNING,SUCCESS, FAILURE};
 
 BT::ROSAction::ROSAction(std::string name) : ActionNode::ActionNode(name)
 {
-    Type = BT::Action;
+    type_ = BT::Action;
     // Thread start
     Thread = boost::thread(&ROSAction::Exec, this);
 

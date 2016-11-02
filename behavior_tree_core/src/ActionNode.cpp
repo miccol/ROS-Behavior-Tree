@@ -4,7 +4,7 @@
 
 BT::ActionNode::ActionNode(std::string name) : LeafNode::LeafNode(name)
 {
-    Type = Action;
+    type_ = Action;
 }
 
 BT::ActionNode::~ActionNode() {}

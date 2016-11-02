@@ -3,7 +3,7 @@
 
 BT::ConditionTestNode::ConditionTestNode(std::string name) : ConditionNode::ConditionNode(name)
 {
-    Type = BT::Condition;
+    type_ = BT::Condition;
 
     // Thread start
     Thread = boost::thread(&ConditionTestNode::Exec, this);

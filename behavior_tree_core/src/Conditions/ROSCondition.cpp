@@ -6,7 +6,7 @@ enum Status {RUNNING,SUCCESS, FAILURE};
 
 BT::ROSCondition::ROSCondition(std::string name) : ConditionNode::ConditionNode(name)
 {
-    Type = BT::Condition;
+    type_ = BT::Condition;
 
     // Thread start
     Thread = boost::thread(&ROSCondition::Exec, this);

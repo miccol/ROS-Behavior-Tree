@@ -3,7 +3,7 @@
 
 BT::ControlNode::ControlNode(std::string name) : TreeNode::TreeNode(name)
 {
-    Type = Control;
+    type_ = Control;
 }
 
 BT::ControlNode::~ControlNode() {}
@@ -66,7 +66,7 @@ void BT::ControlNode::ResetColorState()
 void BT::ControlNode::HaltChildren(int i){
     for(unsigned int j=i; j<ChildNodes.size(); j++)
     {
-        if (ChildNodes[j]->Type != BT::Action && ChildStates[j] == BT::Running)
+        if (ChildNodes[j]->get_type() != BT::Action && ChildStates[j] == BT::Running)
         {
             // if the control node was running:
             // halting it;
@@ -77,7 +77,7 @@ void BT::ControlNode::HaltChildren(int i){
 
             std::cout << get_name() << " halting child number " << j << "!" << std::endl;
         }
-        else if (ChildNodes[j]->Type == BT::Action && ChildNodes[j]->ReadState() == BT::Running)
+        else if (ChildNodes[j]->get_type() == BT::Action && ChildNodes[j]->ReadState() == BT::Running)
         {
             std::cout << get_name() << " trying halting child number " << j << "..." << std::endl;
 
@@ -95,7 +95,7 @@ void BT::ControlNode::HaltChildren(int i){
 
             std::cout << get_name() << " halting of child number " << j << " succedeed!" << std::endl;
         }
-        else if (ChildNodes[j]->Type == BT::Action && ChildNodes[j]->ReadState() != BT::Idle)
+        else if (ChildNodes[j]->get_type() == BT::Action && ChildNodes[j]->ReadState() != BT::Idle)
         {
             // if it's a action node that has finished its job:
             // ticking it without saving its returning state;

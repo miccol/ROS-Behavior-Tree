@@ -117,3 +117,12 @@ return name_;
 
 }
 
+
+
+BT::NodeType BT::TreeNode::get_type()
+{
+
+return type_;
+
+}
+
