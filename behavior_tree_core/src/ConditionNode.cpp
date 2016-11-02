@@ -10,17 +10,17 @@ BT::ConditionNode::~ConditionNode() {}
 
 bool BT::ConditionNode::Halt() { return true;}
 
-bool BT::ConditionNode::WriteState(NodeState StateToBeSet)
+bool BT::ConditionNode::WriteState(NodeState new_state)
 {
 
-    if(StateToBeSet != BT::IDLE)
+    if(new_state != BT::IDLE)
     {
-        SetColorState(StateToBeSet);
+        SetColorState(new_state);
     }
     // Lock acquistion
     boost::lock_guard<boost::mutex> LockGuard(state_mutex_);
 
-    state_ = StateToBeSet;
+    state_ = new_state;
     return true;
 }
 int BT::ConditionNode::DrawType()

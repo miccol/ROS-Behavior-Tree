@@ -33,19 +33,19 @@ BT::NodeState BT::TreeNode::GetNodeState()
     return ReadState;
 }
 
-void BT::TreeNode::SetNodeState(NodeState StateToBeSet)
+void BT::TreeNode::SetNodeState(NodeState new_state)
 {
 
-    if(StateToBeSet != BT::IDLE)
+    if(new_state != BT::IDLE)
     {
-        SetColorState(StateToBeSet);
+        SetColorState(new_state);
     }
 
     // Lock acquistion
     boost::unique_lock<boost::mutex> UniqueLock(state_mutex_);
 
     // state_ update
-    state_ = StateToBeSet;
+    state_ = new_state;
     is_state_updated_ = true;
 
     // Notification and unlock of the mutex

@@ -14,7 +14,7 @@ namespace BT
     int DrawType();
         // The method that is going to be executed by the thread
         void Exec();
-        void AddChild(TreeNode* Child);
+        void AddChild(TreeNode* child);
     };
 }
 

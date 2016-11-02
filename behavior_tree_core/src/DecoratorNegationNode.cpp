@@ -17,7 +17,7 @@ void BT::DecoratorNegationNode::Exec()
     tick_engine.wait();
 
     // Vector size initialization
-    M = ChildNodes.size();
+    N_of_children_ = children_nodes_.size();
 
     // Simulating a tick for myself
     tick_engine.tick();
@@ -42,49 +42,49 @@ void BT::DecoratorNegationNode::Exec()
 
 
 
-                if (ChildNodes[0]->get_type() == BT::ACTION_NODE)
+                if (children_nodes_[0]->get_type() == BT::ACTION_NODE)
                 {
                     // 1) if it's an action:
                     // 1.1) read its state;
-                    NodeState ActionState = ChildNodes[0]->ReadState();
+                    NodeState ActionState = children_nodes_[0]->ReadState();
 
                     if (ActionState == BT::IDLE)
                     {
                         // 1.2) if it's "Idle":
                         // 1.2.1) ticking it;
-                        ChildNodes[0]->tick_engine.tick();
+                        children_nodes_[0]->tick_engine.tick();
 
                         // 1.2.2) retrive its state as soon as it is available;
-                        ChildStates[0] = ChildNodes[0]->GetNodeState();
+                        children_states_[0] = children_nodes_[0]->GetNodeState();
                     }
                     else if (ActionState == BT::RUNNING)
                     {
                         // 1.3) if it's "Running":
                         // 1.3.1) saving "Running"
-                        ChildStates[0] = BT::RUNNING;
+                        children_states_[0] = BT::RUNNING;
                     }
                     else
                     {
                         // 1.4) if it's "Success" of "Failure" (it can't be "Halted"!):
                         // 1.2.1) ticking it;
-                        ChildNodes[0]->tick_engine.tick();
+                        children_nodes_[0]->tick_engine.tick();
 
                         // 1.2.2) saving the read state;
-                        ChildStates[0] = ActionState;
+                        children_states_[0] = ActionState;
                     }
                 }
                 else
                 {
                     // 2) if it's not an action:
                     // 2.1) ticking it;
-                    ChildNodes[0]->tick_engine.tick();
+                    children_nodes_[0]->tick_engine.tick();
 
                     // 2.2) retrive its state as soon as it is available;
-                    ChildStates[0] = ChildNodes[0]->GetNodeState();
+                    children_states_[0] = children_nodes_[0]->GetNodeState();
                 }
 
                 // 3) if the child state is a success:
-                if(ChildStates[0] == BT::SUCCESS)
+                if(children_states_[0] == BT::SUCCESS)
                 {
                     // 3.1) the node state is equal to failure since I am negating the status
                     SetNodeState(BT::FAILURE);
@@ -94,7 +94,7 @@ void BT::DecoratorNegationNode::Exec()
 
                     std::cout << get_name() << " returning " << BT::FAILURE << "!" << std::endl;
                 }
-                else if(ChildStates[0] == BT::FAILURE)
+                else if(children_states_[0] == BT::FAILURE)
                 {
                     // 4.1) the node state is equal to success since I am negating the status
                     SetNodeState(BT::SUCCESS);
@@ -120,44 +120,44 @@ void BT::DecoratorNegationNode::Exec()
             // If it was halted, all the "busy" children must be halted too
             std::cout << get_name() << " halted! Halting all the children..." << std::endl;
 
-                if (ChildNodes[0]->get_type() != BT::ACTION_NODE && ChildStates[0] == BT::RUNNING)
+                if (children_nodes_[0]->get_type() != BT::ACTION_NODE && children_states_[0] == BT::RUNNING)
                 {
                     // if the control node was running:
                     // halting it;
-                    ChildNodes[0]->Halt();
+                    children_nodes_[0]->Halt();
 
                     // sync with it (it's waiting on the semaphore);
-                    ChildNodes[0]->tick_engine.tick();
+                    children_nodes_[0]->tick_engine.tick();
 
                     std::cout << get_name() << " halting child  "  << "!" << std::endl;
                 }
-                else if (ChildNodes[0]->get_type() == BT::ACTION_NODE && ChildNodes[0]->ReadState() == BT::RUNNING)
+                else if (children_nodes_[0]->get_type() == BT::ACTION_NODE && children_nodes_[0]->ReadState() == BT::RUNNING)
                 {
                     std::cout << get_name() << " trying halting child  "  << "..." << std::endl;
 
                     // if it's a action node that hasn't finished its job:
                     // trying to halt it:
-                    if (ChildNodes[0]->Halt() == false)
+                    if (children_nodes_[0]->Halt() == false)
                     {
                         // this means that, before this node could set its child state
                         // to "Halted", the child had already written the action outcome;
                         // sync with him ignoring its state;
-                        ChildNodes[0]->tick_engine.tick();
+                        children_nodes_[0]->tick_engine.tick();
 
                         std::cout << get_name() << " halting of child  "  << " failed!" << std::endl;
                     }
 
                     std::cout << get_name() << " halting of child  "  << " succedeed!" << std::endl;
                 }
-                else if (ChildNodes[0]->get_type() == BT::ACTION_NODE && ChildNodes[0]->ReadState() != BT::IDLE)
+                else if (children_nodes_[0]->get_type() == BT::ACTION_NODE && children_nodes_[0]->ReadState() != BT::IDLE)
                 {
                     // if it's a action node that has finished its job:
                     // ticking it without saving its returning state;
-                    ChildNodes[0]->tick_engine.tick();
+                    children_nodes_[0]->tick_engine.tick();
                 }
 
                 // updating its vector cell
-                ChildStates[0] = BT::IDLE;
+                children_states_[0] = BT::IDLE;
 
 
             // Resetting the node state
@@ -174,16 +174,16 @@ int BT::DecoratorNegationNode::DrawType()
 }
 
 
-void BT::DecoratorNegationNode::AddChild(BT::TreeNode* Child)
+void BT::DecoratorNegationNode::AddChild(BT::TreeNode* child)
 {
-    // Checking if the Child is not already present
+    // Checking if the child is not already present
 
-        if (ChildNodes.size() > 0)
+        if (children_nodes_.size() > 0)
         {
             throw BehaviorTreeException("Decorators can have only one child");
         }
 
 
-    ChildNodes.push_back(Child);
-    ChildStates.push_back(BT::IDLE);
+    children_nodes_.push_back(child);
+    children_states_.push_back(BT::IDLE);
 }

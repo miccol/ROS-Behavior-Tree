@@ -11,20 +11,20 @@ namespace BT
     {
     protected:
         // Children vector
-        std::vector<TreeNode*> ChildNodes;
+        std::vector<TreeNode*> children_nodes_;
 
         // Children states
-        std::vector<NodeState> ChildStates;
+        std::vector<NodeState> children_states_;
 
         // Vector size
-        unsigned int M;
+        unsigned int N_of_children_;
     public:
         // Constructor
         ControlNode(std::string name);
         ~ControlNode();
 
         // The method used to fill the child vector
-        void AddChild(TreeNode* Child);
+        void AddChild(TreeNode* child);
 
         // The method used to know the number of children
         unsigned int GetChildrenNumber();
@@ -37,7 +37,7 @@ namespace BT
 
         // Methods used to access the node state without the
         // conditional waiting (only mutual access)
-        bool WriteState(NodeState StateToBeSet);
+        bool WriteState(NodeState new_state);
     };
 }
 

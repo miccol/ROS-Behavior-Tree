@@ -17,7 +17,7 @@ void BT::SequenceNode::Exec()
     tick_engine.wait();
 
     // Vector size initialization
-    M = ChildNodes.size();
+    N_of_children_ = children_nodes_.size();
 
     // Simulating a tick for myself
     tick_engine.tick();
@@ -40,54 +40,54 @@ void BT::SequenceNode::Exec()
             std::cout << get_name() << " ticked, ticking children..." << std::endl;
 
             // For each child:
-            for (i = 0; i<M; i++)
+            for (i = 0; i < N_of_children_; i++)
             {
-                if (ChildNodes[i]->get_type() == BT::ACTION_NODE)
+                if (children_nodes_[i]->get_type() == BT::ACTION_NODE)
                 {
                     // 1) if it's an action:
                     // 1.1) read its state;
-                    NodeState ActionState = ChildNodes[i]->ReadState();
+                    NodeState ActionState = children_nodes_[i]->ReadState();
 
                     if (ActionState == BT::IDLE)
                     {
                         // 1.2) if it's "Idle":
                         // 1.2.1) ticking it;
-                        ChildNodes[i]->tick_engine.tick();
+                        children_nodes_[i]->tick_engine.tick();
 
                         // 1.2.2) retrive its state as soon as it is available;
-                        ChildStates[i] = ChildNodes[i]->GetNodeState();
+                        children_states_[i] = children_nodes_[i]->GetNodeState();
                     }
                     else if (ActionState == BT::RUNNING)
                     {
                         // 1.3) if it's "Running":
                         // 1.3.1) saving "Running"
-                        ChildStates[i] = BT::RUNNING;
+                        children_states_[i] = BT::RUNNING;
                     }
                     else
                     {
                         // 1.4) if it's "Success" of "Failure" (it can't be "Halted"!):
                         // 1.2.1) ticking it;
-                        ChildNodes[i]->tick_engine.tick();
+                        children_nodes_[i]->tick_engine.tick();
 
                         // 1.2.2) saving the read state;
-                        ChildStates[i] = ActionState;
+                        children_states_[i] = ActionState;
                     }
                 }
                 else
                 {
                     // 2) if it's not an action:
                     // 2.1) ticking it;
-                    ChildNodes[i]->tick_engine.tick();
+                    children_nodes_[i]->tick_engine.tick();
 
                     // 2.2) retrive its state as soon as it is available;
-                    ChildStates[i] = ChildNodes[i]->GetNodeState();
+                    children_states_[i] = children_nodes_[i]->GetNodeState();
                 }
 
                 // 3) if the child state is not a success:
-                if(ChildStates[i] != BT::SUCCESS)
+                if(children_states_[i] != BT::SUCCESS)
                 {
                     // 3.1) the node state is equal to it;
-                    SetNodeState(ChildStates[i]);
+                    SetNodeState(children_states_[i]);
 
                     // 3.2) state reset;
                     WriteState(BT::IDLE);
@@ -95,14 +95,14 @@ void BT::SequenceNode::Exec()
                     // 3.3) all the next action or control child nodes must be halted:
                     HaltChildren(i+1);
 
-                    std::cout << get_name() << " returning " << ChildStates[i] << "!" << std::endl;
+                    std::cout << get_name() << " returning " << children_states_[i] << "!" << std::endl;
 
                     // 3.4) the "for" loop must end here.
                     break;
                 }
             }
 
-            if (i == M)
+            if (i == N_of_children_)
             {
                 // 4) if all of its children return "success":
                 // 4.1) the node state must be "success";

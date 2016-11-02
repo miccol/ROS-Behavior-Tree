@@ -93,7 +93,7 @@ namespace BT
         // The method that retrive the state of the node
         // (conditional waiting and mutual access)
         NodeState GetNodeState();
-        void SetNodeState(NodeState StateToBeSet);
+        void SetNodeState(NodeState new_state);
         void SetColorState(NodeState ColorStateToBeSet);
 
         // Methods used to access the node state without the
@@ -101,7 +101,7 @@ namespace BT
         NodeState ReadState();
         NodeState ReadColorState();
         virtual int DrawType() = 0;
-        virtual bool WriteState(NodeState StateToBeSet) = 0;
+        virtual bool WriteState(NodeState new_state) = 0;
         virtual void ResetColorState() = 0;
         virtual int Depth() = 0;
 

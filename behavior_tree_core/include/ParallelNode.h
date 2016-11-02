@@ -11,25 +11,25 @@ namespace BT
     {
     private:
         // N threshold
-        unsigned int N;
+        unsigned int threshold_;
 
         // Number of returned Success, Failure and Running states
-        unsigned int Successes;
-        unsigned int Failures;
-        unsigned int Runnings;
+        unsigned int n_of_successes_;
+        unsigned int n_of_failures_;
+        unsigned int n_of_runnings_;
 
         // Update states vector
-        std::vector<bool> ChildStatesUpdated;
+        std::vector<bool> is_children_states_updated_vtr_;
 
         // state_ update
-        bool StateUpdate;
+        bool is_state_updated_;
     public:
         // Constructor
         ParallelNode(std::string name);
         ~ParallelNode();
 
-        // the method used to set N
-        void SetThreshold(unsigned int N);
+        // the method used to set threshold_
+        void SetThreshold(unsigned int new_threshold);
         // Method that retuns the type
         int DrawType();
         // The method that is going to be executed by the thread
