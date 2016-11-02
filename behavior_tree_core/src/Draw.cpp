@@ -1,8 +1,8 @@
 #include<Draw.h>
 
 #include <X11/Xlib.h>
-using namespace BT;
-ControlNode* tree;
+
+BT::ControlNode* tree;
 bool init = false;
 
 
@@ -177,7 +177,7 @@ void drawCircle(float radius)
 
 
 
-float get_x_pos_at(TreeNode* tree, int depth)
+float get_x_pos_at(BT::TreeNode* tree, int depth)
 {
     if (depth == 0)
     {
@@ -185,7 +185,7 @@ float get_x_pos_at(TreeNode* tree, int depth)
     }
     else
     {
-        ControlNode* d = dynamic_cast<ControlNode*> (tree);
+        BT::ControlNode* d = dynamic_cast<BT::ControlNode*> (tree);
         if (d == NULL)
         {
             return tree->GetXPose();
@@ -193,7 +193,7 @@ float get_x_pos_at(TreeNode* tree, int depth)
         }
         else
         {
-            std::vector<TreeNode*> children = d->GetChildren();
+            std::vector<BT::TreeNode*> children = d->GetChildren();
 
                 return get_x_pos_at(children.back(), depth - 1);
 
@@ -204,12 +204,12 @@ float get_x_pos_at(TreeNode* tree, int depth)
 }
 
 
-void setpositions(TreeNode* tree, GLfloat x_pos, GLfloat y_pos, GLfloat x_offset, GLfloat y_offset )
+void setpositions(BT::TreeNode* tree, GLfloat x_pos, GLfloat y_pos, GLfloat x_offset, GLfloat y_offset )
 {
 
     //x_offset*pow(2,tree->GetDepth()-1)
 
-    ControlNode* d = dynamic_cast<ControlNode*> (tree);
+    BT::ControlNode* d = dynamic_cast<BT::ControlNode*> (tree);
     if (d == NULL)
     {//if it is a leaf node, draw it
 
@@ -225,7 +225,7 @@ void setpositions(TreeNode* tree, GLfloat x_pos, GLfloat y_pos, GLfloat x_offset
     }
     else
     {//if it is a control flow node, draw it and its children
-        std::vector<TreeNode*> children = d->GetChildren();
+        std::vector<BT::TreeNode*> children = d->GetChildren();
         int M = d->GetChildrenNumber();
         GLfloat x_min = 0.0;
         GLfloat x_max = 0.0;
@@ -276,13 +276,13 @@ void setpositions(TreeNode* tree, GLfloat x_pos, GLfloat y_pos, GLfloat x_offset
 
 
 
-void updateTree(TreeNode* tree, GLfloat x_pos, GLfloat y_pos, GLfloat y_offset )
+void updateTree(BT::TreeNode* tree, GLfloat x_pos, GLfloat y_pos, GLfloat y_offset )
 {
 
     //x_offset*pow(2,tree->GetDepth()-1)
    // GLfloat x_space = 0.01;
 
-    ControlNode* d = dynamic_cast<ControlNode*> (tree);
+    BT::ControlNode* d = dynamic_cast<BT::ControlNode*> (tree);
     if (d == NULL)
     {//if it is a leaf node, draw it
 
@@ -292,7 +292,7 @@ void updateTree(TreeNode* tree, GLfloat x_pos, GLfloat y_pos, GLfloat y_offset )
     }
     else
     {//if it is a control flow node, draw it and its children
-        std::vector<TreeNode*> children = d->GetChildren();
+        std::vector<BT::TreeNode*> children = d->GetChildren();
         int M = d->GetChildrenNumber();
         GLfloat x_min = 0.0;
         GLfloat x_max = 0.0;
@@ -420,7 +420,7 @@ void mouse(int button, int state, int x, int y)
 }
 
 
-void drawTree(ControlNode* tree_)
+void drawTree(BT::ControlNode* tree_)
 {
     //***************************BT VISUALIZATION****************************
     int argc = 1;

@@ -1,18 +1,17 @@
 #include <Conditions/ConditionTestNode.h>
 
-using namespace BT;
 
-ConditionTestNode::ConditionTestNode(std::string Name) : ConditionNode::ConditionNode(Name)
+BT::ConditionTestNode::ConditionTestNode(std::string Name) : ConditionNode::ConditionNode(Name)
 {
-    Type = Condition;
+    Type = BT::Condition;
 
     // Thread start
     Thread = boost::thread(&ConditionTestNode::Exec, this);
 }
 
-ConditionTestNode::~ConditionTestNode() {}
+BT::ConditionTestNode::~ConditionTestNode() {}
 
-void ConditionTestNode::Exec()
+void BT::ConditionTestNode::Exec()
 {
  int i = 0;   
     while(true)
@@ -21,7 +20,7 @@ void ConditionTestNode::Exec()
         // Waiting for a tick to come
         Semaphore.Wait();
 
-        if(ReadState() == Exit)
+        if(ReadState() == BT::Exit)
         {
             // The behavior tree is going to be destroied
             return;
@@ -31,22 +30,22 @@ void ConditionTestNode::Exec()
         i++;
         if (i < 5)
         {
-            SetNodeState(Success);
-            std::cout << Name << " returning Success" << Success << "!" << std::endl;
+            SetNodeState(BT::Success);
+            std::cout << Name << " returning Success" << BT::Success << "!" << std::endl;
         }
         else if( i<10)
         {
-            SetNodeState(Failure);
-            std::cout << Name << " returning Failure" << Failure << "!" << std::endl;
+            SetNodeState(BT::Failure);
+            std::cout << Name << " returning Failure" << BT::Failure << "!" << std::endl;
         } else
 	{
             std::cout << Name << " reset i!" << std::endl;
-            SetNodeState(Failure);
+            SetNodeState(BT::Failure);
 	i=0;
 	}
 	
 
         // Resetting the state
-        WriteState(Idle);
+        WriteState(BT::Idle);
     }
 }

@@ -1,15 +1,14 @@
 #include <ControlNode.h>
 
-using namespace BT;
 
-ControlNode::ControlNode(std::string Name) : TreeNode::TreeNode(Name)
+BT::ControlNode::ControlNode(std::string Name) : TreeNode::TreeNode(Name)
 {
     Type = Control;
 }
 
-ControlNode::~ControlNode() {}
+BT::ControlNode::~ControlNode() {}
 
-void ControlNode::AddChild(TreeNode* Child)
+void BT::ControlNode::AddChild(TreeNode* Child)
 {
     // Checking if the Child is not already present
     for (unsigned int i=0; i<ChildNodes.size(); i++)
@@ -21,15 +20,15 @@ void ControlNode::AddChild(TreeNode* Child)
     }
 
     ChildNodes.push_back(Child);
-    ChildStates.push_back(Idle);
+    ChildStates.push_back(BT::Idle);
 }
 
-unsigned int ControlNode::GetChildrenNumber()
+unsigned int BT::ControlNode::GetChildrenNumber()
 {
     return ChildNodes.size();
 }
 
-bool ControlNode::Halt()
+bool BT::ControlNode::Halt()
 {
     // Lock acquistion
     boost::lock_guard<boost::mutex> LockGuard(StateMutex);
@@ -38,7 +37,7 @@ bool ControlNode::Halt()
     return true;
 }
 
-bool ControlNode::WriteState(NodeState StateToBeSet)
+bool BT::ControlNode::WriteState(NodeState StateToBeSet)
 {
     // Lock acquistion
     boost::lock_guard<boost::mutex> LockGuard(StateMutex);
@@ -48,26 +47,26 @@ bool ControlNode::WriteState(NodeState StateToBeSet)
 }
 
 
-std::vector<TreeNode*> ControlNode::GetChildren()
+std::vector<BT::TreeNode*> BT::ControlNode::GetChildren()
 {
     return ChildNodes;
 }
 
 
-void ControlNode::ResetColorState()
+void BT::ControlNode::ResetColorState()
 {
 
-    SetColorState(Idle);
+    SetColorState(BT::Idle);
     for(unsigned int i = 0; i < ChildNodes.size(); i++)
     {
         ChildNodes[i]->ResetColorState();
     }
 }
 
-void ControlNode::HaltChildren(int i){
+void BT::ControlNode::HaltChildren(int i){
     for(unsigned int j=i; j<ChildNodes.size(); j++)
     {
-        if (ChildNodes[j]->Type != Action && ChildStates[j] == Running)
+        if (ChildNodes[j]->Type != BT::Action && ChildStates[j] == BT::Running)
         {
             // if the control node was running:
             // halting it;
@@ -78,7 +77,7 @@ void ControlNode::HaltChildren(int i){
 
             std::cout << Name << " halting child number " << j << "!" << std::endl;
         }
-        else if (ChildNodes[j]->Type == Action && ChildNodes[j]->ReadState() == Running)
+        else if (ChildNodes[j]->Type == BT::Action && ChildNodes[j]->ReadState() == BT::Running)
         {
             std::cout << Name << " trying halting child number " << j << "..." << std::endl;
 
@@ -96,7 +95,7 @@ void ControlNode::HaltChildren(int i){
 
             std::cout << Name << " halting of child number " << j << " succedeed!" << std::endl;
         }
-        else if (ChildNodes[j]->Type == Action && ChildNodes[j]->ReadState() != Idle)
+        else if (ChildNodes[j]->Type == BT::Action && ChildNodes[j]->ReadState() != BT::Idle)
         {
             // if it's a action node that has finished its job:
             // ticking it without saving its returning state;
@@ -104,13 +103,13 @@ void ControlNode::HaltChildren(int i){
         }
 
         // updating its vector cell
-        ChildStates[j] = Idle;
+        ChildStates[j] = BT::Idle;
     }
 
  }
 
 
-int ControlNode::GetDepth()
+int BT::ControlNode::GetDepth()
 {
         int depMax = 0;
         int dep = 0;

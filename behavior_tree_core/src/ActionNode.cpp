@@ -1,15 +1,15 @@
 #include <ActionNode.h>
 
-using namespace BT;
 
-ActionNode::ActionNode(std::string Name) : LeafNode::LeafNode(Name)
+
+BT::ActionNode::ActionNode(std::string Name) : LeafNode::LeafNode(Name)
 {
     Type = Action;
 }
 
-ActionNode::~ActionNode() {}
+BT::ActionNode::~ActionNode() {}
 
-bool ActionNode::WriteState(NodeState StateToBeSet)
+bool BT::ActionNode::WriteState(NodeState StateToBeSet)
 {
 
     if(StateToBeSet != Idle)
@@ -29,9 +29,9 @@ bool ActionNode::WriteState(NodeState StateToBeSet)
     return true;
 }
 
-int ActionNode::GetType()
+int BT::ActionNode::GetType()
 {
     // Lock acquistion
 
-    return ACTION;
+    return BT::ACTION;
 }

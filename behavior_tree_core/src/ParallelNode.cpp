@@ -1,8 +1,7 @@
 #include <ParallelNode.h>
 
-using namespace BT;
 
-ParallelNode::ParallelNode(std::string Name) : ControlNode::ControlNode(Name)
+BT::ParallelNode::ParallelNode(std::string Name) : ControlNode::ControlNode(Name)
 {
     // Initializations
     N = std::numeric_limits<unsigned int>::max();
@@ -12,9 +11,9 @@ ParallelNode::ParallelNode(std::string Name) : ControlNode::ControlNode(Name)
     Thread = boost::thread(&ParallelNode::Exec, this);
 }
 
-ParallelNode::~ParallelNode() {}
+BT::ParallelNode::~ParallelNode() {}
 
-void ParallelNode::SetThreshold(unsigned int N)
+void BT::ParallelNode::SetThreshold(unsigned int N)
 {
     // Vector size initialization
     M = ChildNodes.size();
@@ -33,7 +32,7 @@ void ParallelNode::SetThreshold(unsigned int N)
     Semaphore.Signal();
 }
 
-void ParallelNode::Exec()
+void BT::ParallelNode::Exec()
 {
     unsigned int i;
 
@@ -72,7 +71,7 @@ void ParallelNode::Exec()
         }
 
         // Checking if i was halted
-        if (ReadState() != Halted)
+        if (ReadState() != BT::Halted)
         {
             std::cout << Name << " ticked, ticking actions..." << std::endl;
 
@@ -80,14 +79,14 @@ void ParallelNode::Exec()
             // be immediatelly returned.
             for(i = 0; i<M; i++)
             {
-                if (ChildNodes[i]->Type != Action)
+                if (ChildNodes[i]->Type != BT::Action)
                 {
                     continue;
                 }
 
                 ChildStates[i] = ChildNodes[i]->ReadState();
 
-                if (ChildStates[i] == Success)
+                if (ChildStates[i] == BT::Success)
                 {
                     // The action node has finished, sync
                     ChildNodes[i]->Semaphore.Signal();
@@ -95,7 +94,7 @@ void ParallelNode::Exec()
                     Successes++;
                     ChildStatesUpdated[i] = true;
                 }
-                else if (ChildStates[i] == Failure)
+                else if (ChildStates[i] == BT::Failure)
                 {
                     // The action node has finished, sync
                     ChildNodes[i]->Semaphore.Signal();
@@ -103,7 +102,7 @@ void ParallelNode::Exec()
                     Failures++;
                     ChildStatesUpdated[i] = true;
                 }
-                else if (ChildStates[i] == Running)
+                else if (ChildStates[i] == BT::Running)
                 {
                     Runnings++;
                     ChildStatesUpdated[i] = true;
@@ -112,7 +111,7 @@ void ParallelNode::Exec()
                 if (Successes >= N)
                 {
                     // Returning success
-                    SetNodeState(Success);
+                    SetNodeState(BT::Success);
                     std::cout << Name << " returning Success! " << std::endl;
                     StateUpdate = true;
 
@@ -133,7 +132,7 @@ void ParallelNode::Exec()
                 {
                     // Neither a Success nor a Failure could be returned
                     // Returning Running
-                    SetNodeState(Running);
+                    SetNodeState(BT::Running);
                     std::cout << Name << " returning Running! " << std::endl;
                     StateUpdate = true;
 
@@ -147,12 +146,12 @@ void ParallelNode::Exec()
                 // If it is known what to return...
                 std::cout << Name << " knows what to return... " << std::endl;
 
-                if (ReadState() == Success || ReadState() == Failure)
+                if (ReadState() == BT::Success || ReadState() == BT::Failure)
                 {
                     // Halting the running actions
                     for (i=0; i<M; i++)
                     {
-                        if (ChildStatesUpdated[i] == false || ChildStates[i] != Running)
+                        if (ChildStatesUpdated[i] == false || ChildStates[i] != BT::Running)
                         {
                             continue;
                         }
@@ -174,7 +173,7 @@ void ParallelNode::Exec()
                         }
 
                         // updating its vector cell;
-                        ChildStates[i] = Idle;
+                        ChildStates[i] = BT::Idle;
                     }
 
                     // Ticking the other children, but halting them if they
@@ -193,7 +192,7 @@ void ParallelNode::Exec()
 
                         // retrive its state as soon as it is available;
                         ChildStates[i] = ChildNodes[i]->GetNodeState();
-                        if (ChildStates[i] == Running)
+                        if (ChildStates[i] == BT::Running)
                         {
                             std::cout << Name << " halting (control) child number " << i << "..." << std::endl;
 
@@ -205,14 +204,14 @@ void ParallelNode::Exec()
                         }
 
                         // updating its vector cell;
-                        ChildStates[i] = Idle;
+                        ChildStates[i] = BT::Idle;
                         ChildStatesUpdated[i] = true;
                     }
 
                     // Resetting the node state
-                    if (ReadState() != Halted)
+                    if (ReadState() != BT::Halted)
                     {
-                        WriteState(Idle);
+                        WriteState(BT::Idle);
                     }
 
                     // Next cicle
@@ -232,13 +231,13 @@ void ParallelNode::Exec()
                             continue;
                         }
 
-                        if (ChildNodes[i]->Type == Action)
+                        if (ChildNodes[i]->Type == BT::Action)
                         {
                             // if it's an action:
                             // read its state;
                             NodeState ActionState = ChildNodes[i]->ReadState();
 
-                            if (ActionState == Idle)
+                            if (ActionState == BT::Idle)
                             {
                                 // if it's "Idle":
                                 // ticking it;
@@ -247,10 +246,10 @@ void ParallelNode::Exec()
                                 // retriving its state as soon as it is available;
                                 ChildStates[i] = ChildNodes[i]->GetNodeState();
                             }
-                            else if (ActionState == Running)
+                            else if (ActionState == BT::Running)
                             {
                                 // It's ok, it can continue running
-                                ChildStates[i] = Running;
+                                ChildStates[i] = BT::Running;
                             }
                             else
                             {
@@ -306,12 +305,12 @@ void ParallelNode::Exec()
                 // retrive its state as soon as it is available;
                 ChildStates[i] = ChildNodes[i]->GetNodeState();
 
-                if (ChildStates[i] == Success)
+                if (ChildStates[i] == BT::Success)
                 {
                     Successes++;
                     ChildStatesUpdated[i] = true;
                 }
-                else if (ChildStates[i] == Failure)
+                else if (ChildStates[i] == BT::Failure)
                 {
                     Failures++;
                     ChildStatesUpdated[i] = true;
@@ -325,7 +324,7 @@ void ParallelNode::Exec()
                 if (Successes >= N)
                 {
                     // Returning success
-                    SetNodeState(Success);
+                    SetNodeState(BT::Success);
                     std::cout << Name << " returning Success! " << std::endl;
                     StateUpdate = true;
 
@@ -335,7 +334,7 @@ void ParallelNode::Exec()
                 else if (Failures > M - N)
                 {
                     // Returning failure
-                    SetNodeState(Failure);
+                    SetNodeState(BT::Failure);
                     std::cout << Name << " returning Failure! " << std::endl;
                     StateUpdate = true;
 
@@ -346,7 +345,7 @@ void ParallelNode::Exec()
                 {
                     // Neither a Success nor a Failure could be returned
                     // Returning Running
-                    SetNodeState(Running);
+                    SetNodeState(BT::Running);
                     std::cout << Name << " returning Running! " << std::endl;
                     StateUpdate = true;
 
@@ -355,19 +354,19 @@ void ParallelNode::Exec()
                 }
             }
 
-            if (StateUpdate == true && ReadState() != Running)
+            if (StateUpdate == true && ReadState() != BT::Running)
             {
                 std::cout << Name << " knows what to return... " << std::endl;
 
                 // Halting all the running nodes (that have been ticked!)
                 for (i=0; i<M; i++)
                 {
-                    if (ChildStatesUpdated[i] == false || ChildStates[i] != Running)
+                    if (ChildStatesUpdated[i] == false || ChildStates[i] != BT::Running)
                     {
                         continue;
                     }
 
-                    if (ChildNodes[i]->Type == Action)
+                    if (ChildNodes[i]->Type == BT::Action)
                     {
                         std::cout << Name << " trying halting (action) child number " << i << "..." << std::endl;
 
@@ -397,7 +396,7 @@ void ParallelNode::Exec()
                     }
 
                     // updating its vector cell;
-                    ChildStates[i] = Idle;
+                    ChildStates[i] = BT::Idle;
                 }
 
                 // Ticking the other children, but halting them is they
@@ -417,7 +416,7 @@ void ParallelNode::Exec()
                     // retrive its state as soon as it is available
                     ChildStates[i] = ChildNodes[i]->GetNodeState();
 
-                    if (ChildStates[i] == Running)
+                    if (ChildStates[i] == BT::Running)
                     {
                         std::cout << Name << " halting (control) child number " << i << "..." << std::endl;
 
@@ -428,14 +427,14 @@ void ParallelNode::Exec()
                         ChildNodes[i]->Semaphore.Signal();
 
                         // updating its vector cell;
-                        ChildStates[i] = Idle;
+                        ChildStates[i] = BT::Idle;
                     }
                 }
 
                 // Resetting the node state
-                if (ReadState() != Halted)
+                if (ReadState() != BT::Halted)
                 {
-                    WriteState(Idle);
+                    WriteState(BT::Idle);
                 }
             }
             else if (StateUpdate == true && Runnings + Failures + Successes < M)
@@ -462,7 +461,7 @@ void ParallelNode::Exec()
             else if (StateUpdate == false)
             {
                 // Returning running!
-                SetNodeState(Running);
+                SetNodeState(BT::Running);
                 std::cout << Name << " returning Running! " << std::endl;
                 StateUpdate = true;
             }
@@ -518,15 +517,15 @@ void ParallelNode::Exec()
 */
             HaltChildren(0);
             // Resetting the node state
-            WriteState(Idle);
+            WriteState(BT::Idle);
         }
     }
 }
 
 
-int ParallelNode::GetType()
+int BT::ParallelNode::GetType()
 {
     // Lock acquistion
 
-    return PARALLEL;
+    return BT::PARALLEL;
 }

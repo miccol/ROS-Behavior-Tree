@@ -1,16 +1,15 @@
 #include <SequenceStarNode.h>
 
-using namespace BT;
 
-SequenceStarNode::SequenceStarNode(std::string Name) : ControlNode::ControlNode(Name)
+BT::SequenceStarNode::SequenceStarNode(std::string Name) : ControlNode::ControlNode(Name)
 {
     // Thread start
     Thread = boost::thread(&SequenceStarNode::Exec, this);
 }
 
-SequenceStarNode::~SequenceStarNode() {}
+BT::SequenceStarNode::~SequenceStarNode() {}
 
-void SequenceStarNode::Exec()
+void BT::SequenceStarNode::Exec()
 {
     unsigned int i;
 
@@ -30,7 +29,7 @@ void SequenceStarNode::Exec()
         Semaphore.Wait();
 
 
-        if(ReadState() == Exit)
+        if(ReadState() == BT::Exit)
         {
             i = 0;
             // The behavior tree is going to be destroied
@@ -38,7 +37,7 @@ void SequenceStarNode::Exec()
         }
 
         // Checking if i was halted
-        if (ReadState() != Halted)
+        if (ReadState() != BT::Halted)
         {
             // If not, the children can be ticked
             std::cout << Name << " ticked, ticking children..." << std::endl;
@@ -46,13 +45,13 @@ void SequenceStarNode::Exec()
             // For each child:
             while (i<M)
             {
-                if (ChildNodes[i]->Type == Action)
+                if (ChildNodes[i]->Type == BT::Action)
                 {
                     // 1) if it's an action:
                     // 1.1) read its state;
                     NodeState ActionState = ChildNodes[i]->ReadState();
 
-                    if (ActionState == Idle)
+                    if (ActionState == BT::Idle)
                     {
                         // 1.2) if it's "Idle":
                         // 1.2.1) ticking it;
@@ -61,11 +60,11 @@ void SequenceStarNode::Exec()
                         // 1.2.2) retrive its state as soon as it is available;
                         ChildStates[i] = ChildNodes[i]->GetNodeState();
                     }
-                    else if (ActionState == Running)
+                    else if (ActionState == BT::Running)
                     {
                         // 1.3) if it's "Running":
                         // 1.3.1) saving "Running"
-                        ChildStates[i] = Running;
+                        ChildStates[i] = BT::Running;
                     }
                     else
                     {
@@ -88,15 +87,15 @@ void SequenceStarNode::Exec()
                 }
 
                 // 3) if the child state is not a success:
-                if(ChildStates[i] != Success)
+                if(ChildStates[i] != BT::Success)
                 {
 
 
                     // 3.1) the node state is equal to it;
                     SetNodeState(ChildStates[i]);
                     // 3.2) state reset;
-                    WriteState(Idle);
-                    if (ChildStates[i] == Failure)
+                    WriteState(BT::Idle);
+                    if (ChildStates[i] == BT::Failure)
                     {
                         i = 0; // Final State of rhe selector node. Child index reinitialized
                     }
@@ -106,7 +105,7 @@ void SequenceStarNode::Exec()
 
                     // 3.4) the "for" loop must end here.
                     break;
-                } else if (ChildStates[i] == Success) //If the child i returns success, the sequence star node can tick the next child
+                } else if (ChildStates[i] == BT::Success) //If the child i returns success, the sequence star node can tick the next child
                 {
                     i++;
                 }
@@ -119,13 +118,13 @@ void SequenceStarNode::Exec()
             {
                 // 4) if all of its children return "success":
                 // 4.1) the node state must be "success";
-                SetNodeState(Success); // Final State of rhe selector node. Child index reinitialized
+                SetNodeState(BT::Success); // Final State of rhe selector node. Child index reinitialized
 
                 i = 0;
                 // 4.2) resetting the state;
-                WriteState(Idle);
+                WriteState(BT::Idle);
 
-                std::cout << Name << " returning " << Success << "!" << std::endl;
+                std::cout << Name << " returning " << BT::Success << "!" << std::endl;
             }
 
 
@@ -134,52 +133,10 @@ void SequenceStarNode::Exec()
         {
             // If it was halted, all the "busy" children must be halted too
             std::cout << Name << " halted! Halting all the children..." << std::endl;
-/*
-            for(unsigned int j=0; j<M; j++)
-            {
-                if (ChildNodes[j]->Type != Action && ChildStates[j] == Running)
-                {
-                    // if the control node was running:
-                    // halting it;
-                    ChildNodes[j]->Halt();
 
-                    // sync with it (it's waiting on the semaphore);
-                    ChildNodes[j]->Semaphore.Signal();
-
-                    std::cout << Name << " halting child number " << j << "!" << std::endl;
-                }
-                else if (ChildNodes[j]->Type == Action && ChildNodes[j]->ReadState() == Running)
-                {
-                    std::cout << Name << " trying halting child number " << j << "..." << std::endl;
-
-                    // if it's a action node that hasn't finished its job:
-                    // trying to halt it:
-                    if (ChildNodes[j]->Halt() == false)
-                    {
-                        // this means that, before this node could set its child state
-                        // to "Halted", the child had already written the action outcome;
-                        // sync with him ignoring its state;
-                        ChildNodes[j]->Semaphore.Signal();
-
-                        std::cout << Name << " halting of child number " << j << " failed!" << std::endl;
-                    }
-
-                    std::cout << Name << " halting of child number " << j << " succedeed!" << std::endl;
-                }
-                else if (ChildNodes[j]->Type == Action && ChildNodes[j]->ReadState() != Idle)
-                {
-                    // if it's a action node that has finished its job:
-                    // ticking it without saving its returning state;
-                    ChildNodes[j]->Semaphore.Signal();
-                }
-
-                // updating its vector cell
-                ChildStates[j] = Idle;
-            }
-*/
             HaltChildren(0);
             // Resetting the node state
-            WriteState(Idle);
+            WriteState(BT::Idle);
 
         }
 
@@ -188,9 +145,9 @@ void SequenceStarNode::Exec()
 }
 
 
-int SequenceStarNode::GetType()
+int BT::SequenceStarNode::GetType()
 {
     // Lock acquistion
 
-    return SEQUENCESTAR;
+    return BT::SEQUENCESTAR;
 }

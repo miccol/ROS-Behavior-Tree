@@ -1,5 +1,5 @@
-#ifndef ACTIONNODE_H
-#define ACTIONNODE_H
+#ifndef BEHAVIORTREECORE_ACTIONNODE_H
+#define BEHAVIORTREECORE_ACTIONNODE_H
 
 #include "LeafNode.h"
 

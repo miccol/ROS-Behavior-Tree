@@ -1,6 +1,5 @@
 #include "BehaviorTree.h"
 
-using namespace BT;
 
 int main(int argc, char **argv)
 {
@@ -9,11 +8,11 @@ int main(int argc, char **argv)
     {
         int TickPeriod_milliseconds = 1000;
 
-        ActionTestNode* action = new ActionTestNode("action");
-        ActionTestNode* condition = new ActionTestNode("condition");
+        BT::ActionTestNode* action = new BT::ActionTestNode("action");
+        BT::ActionTestNode* condition = new BT::ActionTestNode("condition");
 
 
-         SequenceNode* sequence1 = new SequenceNode("seq1");
+        BT:: SequenceNode* sequence1 = new BT::SequenceNode("seq1");
         //SequenceStarNode* sequence1 = new SequenceStarNode("seq1");
 
         sequence1->AddChild(condition);
@@ -22,7 +21,7 @@ int main(int argc, char **argv)
         Execute(sequence1, TickPeriod_milliseconds);//from BehaviorTree.cpp
 
 }
-    catch (BehaviorTreeException& Exception)
+    catch (BT::BehaviorTreeException& Exception)
     {
         std::cout << Exception.what() << std::endl;
     }

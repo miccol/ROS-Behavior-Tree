@@ -1,20 +1,19 @@
 #include <ConditionNode.h>
 
-using namespace BT;
 
-ConditionNode::ConditionNode(std::string Name) : LeafNode::LeafNode(Name)
+BT::ConditionNode::ConditionNode(std::string Name) : LeafNode::LeafNode(Name)
 {
     Type = Condition;
 }
 
-ConditionNode::~ConditionNode() {}
+BT::ConditionNode::~ConditionNode() {}
 
-bool ConditionNode::Halt() { return true;}
+bool BT::ConditionNode::Halt() { return true;}
 
-bool ConditionNode::WriteState(NodeState StateToBeSet)
+bool BT::ConditionNode::WriteState(NodeState StateToBeSet)
 {
 
-    if(StateToBeSet != Idle)
+    if(StateToBeSet != BT::Idle)
     {
         SetColorState(StateToBeSet);
     }
@@ -24,9 +23,9 @@ bool ConditionNode::WriteState(NodeState StateToBeSet)
     State = StateToBeSet;
     return true;
 }
-int ConditionNode::GetType()
+int BT::ConditionNode::GetType()
 {
     // Lock acquistion
 
-    return CONDITION;
+    return BT::CONDITION;
 }

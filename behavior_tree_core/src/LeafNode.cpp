@@ -1,20 +1,19 @@
 #include <LeafNode.h>
 
-using namespace BT;
 
-LeafNode::LeafNode(std::string Name) : TreeNode(Name) {}
+BT::LeafNode::LeafNode(std::string Name) : TreeNode(Name) {}
 
-LeafNode::~LeafNode() {}
+BT::LeafNode::~LeafNode() {}
 
 
-void LeafNode::ResetColorState()
+void BT::LeafNode::ResetColorState()
 {
     // Lock acquistion
 
-    ColorState = Idle;
+    ColorState = BT::Idle;
 }
 
-int LeafNode::GetDepth()
+int BT::LeafNode::GetDepth()
 {
     return 0;
 }

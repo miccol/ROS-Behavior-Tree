@@ -1,18 +1,16 @@
 #include <TreeNode.h>
 
-using namespace BT;
-
-TreeNode::TreeNode(std::string Name) : Semaphore(0)
+BT::TreeNode::TreeNode(std::string Name) : Semaphore(0)
 {
     // Initialization
     this->Name = Name;
     StateUpdated = false;
-    State = Idle;
+    State = BT::Idle;
 }
 
-TreeNode::~TreeNode() {}
+BT::TreeNode::~TreeNode() {}
 
-NodeState TreeNode::GetNodeState()
+BT::NodeState BT::TreeNode::GetNodeState()
 {
     NodeState ReadState;
     // Lock acquistion
@@ -35,10 +33,10 @@ NodeState TreeNode::GetNodeState()
     return ReadState;
 }
 
-void TreeNode::SetNodeState(NodeState StateToBeSet)
+void BT::TreeNode::SetNodeState(NodeState StateToBeSet)
 {
 
-    if(StateToBeSet != Idle)
+    if(StateToBeSet != BT::Idle)
     {
         SetColorState(StateToBeSet);
     }
@@ -57,7 +55,7 @@ void TreeNode::SetNodeState(NodeState StateToBeSet)
     StateConditionVariable.wait(UniqueLock);
 }
 
-NodeState TreeNode::ReadState()
+BT::NodeState BT::TreeNode::ReadState()
 {
     // Lock acquistion
     boost::lock_guard<boost::mutex> LockGuard(StateMutex);
@@ -66,14 +64,14 @@ NodeState TreeNode::ReadState()
 }
 
 
-NodeState TreeNode::ReadColorState()
+BT::NodeState BT::TreeNode::ReadColorState()
 {
     // Lock acquistion
 
     return ColorState;
 }
 
-void TreeNode::SetColorState(NodeState ColorStateToBeSet)
+void BT::TreeNode::SetColorState(NodeState ColorStateToBeSet)
 {
     // Lock acquistion
 
@@ -82,14 +80,14 @@ void TreeNode::SetColorState(NodeState ColorStateToBeSet)
 }
 
 
-float TreeNode::GetXPose()
+float BT::TreeNode::GetXPose()
 {
 
 return x_pose_;
 }
 
 
-void TreeNode::SetXPose(float x_pose)
+void BT::TreeNode::SetXPose(float x_pose)
 {
 
 x_pose_ = x_pose;
@@ -97,14 +95,14 @@ x_pose_ = x_pose;
 
 
 
-float TreeNode::GetXShift()
+float BT::TreeNode::GetXShift()
 {
 
 return x_shift_;
 }
 
 
-void TreeNode::SetXShift(float x_shift)
+void BT::TreeNode::SetXShift(float x_shift)
 {
 
 x_shift_ = x_shift;
@@ -112,7 +110,7 @@ x_shift_ = x_shift;
 
 
 
-std::string TreeNode::get_name()
+std::string BT::TreeNode::get_name()
 {
 
 return Name;

@@ -1,9 +1,8 @@
 #include<BehaviorTree.h>
 
-using namespace BT;
 
 
-void Execute(ControlNode* root,int TickPeriod_milliseconds)
+void Execute(BT::ControlNode* root,int TickPeriod_milliseconds)
 {
     std::cout << "Start Drawing!" << std::endl;
     // Starts in another thread the drawing of the BT
@@ -20,7 +19,7 @@ void Execute(ControlNode* root,int TickPeriod_milliseconds)
         // Printing its state
         root->GetNodeState();
 
-        if(root->ReadState() != Running  )
+        if(root->ReadState() != BT::Running  )
         {
             //when the root returns a status it resets the colors of the tree
             root->ResetColorState();

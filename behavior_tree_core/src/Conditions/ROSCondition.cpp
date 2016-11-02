@@ -1,22 +1,20 @@
 #include <Conditions/ROSCondition.h>
 
-using namespace BT;
-
 
 enum Status {RUNNING,SUCCESS, FAILURE};
 
 
-ROSCondition::ROSCondition(std::string Name) : ConditionNode::ConditionNode(Name)
+BT::ROSCondition::ROSCondition(std::string Name) : ConditionNode::ConditionNode(Name)
 {
-    Type = Condition;
+    Type = BT::Condition;
 
     // Thread start
     Thread = boost::thread(&ROSCondition::Exec, this);
 }
 
-ROSCondition::~ROSCondition() {}
+BT::ROSCondition::~ROSCondition() {}
 
-void ROSCondition::Exec()
+void BT::ROSCondition::Exec()
 {
 
    // ROS_INFO("Waiting For the Acutator %s to start", Name);
@@ -56,20 +54,20 @@ void ROSCondition::Exec()
         if (node_result.status == SUCCESS)
         {
             SetNodeState(BT::Success);
-           std::cout << Name << " returning Success" << Success << "!" << std::endl;
+           std::cout << Name << " returning Success" << BT::Success << "!" << std::endl;
         }
         else if( node_result.status == FAILURE)
         {
             SetNodeState(BT::Failure);
-            std::cout << Name << " returning Failure" << Failure << "!" << std::endl;
+            std::cout << Name << " returning Failure" << BT::Failure << "!" << std::endl;
         }else{
             SetNodeState(BT::Failure);
-            std::cout << Name << " returning NOTHING" << Failure << "!" << std::endl;
+            std::cout << Name << " returning NOTHING" << BT::Failure << "!" << std::endl;
         }
 
 	
 
         // Resetting the state
-        WriteState(Idle);
+        WriteState(BT::Idle);
     }
 }

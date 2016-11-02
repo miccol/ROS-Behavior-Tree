@@ -1,17 +1,15 @@
 #include <Actions/ActionTestNode.h>
 
-using namespace BT;
-
-ActionTestNode::ActionTestNode(std::string Name) : ActionNode::ActionNode(Name)
+BT::ActionTestNode::ActionTestNode(std::string Name) : ActionNode::ActionNode(Name)
 {
-    Type = Action;
+    Type = BT::Action;
     // Thread start
     Thread = boost::thread(&ActionTestNode::Exec, this);
 }
 
-ActionTestNode::~ActionTestNode() {}
+BT::ActionTestNode::~ActionTestNode() {}
 
-void ActionTestNode::Exec()
+void BT::ActionTestNode::Exec()
 {
 
 
@@ -30,18 +28,18 @@ void ActionTestNode::Exec()
         }
 
         // Running state
-        SetNodeState(Running);
-        std::cout << Name << " returning " << Running << "!" << std::endl;
+        SetNodeState(BT::Running);
+        std::cout << Name << " returning " << BT::Running << "!" << std::endl;
 
         // Perform action...
         int i = 0;
-        while(ReadState() == Running and i++<5)
+        while(ReadState() == BT::Running and i++<5)
         {
             std::cout << Name << " working!" << std::endl;
             boost::this_thread::sleep(boost::posix_time::milliseconds(800));
         }
 
-        if(ReadState() == Exit)
+        if(ReadState() == BT::Exit)
         {
             // The behavior tree is going to be destroied
             return;
@@ -63,14 +61,14 @@ void ActionTestNode::Exec()
                 continue;
             }
 
-            std::cout << Name << " returning " << Success << "!" << std::endl;
+            std::cout << Name << " returning " << BT::Success << "!" << std::endl;
         }
 
         // Synchronization
         // (my father is telling me that it has read my new state)
         Semaphore.Wait();
 
-        if(ReadState() == Exit)
+        if(ReadState() == BT::Exit)
         {
 
             // The behavior tree is going to be destroied
@@ -78,17 +76,17 @@ void ActionTestNode::Exec()
         }
 
         // Resetting the state
-        WriteState(Idle);
+        WriteState(BT::Idle);
     }
 }
 
-bool ActionTestNode::Halt()
+bool BT::ActionTestNode::Halt()
 {
     // Lock acquistion
     boost::lock_guard<boost::mutex> LockGuard(StateMutex);
 
     // Checking for "Running" correctness
-    if (State != Running)
+    if (State != BT::Running)
     {
         return false;
     }
@@ -99,6 +97,6 @@ bool ActionTestNode::Halt()
 }
 
 
-void ActionTestNode::SetBehavior(NodeState status){
+void BT::ActionTestNode::SetBehavior(NodeState status){
     status_ = status;
 }

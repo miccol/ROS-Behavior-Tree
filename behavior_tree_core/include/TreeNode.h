@@ -1,5 +1,5 @@
-#ifndef TREENODE_H
-#define TREENODE_H
+#ifndef BEHAVIORTREECORE_TREENODE_H
+#define BEHAVIORTREECORE_TREENODE_H
 
 #include <iostream>
 #include <unistd.h>

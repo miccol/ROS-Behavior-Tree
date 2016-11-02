@@ -1,16 +1,15 @@
 #include <DecoratorNegationNode.h>
 
-using namespace BT;
 
-DecoratorNegationNode::DecoratorNegationNode(std::string Name) : ControlNode::ControlNode(Name)
+BT::DecoratorNegationNode::DecoratorNegationNode(std::string Name) : ControlNode::ControlNode(Name)
 {
     // Thread start
     Thread = boost::thread(&DecoratorNegationNode::Exec, this);
 }
 
-DecoratorNegationNode::~DecoratorNegationNode() {}
+BT::DecoratorNegationNode::~DecoratorNegationNode() {}
 
-void DecoratorNegationNode::Exec()
+void BT::DecoratorNegationNode::Exec()
 {
 
 
@@ -28,14 +27,14 @@ void DecoratorNegationNode::Exec()
         // Waiting for a tick to come
         Semaphore.Wait();
 
-        if(ReadState() == Exit)
+        if(ReadState() == BT::Exit)
         {
             // The behavior tree is going to be destroied
             return;
         }
 
         // Checking if i was halted
-        if (ReadState() != Halted)
+        if (ReadState() != BT::Halted)
         {
             // If not, the children can be ticked
             std::cout << Name << " ticked, ticking children..." << std::endl;
@@ -43,13 +42,13 @@ void DecoratorNegationNode::Exec()
 
 
 
-                if (ChildNodes[0]->Type == Action)
+                if (ChildNodes[0]->Type == BT::Action)
                 {
                     // 1) if it's an action:
                     // 1.1) read its state;
                     NodeState ActionState = ChildNodes[0]->ReadState();
 
-                    if (ActionState == Idle)
+                    if (ActionState == BT::Idle)
                     {
                         // 1.2) if it's "Idle":
                         // 1.2.1) ticking it;
@@ -58,11 +57,11 @@ void DecoratorNegationNode::Exec()
                         // 1.2.2) retrive its state as soon as it is available;
                         ChildStates[0] = ChildNodes[0]->GetNodeState();
                     }
-                    else if (ActionState == Running)
+                    else if (ActionState == BT::Running)
                     {
                         // 1.3) if it's "Running":
                         // 1.3.1) saving "Running"
-                        ChildStates[0] = Running;
+                        ChildStates[0] = BT::Running;
                     }
                     else
                     {
@@ -85,17 +84,17 @@ void DecoratorNegationNode::Exec()
                 }
 
                 // 3) if the child state is a success:
-                if(ChildStates[0] == Success)
+                if(ChildStates[0] == BT::Success)
                 {
                     // 3.1) the node state is equal to failure since I am negating the status
-                    SetNodeState(Failure);
+                    SetNodeState(BT::Failure);
 
                     // 3.2) resetting the state;
-                    WriteState(Idle);
+                    WriteState(BT::Idle);
 
                     std::cout << Name << " returning " << Failure << "!" << std::endl;
                 }
-                else if(ChildStates[0] == Failure)
+                else if(ChildStates[0] == BT::Failure)
                 {
                     // 4.1) the node state is equal to success since I am negating the status
                     SetNodeState(Success);
@@ -109,10 +108,10 @@ void DecoratorNegationNode::Exec()
                 // 5) if the child state is  running
                 {
                     // 5.1) the node state is equal to running
-                    SetNodeState(Running);
+                    SetNodeState(BT::Running);
 
                     // 5.2) state reset;
-                    WriteState(Idle);
+                    WriteState(BT::Idle);
                 }
 
         }
@@ -121,7 +120,7 @@ void DecoratorNegationNode::Exec()
             // If it was halted, all the "busy" children must be halted too
             std::cout << Name << " halted! Halting all the children..." << std::endl;
 
-                if (ChildNodes[0]->Type != Action && ChildStates[0] == Running)
+                if (ChildNodes[0]->Type != BT::Action && ChildStates[0] == BT::Running)
                 {
                     // if the control node was running:
                     // halting it;
@@ -132,7 +131,7 @@ void DecoratorNegationNode::Exec()
 
                     std::cout << Name << " halting child  "  << "!" << std::endl;
                 }
-                else if (ChildNodes[0]->Type == Action && ChildNodes[0]->ReadState() == Running)
+                else if (ChildNodes[0]->Type == Action && ChildNodes[0]->ReadState() == BT::Running)
                 {
                     std::cout << Name << " trying halting child  "  << "..." << std::endl;
 
@@ -150,7 +149,7 @@ void DecoratorNegationNode::Exec()
 
                     std::cout << Name << " halting of child  "  << " succedeed!" << std::endl;
                 }
-                else if (ChildNodes[0]->Type == Action && ChildNodes[0]->ReadState() != Idle)
+                else if (ChildNodes[0]->Type == BT::Action && ChildNodes[0]->ReadState() != BT::Idle)
                 {
                     // if it's a action node that has finished its job:
                     // ticking it without saving its returning state;
@@ -158,24 +157,24 @@ void DecoratorNegationNode::Exec()
                 }
 
                 // updating its vector cell
-                ChildStates[0] = Idle;
+                ChildStates[0] = BT::Idle;
 
 
             // Resetting the node state
-            WriteState(Idle);
+            WriteState(BT::Idle);
         }
     }
 }
 
-int DecoratorNegationNode::GetType()
+int BT::DecoratorNegationNode::GetType()
 {
     // Lock acquistion
 
-    return DECORATOR;
+    return BT::DECORATOR;
 }
 
 
-void DecoratorNegationNode::AddChild(TreeNode* Child)
+void BT::DecoratorNegationNode::AddChild(BT::TreeNode* Child)
 {
     // Checking if the Child is not already present
 
@@ -186,5 +185,5 @@ void DecoratorNegationNode::AddChild(TreeNode* Child)
 
 
     ChildNodes.push_back(Child);
-    ChildStates.push_back(Idle);
+    ChildStates.push_back(BT::Idle);
 }

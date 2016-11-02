@@ -2,21 +2,20 @@
 
 
 
-using namespace BT;
 
 enum Status {RUNNING,SUCCESS, FAILURE};
 
-ROSAction::ROSAction(std::string Name) : ActionNode::ActionNode(Name)
+BT::ROSAction::ROSAction(std::string Name) : ActionNode::ActionNode(Name)
 {
-    Type = Action;
+    Type = BT::Action;
     // Thread start
     Thread = boost::thread(&ROSAction::Exec, this);
 
 }
 
-ROSAction::~ROSAction() {}
+BT::ROSAction::~ROSAction() {}
 
-void ROSAction::Exec()
+void BT::ROSAction::Exec()
 {
 
 
@@ -44,7 +43,7 @@ void ROSAction::Exec()
         }
 
         // Running state
-        SetNodeState(Running);
+        SetNodeState(BT::Running);
         std::cout << Name << " returning " << Running << "!" << std::endl;
         node_result.status = RUNNING;
         // Perform action...
@@ -79,7 +78,7 @@ void ROSAction::Exec()
                 continue;
             }
 
-            std::cout << Name << " returning Success " << Success << "!" << std::endl;
+            std::cout << Name << " returning Success " << BT::Success << "!" << std::endl;
         }
         else if( node_result.status == FAILURE)
         {
@@ -95,39 +94,39 @@ void ROSAction::Exec()
                 continue;
             }
 
-            std::cout << Name << " returning Failure" << Failure << "!" << std::endl;
+            std::cout << Name << " returning Failure" << BT::Failure << "!" << std::endl;
         }else{//it means that the parent has halted the node
 
             std::cout << Name << " Halted!" << std::endl;
             ROS_INFO("I am cancelling the request");
             ac.cancelGoal();
             // Resetting the state
-            WriteState(Idle);
+            WriteState(BT::Idle);
             continue;
 
-            std::cout << Name << " returning NOTHING (HALTED)" << Failure << "!" << std::endl;
+            std::cout << Name << " returning NOTHING (HALTED)" << BT::Failure << "!" << std::endl;
         }
 
 
-            std::cout << Name << " returning " << Success << "!" << std::endl;
+            std::cout << Name << " returning " << BT::Success << "!" << std::endl;
 
 
         // Synchronization
         // (my father is telling me that it has read my new state)
         Semaphore.Wait();
 
-        if(ReadState() == Exit)
+        if(ReadState() == BT::Exit)
         {
             // The behavior tree is going to be destroied
             return;
         }
 
         // Resetting the state
-        WriteState(Idle);
+        WriteState(BT::Idle);
     }
 }
 
-bool ROSAction::Halt()
+bool BT::ROSAction::Halt()
 {
 
         ROS_INFO("I am Halting the client");
@@ -135,7 +134,7 @@ bool ROSAction::Halt()
     boost::lock_guard<boost::mutex> LockGuard(StateMutex);
 
     // Checking for "Running" correctness
-    if (State != Running)
+    if (State != BT::Running)
     {
         return false;
     }

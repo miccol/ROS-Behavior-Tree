@@ -1,17 +1,16 @@
 #include <DecoratorRetryNode.h>
 
-using namespace BT;
 
-DecoratorRetryNode::DecoratorRetryNode(std::string Name, unsigned int NTries) : ControlNode::ControlNode(Name)
+BT::DecoratorRetryNode::DecoratorRetryNode(std::string Name, unsigned int NTries) : ControlNode::ControlNode(Name)
 {
     // Thread start
     NTries_ = NTries;
     Thread = boost::thread(&DecoratorRetryNode::Exec, this);
 }
 
-DecoratorRetryNode::~DecoratorRetryNode() {}
+BT::DecoratorRetryNode::~DecoratorRetryNode() {}
 
-void DecoratorRetryNode::Exec()
+void BT::DecoratorRetryNode::Exec()
 {
     int i;
 
@@ -29,14 +28,14 @@ void DecoratorRetryNode::Exec()
         // Waiting for a tick to come
         Semaphore.Wait();
 
-        if(ReadState() == Exit)
+        if(ReadState() == BT::Exit)
         {
             // The behavior tree is going to be destroied
             return;
         }
 
         // Checking if i was halted
-        if (ReadState() != Halted)
+        if (ReadState() != BT::Halted)
         {
             // If not, the children can be ticked
             std::cout << Name << " ticked, ticking children..." << std::endl;
@@ -45,7 +44,7 @@ void DecoratorRetryNode::Exec()
             // For each child:
             //for (i = 0; i<M; i++)
             {
-                if (ChildNodes[0]->Type == Action)
+                if (ChildNodes[0]->Type == BT::Action)
                 {
                     // 1) if it's an action:
                     // 1.1) read its state;
@@ -60,11 +59,11 @@ void DecoratorRetryNode::Exec()
                         // 1.2.2) retrive its state as soon as it is available;
                         ChildStates[0] = ChildNodes[0]->GetNodeState();
                     }
-                    else if (ActionState == Running)
+                    else if (ActionState == BT::Running)
                     {
                         // 1.3) if it's "Running":
                         // 1.3.1) saving "Running"
-                        ChildStates[0] = Running;
+                        ChildStates[0] = BT::Running;
                     }
                     else
                     {
@@ -87,25 +86,25 @@ void DecoratorRetryNode::Exec()
                 }
 
                 // 3) if the child state is not a success:
-                if(ChildStates[0] == Success)
+                if(ChildStates[0] == BT::Success)
                 {
-                    SetNodeState(Success);
+                    SetNodeState(BT::Success);
 
                     // 4.2) resetting the state;
                     WriteState(Idle);
 
-                    std::cout << Name << " returning " << Success << "!" << std::endl;
+                    std::cout << Name << " returning " << BT::Success << "!" << std::endl;
                 }
                 else
                 {
-                    if(ChildStates[0] == Failure)
+                    if(ChildStates[0] == BT::Failure)
                     {
                         ChildNodes[0]->ResetColorState();
                         TryIndx_++;
 
                     }
 
-                    if(ChildStates[0] == Failure && TryIndx_ < NTries_)
+                    if(ChildStates[0] == BT::Failure && TryIndx_ < NTries_)
                     {
                         // 3.1) the node state is equal to running since I am rerunning the child
                         SetNodeState(Running);
@@ -116,7 +115,7 @@ void DecoratorRetryNode::Exec()
                     {
                         SetNodeState(ChildStates[0]);
                         // 3.2) state reset;
-                        WriteState(Idle);
+                        WriteState(BT::Idle);
                         std::cout << Name << " returning " << ChildStates[0] << "!" << std::endl;
 
                     }
@@ -129,7 +128,7 @@ void DecoratorRetryNode::Exec()
             // If it was halted, all the "busy" children must be halted too
             std::cout << Name << " halted! Halting all the children..." << std::endl;
 
-                if (ChildNodes[0]->Type != Action && ChildStates[0] == Running)
+                if (ChildNodes[0]->Type != Action && ChildStates[0] == BT::Running)
                 {
                     // if the control node was running:
                     // halting it;
@@ -140,7 +139,7 @@ void DecoratorRetryNode::Exec()
 
                     std::cout << Name << " halting child  "  << "!" << std::endl;
                 }
-                else if (ChildNodes[0]->Type == Action && ChildNodes[0]->ReadState() == Running)
+                else if (ChildNodes[0]->Type == Action && ChildNodes[0]->ReadState() == BT::Running)
                 {
                     std::cout << Name << " trying halting child  "  << "..." << std::endl;
 
@@ -158,7 +157,7 @@ void DecoratorRetryNode::Exec()
 
                     std::cout << Name << " halting of child  "  << " succedeed!" << std::endl;
                 }
-                else if (ChildNodes[0]->Type == Action && ChildNodes[0]->ReadState() != Idle)
+                else if (ChildNodes[0]->Type == BT::Action && ChildNodes[0]->ReadState() != BT::Idle)
                 {
                     // if it's a action node that has finished its job:
                     // ticking it without saving its returning state;
@@ -166,19 +165,19 @@ void DecoratorRetryNode::Exec()
                 }
 
                 // updating its vector cell
-                ChildStates[0] = Idle;
+                ChildStates[0] = BT::Idle;
 
 
             // Resetting the node state
-            WriteState(Idle);
+            WriteState(BT::Idle);
         }
     }
 }
 
-int DecoratorRetryNode::GetType()
+int BT::DecoratorRetryNode::GetType()
 {
     // Lock acquistion
 
-    return DECORATOR;
+    return BT::DECORATOR;
 }
 
