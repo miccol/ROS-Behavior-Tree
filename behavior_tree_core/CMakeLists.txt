@@ -85,13 +85,15 @@ src/conditions/ros_condition.cpp
 )
 
 
-add_executable(test src/test.cpp ${BTSrcLibrary} ${BTHeadLibrary})
-target_link_libraries(test ${catkin_LIBRARIES} ${OPENGL_LIBRARIES} ${GLUT_LIBRARY})
-add_dependencies(test behavior_tree_core_generate_messages_cpp)
 
 
 add_executable(tree src/tree.cpp ${BTSrcLibrary} ${BTHeadLibrary})
 target_link_libraries(tree ${catkin_LIBRARIES} ${OPENGL_LIBRARIES} ${GLUT_LIBRARY})
 add_dependencies(tree behavior_tree_core_generate_messages_cpp)
+
+
+add_executable(ros_test src/ros_test.cpp ${BTSrcLibrary} ${BTHeadLibrary})
+target_link_libraries(ros_test ${catkin_LIBRARIES} ${OPENGL_LIBRARIES} ${GLUT_LIBRARY})
+add_dependencies(ros_test behavior_tree_core_generate_messages_cpp)
 
 
