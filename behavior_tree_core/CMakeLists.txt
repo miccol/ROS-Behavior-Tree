@@ -62,26 +62,26 @@ INCLUDE_DIRECTORIES(${catkin_INCLUDE_DIRS} include)
 file(GLOB_RECURSE BTHeadLibrary include/*.h)
 
 set(BTSrcLibrary
-src/ActionNode.cpp
-src/BehaviorTree.cpp
-src/ConditionNode.cpp
-src/ControlNode.cpp
-src/DecoratorRetryNode.cpp
-src/DecoratorNegationNode.cpp
-src/Draw.cpp
-src/Exceptions.cpp
-src/LeafNode.cpp
-src/NodeSemaphore.cpp
-src/ParallelNode.cpp
-src/SelectorNode.cpp
-src/SequenceNode.cpp
-src/SelectorStarNode.cpp
-src/SequenceStarNode.cpp
-src/TreeNode.cpp
-src/Actions/ActionTestNode.cpp
-src/Conditions/ConditionTestNode.cpp
-src/Actions/ROSAction.cpp
-src/Conditions/ROSCondition.cpp
+src/action_node.cpp
+src/behavior_tree.cpp
+src/condition_node.cpp
+src/control_node.cpp
+src/decorator_retry_node.cpp
+src/decorator_negation_node.cpp
+src/draw.cpp
+src/exceptions.cpp
+src/leaf_node.cpp
+src/tick_engine.cpp
+src/parallel_node.cpp
+src/selector_node.cpp
+src/sequence_node.cpp
+src/selector_star_node.cpp
+src/sequence_star_node.cpp
+src/tree_node.cpp
+src/actions/action_test_node.cpp
+src/conditions/condition_test_node.cpp
+src/actions/ros_action.cpp
+src/conditions/ros_condition.cpp
 )
 
 
