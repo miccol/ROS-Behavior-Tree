@@ -9,11 +9,14 @@ BT::ActionTestNode::ActionTestNode(std::string name) : ActionNode::ActionNode(na
 
 BT::ActionTestNode::~ActionTestNode() {}
 
-void BT::ActionTestNode::Exec()
+BT::NodeState BT::ActionTestNode::Exec(){}
+
+
+void BT::ActionTestNode::Exec2()
 {
 
 
-
+time_ = 100;
     while(true)
     {
 
@@ -33,7 +36,7 @@ void BT::ActionTestNode::Exec()
 
         // Perform action...
         int i = 0;
-        while(ReadState() == BT::RUNNING and i++<5)
+        while(ReadState() == BT::RUNNING && i++<time_)
         {
             std::cout << get_name() << " working!" << std::endl;
             boost::this_thread::sleep(boost::posix_time::milliseconds(800));
@@ -97,6 +100,10 @@ bool BT::ActionTestNode::Halt()
 }
 
 
-void BT::ActionTestNode::SetBehavior(NodeState status){
+void BT::ActionTestNode::set_status(NodeState status){
     status_ = status;
+}
+
+void BT::ActionTestNode::set_time(int time){
+    time_ = time;
 }

@@ -13,7 +13,7 @@ namespace BT
         ~ConditionNode();
 
         // The method that is going to be executed by the thread
-        virtual void Exec() = 0;
+        virtual BT::NodeState Exec() = 0;
 
         // The method used to interrupt the execution of the node
         bool Halt();

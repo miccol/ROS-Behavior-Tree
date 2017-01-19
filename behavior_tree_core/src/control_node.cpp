@@ -37,6 +37,7 @@ bool BT::ControlNode::Halt()
     return true;
 }
 
+
 bool BT::ControlNode::WriteState(NodeState new_state)
 {
     // Lock acquistion

@@ -4,48 +4,56 @@
 BT::ConditionTestNode::ConditionTestNode(std::string name) : ConditionNode::ConditionNode(name)
 {
     type_ = BT::CONDITION_NODE;
+    boolean_value_ = true;
 
     // thread_ start
-    thread_ = boost::thread(&ConditionTestNode::Exec, this);
+    //thread_ = boost::thread(&ConditionTestNode::Exec, this);
 }
 
 BT::ConditionTestNode::~ConditionTestNode() {}
 
-void BT::ConditionTestNode::Exec()
+BT::NodeState BT::ConditionTestNode::Exec()
 {
- int i = 0;   
-    while(true)
+//    while(true)
     {
 	
         // Waiting for a tick to come
-        tick_engine.wait();
+     //   tick_engine.wait();
 
         if(ReadState() == BT::EXIT)
         {
             // The behavior tree is going to be destroied
-            return;
+            return BT::EXIT;
         }
 
         // Condition checking and state update
-        i++;
-        if (i < 5)
+
+        if (boolean_value_)
         {
-            SetNodeState(BT::SUCCESS);
+          //  SetNodeState(BT::SUCCESS);
             std::cout << get_name() << " returning Success" << BT::SUCCESS << "!" << std::endl;
+            return BT::SUCCESS;
         }
-        else if( i<10)
+        else
         {
-            SetNodeState(BT::FAILURE);
+//            SetNodeState(BT::FAILURE);
             std::cout << get_name() << " returning Failure" << BT::FAILURE << "!" << std::endl;
-        } else
-	{
-            std::cout << get_name() << " reset i!" << std::endl;
-            SetNodeState(BT::FAILURE);
-	i=0;
-	}
+            return BT::FAILURE;
+
+        }
 	
 
-        // Resetting the state
-        WriteState(BT::IDLE);
+
     }
+
+
 }
+
+
+
+
+	void BT::ConditionTestNode::set_boolean_value(bool boolean_value)
+	{
+		boolean_value_ = boolean_value;
+	}
+
