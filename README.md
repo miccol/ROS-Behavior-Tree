@@ -5,6 +5,21 @@ ROS-Behavior-Tree ![License MIT](https://img.shields.io/dub/l/vibe-d.svg)
 ![Version](https://img.shields.io/badge/version-v1.1-orange.svg) <br/> 
 A ROS behavior tree library. The leaf nodes (user defined) can be either in `C++` or `python`.
 
+REFERENCE
+------------
+Please refer to the following paper when using the library:
+
+**How Behavior Trees Modularize Hybrid Control Systems and Generalize Sequential Behavior Compositions, the Subsumption Architecture, and Decision Trees.** Michele Colledanchise and Petter Ogren. IEEE Transaction on Robotics 2016.
+
+bibtex entry:
+
+`@article{colledanchise2016behavior,
+  title={How {B}ehavior {T}rees {M}odularize {H}ybrid {C}ontrol {S}ystems and {G}eneralize {S}equential {B}ehavior {C}ompositions, the {S}ubsumption    {A}rchitecture, and {D}ecision {T}rees},
+  author={Colledanchise, Michele and {\"O}gren, Petter},
+  journal={IEEE Transactions on Robotics},
+  year={2016},
+  publisher={IEEE}
+}`
 
 INFO
 ------------
@@ -93,7 +108,7 @@ LICENSE
 -------
 The MIT License (MIT)
 
-Copyright (c) 2014-2016 Michele Colledanchise
+Copyright (c) 2014-2017 Michele Colledanchise
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
