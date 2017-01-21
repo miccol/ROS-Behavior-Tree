@@ -20,9 +20,9 @@ time_ = 100;
     while(true)
     {
 
-        // Waiting for a tick to come
+        // Waiting for the first tick to come
         tick_engine.wait();
-
+        DEBUG_STDOUT("TICK RECEIVED");
 //        if(ReadState() == BT::EXIT)
 //        {    //SetColorState(Idle);
 
@@ -32,15 +32,15 @@ time_ = 100;
 
         // Running state
         SetNodeState(BT::RUNNING);
-        std::cout << get_name() << " returning " << BT::RUNNING << "!" << std::endl;
-
         // Perform action...
         int i = 0;
         while(ReadState() == BT::RUNNING && i++<time_)
         {
-            std::cout << get_name() << " working!" << std::endl;
+            DEBUG_STDOUT(" Action running!");
             boost::this_thread::sleep(boost::posix_time::milliseconds(800));
         }
+
+        DEBUG_STDOUT(" OUT !");
 
         if(ReadState() == BT::EXIT)
         {
@@ -52,7 +52,7 @@ time_ = 100;
         else
         {
             // trying to set the outcome state:
-            if (WriteState(status_) != true)
+           // if (WriteState(status_) != true)
 //            {
 //                // meanwhile, my father halted me!
 //                std::cout << get_name() << " Halted!" << std::endl;
@@ -65,7 +65,7 @@ time_ = 100;
 //                continue;
 //            }
 
-            std::cout << get_name() << " returning " << BT::SUCCESS << "!" << std::endl;
+           // std::cout << get_name() << " returning " << BT::SUCCESS << "!" << std::endl;
         }
 
         // Synchronization
@@ -87,11 +87,14 @@ time_ = 100;
 bool BT::ActionTestNode::Halt()
 {
     // Lock acquistion
-    boost::lock_guard<boost::mutex> LockGuard(state_mutex_);
+    DEBUG_STDOUT(" Waiting for Lock to Halt action!");
 
     //SetColorState(Idle);
+    DEBUG_STDOUT(" Action Halted!");
 
-    state_ = BT::HALTED;
+    SetNodeState(BT::HALTED);
+    DEBUG_STDOUT(" HALTED state set!");
+
     return true;
 }
 

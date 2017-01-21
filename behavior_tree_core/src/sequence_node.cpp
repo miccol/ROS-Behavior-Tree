@@ -12,8 +12,6 @@ BT::SequenceNode::~SequenceNode() {}
 BT::NodeState BT::SequenceNode::Exec()
 {
 
-    std::cout  << " EXECUTING " << std::endl;
-
     unsigned int i;
 
     // Waiting for the first tick to come
@@ -51,10 +49,8 @@ BT::NodeState BT::SequenceNode::Exec()
 
                     // 1) if it's an action:
                     // 1.1) read its state;
-                    std::cout << " READING STATE !" << std::endl;
 
                     NodeState ActionState = children_nodes_[i]->ReadState();
-                    std::cout << " READING STATE DONE!" << std::endl;
 
                     if (ActionState == BT::IDLE)
                     {
@@ -95,27 +91,27 @@ BT::NodeState BT::SequenceNode::Exec()
 
                     // 2.2) retrive its state as soon as it is available;
                     children_states_[i] = children_nodes_[i]->Exec();
-                    std::cout << " NOT AN ACTION  EXECUTED!" << std::endl;
 
                 }
 
                 // 3) if the child state is not a success:
                 if(children_states_[i] != BT::SUCCESS)
                 {
+                    DEBUG_STDOUT("Halting other children");
+                    HaltChildren(i+1);
                     return children_states_[i];
-                    // 3.1) the node state is equal to it;
-                    SetNodeState(children_states_[i]);
 
-                    // 3.2) state reset;
-                    WriteState(BT::IDLE);
+                    // 3.1) the node state is equal to it;
+
 
                     // 3.3) all the next action or control child nodes must be halted:
+                    DEBUG_STDOUT("Halting other children");
                     HaltChildren(i+1);
 
                     std::cout << get_name() << " returning " << children_states_[i] << "!" << std::endl;
 
                     // 3.4) the "for" loop must end here.
-                    break;
+                    return children_states_[i];
                 }
 
                 std::cout << " returning SUCCESS!" << std::endl;

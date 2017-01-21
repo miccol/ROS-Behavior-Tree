@@ -46,13 +46,13 @@ void BT::TreeNode::SetNodeState(NodeState new_state)
 
     // state_ update
     state_ = new_state;
-    is_state_updated_ = true;
+//    is_state_updated_ = true;
 
-    // Notification and unlock of the mutex
-    state_condition_variable_.notify_all();
+//    // Notification and unlock of the mutex
+//    state_condition_variable_.notify_all();
 
-    // Waiting for the father to read the state
-    state_condition_variable_.wait(UniqueLock);
+//    // Waiting for the father to read the state
+//    state_condition_variable_.wait(UniqueLock);
 }
 
 BT::NodeState BT::TreeNode::ReadState()

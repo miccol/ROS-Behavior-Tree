@@ -31,13 +31,13 @@ BT::NodeState BT::ConditionTestNode::Exec()
         if (boolean_value_)
         {
           //  SetNodeState(BT::SUCCESS);
-            std::cout << get_name() << " returning Success" << BT::SUCCESS << "!" << std::endl;
+        //    std::cout << get_name() << " returning Success" << BT::SUCCESS << "!" << std::endl;
             return BT::SUCCESS;
         }
         else
         {
 //            SetNodeState(BT::FAILURE);
-            std::cout << get_name() << " returning Failure" << BT::FAILURE << "!" << std::endl;
+         //   std::cout << get_name() << " returning Failure" << BT::FAILURE << "!" << std::endl;
             return BT::FAILURE;
 
         }

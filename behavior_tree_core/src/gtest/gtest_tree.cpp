@@ -43,32 +43,43 @@ TEST_F(BehaviorTreeTest, TreeRunning) {
     boost::this_thread::sleep(boost::posix_time::milliseconds(1000));
 
     ASSERT_EQ(BT::RUNNING, state);
+    root->Halt();
 
 }
 
 
-//TEST_F(BehaviorTreeTest, ActionHalted) {
+TEST_F(BehaviorTreeTest, ActionHalted) {
 
+    BT::NodeState state = root->Exec();
+
+    boost::this_thread::sleep(boost::posix_time::milliseconds(1000));
+    condition->set_boolean_value(false);
+
+    root->Exec();
+
+
+    boost::this_thread::sleep(boost::posix_time::milliseconds(1000));
+
+    ASSERT_EQ(BT::HALTED,action->ReadState());
+    root->Halt();
+
+}
+
+//TEST_F(BehaviorTreeTest, TreeFailure) {
+//    // Ticking the root node
 //    condition->set_boolean_value(false);
 
-//    root->tick_engine.tick();
+//    BT::NodeState state = root->Exec();
+//    boost::this_thread::sleep(boost::posix_time::milliseconds(1000));
 
-//    boost::this_thread::sleep(boost::posix_time::milliseconds(2000));
-
-//    ASSERT_EQ(BT::IDLE,action->ReadState());
+//    ASSERT_EQ(BT::FAILURE, state);
 
 //}
 
-TEST_F(BehaviorTreeTest, TreeFailure) {
-    // Ticking the root node
-    condition->set_boolean_value(false);
 
-    BT::NodeState state = root->Exec();
-    boost::this_thread::sleep(boost::posix_time::milliseconds(1000));
 
-    ASSERT_EQ(BT::FAILURE, state);
 
-}
+
 int main(int argc, char **argv)
 {
     ros::init(argc, argv, "BehaviorTree");
