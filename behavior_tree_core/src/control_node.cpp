@@ -4,6 +4,8 @@
 BT::ControlNode::ControlNode(std::string name) : TreeNode::TreeNode(name)
 {
     type_ = BT::CONDITION_NODE;
+    NodeState child_i_status_ = BT::IDLE;
+
 }
 
 BT::ControlNode::~ControlNode() {}
@@ -32,19 +34,10 @@ bool BT::ControlNode::Halt()
 {
     HaltChildren(0);
 
-    SetNodeState(BT::HALTED);
+    set_status(BT::HALTED);
     return true;
 }
 
-
-bool BT::ControlNode::WriteState(NodeState new_state)
-{
-    // Lock acquistion
-    boost::lock_guard<boost::mutex> LockGuard(state_mutex_);
-
-    state_ = new_state;
-    return true;
-}
 
 
 std::vector<BT::TreeNode*> BT::ControlNode::GetChildren()
@@ -66,16 +59,16 @@ void BT::ControlNode::ResetColorState()
 void BT::ControlNode::HaltChildren(int i){
     for(unsigned int j=i; j<children_nodes_.size(); j++)
     {
-        if (children_nodes_[j]->get_type() != BT::CONDITION_NODE && children_nodes_[j]->ReadState() == BT::RUNNING)
+        if (children_nodes_[j]->get_type() != BT::CONDITION_NODE && children_nodes_[j]->get_status() == BT::RUNNING)
         {
-            DEBUG_STDOUT("SENDING HALT TO CHILD");
+            DEBUG_STDOUT("SENDING HALT TO CHILD " << children_nodes_[j]-> get_name());
             children_nodes_[j]->Halt();
 
         }
         else
         {
-            DEBUG_STDOUT("NO NEED TO HALT");
-            std::cout <<children_nodes_[j]-> get_name() << children_nodes_[j]->ReadState() << std::endl;
+            DEBUG_STDOUT("NO NEED TO HALT " << children_nodes_[j]-> get_name() << "STATUS" << children_nodes_[j]->get_status());
+            std::cout <<children_nodes_[j]-> get_name() << children_nodes_[j]->get_status() << std::endl;
 
         }
     }

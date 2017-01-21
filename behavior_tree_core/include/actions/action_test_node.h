@@ -15,16 +15,16 @@ namespace BT
         ~ActionTestNode();
 
         // The method that is going to be executed by the thread
-        void Exec2();
-        BT::NodeState Exec();
-        void set_status(NodeState status);
+        void WaitForTick();
+    //    BT::NodeState Tick();
+      //  void set_status(NodeState status);
         void set_time(int time);
 	
         // The method used to interrupt the execution of the node
         bool Halt();
     private:
         int time_;
-    	NodeState status_;
+        ///NodeState status_;
 
     };
 }

@@ -12,15 +12,17 @@ BT::ConditionTestNode::ConditionTestNode(std::string name) : ConditionNode::Cond
 
 BT::ConditionTestNode::~ConditionTestNode() {}
 
-BT::NodeState BT::ConditionTestNode::Exec()
+BT::NodeState BT::ConditionTestNode::Tick()
 {
-//    while(true)
+
+
+    //    while(true)
     {
 	
         // Waiting for a tick to come
      //   tick_engine.wait();
 
-        if(ReadState() == BT::EXIT)
+        if(get_status() == BT::EXIT)
         {
             // The behavior tree is going to be destroied
             return BT::EXIT;
@@ -30,14 +32,14 @@ BT::NodeState BT::ConditionTestNode::Exec()
 
         if (boolean_value_)
         {
-          //  SetNodeState(BT::SUCCESS);
-        //    std::cout << get_name() << " returning Success" << BT::SUCCESS << "!" << std::endl;
+            set_status(BT::SUCCESS);
+            std::cout << get_name() << " returning Success" << BT::SUCCESS << "!" << std::endl;
             return BT::SUCCESS;
         }
         else
         {
-//            SetNodeState(BT::FAILURE);
-         //   std::cout << get_name() << " returning Failure" << BT::FAILURE << "!" << std::endl;
+            set_status(BT::FAILURE);
+            std::cout << get_name() << " returning Failure" << BT::FAILURE << "!" << std::endl;
             return BT::FAILURE;
 
         }

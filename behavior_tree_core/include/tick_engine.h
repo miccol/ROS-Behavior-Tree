@@ -12,8 +12,8 @@ private:
 public:
     TickEngine(int initial_value);
     ~TickEngine();
-    void wait();
-    void tick();
+    void Wait();
+    void Tick();
 };
 
 #endif

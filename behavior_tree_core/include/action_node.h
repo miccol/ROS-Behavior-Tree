@@ -14,9 +14,8 @@ namespace BT
         ~ActionNode();
 
         // The method that is going to be executed by the thread
-        virtual void Exec2() = 0;
-        virtual BT::NodeState Exec() = 0;
-
+        virtual void WaitForTick() = 0;
+        BT::NodeState Tick();
 
         // The method used to interrupt the execution of the node
         virtual bool Halt() = 0;

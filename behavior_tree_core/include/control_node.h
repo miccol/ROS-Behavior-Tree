@@ -18,6 +18,9 @@ namespace BT
 
         // Vector size
         unsigned int N_of_children_;
+        //child i status. Used to rout the ticks
+        NodeState child_i_status_;
+
     public:
         // Constructor
         ControlNode(std::string name);

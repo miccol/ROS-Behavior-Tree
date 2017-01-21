@@ -9,25 +9,10 @@ BT::ActionNode::ActionNode(std::string name) : LeafNode::LeafNode(name)
 
 BT::ActionNode::~ActionNode() {}
 
-bool BT::ActionNode::WriteState(NodeState new_state)
-{
 
-    if(new_state != BT::IDLE)
-    {
-        SetColorState(new_state);
-    }
-    // Lock acquistion
-    boost::lock_guard<boost::mutex> LockGuard(state_mutex_);
+BT::NodeState BT::ActionNode::Tick(){ return BT::EXIT;}//not used in action node.
+                                                       //An action node runs the WaitForTick() instead.
 
-    // Check for spourios "Halted"
-    if (state_ == BT::HALTED && new_state != BT::IDLE && new_state != BT::EXIT)
-    {
-        return false;
-    }
-
-    state_ = new_state;
-    return true;
-}
 
 int BT::ActionNode::DrawType()
 {

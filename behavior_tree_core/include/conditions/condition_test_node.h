@@ -14,7 +14,7 @@ namespace BT
         void set_boolean_value(bool boolean_value);
 
         // The method that is going to be executed by the thread
-        BT::NodeState Exec();
+        BT::NodeState Tick();
     private:
         bool boolean_value_;
     };

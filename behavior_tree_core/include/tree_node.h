@@ -32,9 +32,9 @@
 
 #ifdef DEBUG
 //#define DEBUG_STDERR(x) (std::cerr << (x))
-#define DEBUG_STDOUT(x) (std:: cout << FBLU(x) <<std::endl);
+#define DEBUG_STDOUT(str) do { std::cout << str << std::endl; } while( false )
 
-#else DEBUG_STDOUT(x)
+#else DEBUG_STDOUT(str) do {} while( false )
 #endif
 
 
@@ -94,7 +94,7 @@ namespace BT
     protected:
         // The node state that must be treated in a thread-safe way
         bool is_state_updated_;
-        NodeState state_;
+        NodeState status_;
         NodeState color_state_;
         boost::mutex state_mutex_;
         boost::mutex color_state_mutex_;
@@ -121,15 +121,15 @@ namespace BT
         TreeNode(std::string name);
         ~TreeNode();
 
-        // The method that is going to be executed by the thread
-        virtual BT::NodeState Exec() = 0;
+        // The method that is going to be executed when the node receive a tick
+        virtual BT::NodeState Tick() = 0;
 
         // The method used to interrupt the execution of the node
         virtual bool Halt() = 0;
 
         // The method that retrive the state of the node
         // (conditional waiting and mutual access)
-        NodeState GetNodeState();
+       // NodeState GetNodeState();
         void SetNodeState(NodeState new_state);
         void SetColorState(NodeState ColorStateToBeSet);
 
@@ -138,7 +138,6 @@ namespace BT
         NodeState ReadState();
         NodeState ReadColorState();
         virtual int DrawType() = 0;
-        virtual bool WriteState(NodeState new_state) = 0;
         virtual void ResetColorState() = 0;
         virtual int Depth() = 0;
 
@@ -150,7 +149,15 @@ namespace BT
         void set_x_shift(float x_shift);
         float get_x_shift();
 
+
+
+        NodeState get_status();
+        void set_status(NodeState new_status);
+
+
         std::string get_name();
+        void set_name(std::string new_name);
+
         NodeType get_type();
 
 
