@@ -4,12 +4,12 @@ BT::ActionTestNode::ActionTestNode(std::string name) : ActionNode::ActionNode(na
 {
     type_ = BT::ACTION_NODE;
     // thread_ start
-    thread_ = boost::thread(&ActionTestNode::Exec, this);
+    thread_ = boost::thread(&ActionTestNode::Exec2, this);
 }
 
 BT::ActionTestNode::~ActionTestNode() {}
 
-BT::NodeState BT::ActionTestNode::Exec(){}
+BT::NodeState BT::ActionTestNode::Exec(){ return BT::EXIT;}
 
 
 void BT::ActionTestNode::Exec2()
@@ -23,12 +23,12 @@ time_ = 100;
         // Waiting for a tick to come
         tick_engine.wait();
 
-        if(ReadState() == BT::EXIT)
-        {    //SetColorState(Idle);
+//        if(ReadState() == BT::EXIT)
+//        {    //SetColorState(Idle);
 
-            // The behavior tree is going to be destroied
-            return;
-        }
+//            // The behavior tree is going to be destroied
+//            return;
+//        }
 
         // Running state
         SetNodeState(BT::RUNNING);
@@ -53,23 +53,24 @@ time_ = 100;
         {
             // trying to set the outcome state:
             if (WriteState(status_) != true)
-            {
-                // meanwhile, my father halted me!
-                std::cout << get_name() << " Halted!" << std::endl;
+//            {
+//                // meanwhile, my father halted me!
+//                std::cout << get_name() << " Halted!" << std::endl;
 
-                // Resetting the state
-                WriteState(BT::IDLE);
+//                // Resetting the state
+//                //WriteState(BT::IDLE);
+//                SetNodeState(BT::IDLE);
 
-                // Next loop
-                continue;
-            }
+//                // Next loop
+//                continue;
+//            }
 
             std::cout << get_name() << " returning " << BT::SUCCESS << "!" << std::endl;
         }
 
         // Synchronization
         // (my father is telling me that it has read my new state)
-        tick_engine.wait();
+       // tick_engine.wait();
 
         if(ReadState() == BT::EXIT)
         {
@@ -79,7 +80,7 @@ time_ = 100;
         }
 
         // Resetting the state
-        WriteState(BT::IDLE);
+       // WriteState(BT::IDLE);
     }
 }
 
@@ -88,11 +89,6 @@ bool BT::ActionTestNode::Halt()
     // Lock acquistion
     boost::lock_guard<boost::mutex> LockGuard(state_mutex_);
 
-    // Checking for "Running" correctness
-    if (state_ != BT::RUNNING)
-    {
-        return false;
-    }
     //SetColorState(Idle);
 
     state_ = BT::HALTED;

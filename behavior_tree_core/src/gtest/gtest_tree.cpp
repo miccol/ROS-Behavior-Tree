@@ -22,19 +22,19 @@ struct BehaviorTreeTest : testing::Test
 };
 
 
-//TEST_F(BehaviorTreeTest, ActionRunning) {
+TEST_F(BehaviorTreeTest, ActionRunning) {
 
 
-//    std::cout << "Ticking the root node !" << std::endl << std::endl;
+    std::cout << "Ticking the root node !" << std::endl << std::endl;
 
-//    // Ticking the root node
-//    BT::NodeState state = root->Exec();
+    // Ticking the root node
+    BT::NodeState state = root->Exec();
 
-//    boost::this_thread::sleep(boost::posix_time::milliseconds(1000));
+    boost::this_thread::sleep(boost::posix_time::milliseconds(1000));
 
-//    ASSERT_EQ(BT::RUNNING, action->ReadState());
+    ASSERT_EQ(BT::RUNNING, action->ReadState());
 
-//}
+}
 
 TEST_F(BehaviorTreeTest, TreeRunning) {
     // Ticking the root node
