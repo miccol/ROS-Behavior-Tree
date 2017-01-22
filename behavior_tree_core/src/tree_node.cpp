@@ -10,52 +10,22 @@ BT::TreeNode::TreeNode(std::string name) : tick_engine(0)
 
 BT::TreeNode::~TreeNode() {}
 
-//BT::NodeState BT::TreeNode::GetNodeState()
-//{
-//    NodeState ReadState;
-//    // Lock acquistion
-//    boost::unique_lock<boost::mutex> UniqueLock(state_mutex_);
-
-//    // Wait until the state is updated by the node thread
-//    while(is_state_updated_ == false)
-//        state_condition_variable_.wait(UniqueLock);
-
-//    // Reset the is_state_updated_ flag
-//    is_state_updated_ = false;
-
-//    // state_ save
-//    ReadState = status_;
-
-//    // Releasing the node thread;
-//    state_condition_variable_.notify_all();
-
-//    // Take the state and unlock the mutex
-//    return ReadState;
-//}
-
-void BT::TreeNode::set_status(NodeState new_state)
+void BT::TreeNode::set_status(ReturnStatus new_status)
 {
 
-    if(new_state != BT::IDLE)
+    if(new_status != BT::IDLE)
     {
-        SetColorState(new_state);
+        SetColorState(new_status);
     }
 
     // Lock acquistion
     boost::unique_lock<boost::mutex> UniqueLock(state_mutex_);
 
     // state_ update
-    status_ = new_state;
-//    is_state_updated_ = true;
-
-//    // Notification and unlock of the mutex
-//    state_condition_variable_.notify_all();
-
-//    // Waiting for the father to read the state
-//    state_condition_variable_.wait(UniqueLock);
+    status_ = new_status;
 }
 
-BT::NodeState BT::TreeNode::get_status()
+BT::ReturnStatus BT::TreeNode::get_status()
 {
     // Lock acquistion
     boost::lock_guard<boost::mutex> LockGuard(state_mutex_);
@@ -64,14 +34,14 @@ BT::NodeState BT::TreeNode::get_status()
 }
 
 
-BT::NodeState BT::TreeNode::ReadColorState()
+BT::ReturnStatus BT::TreeNode::ReadColorState()
 {
     // Lock acquistion
 
     return color_state_;
 }
 
-void BT::TreeNode::SetColorState(NodeState ColorStateToBeSet)
+void BT::TreeNode::SetColorState(ReturnStatus ColorStateToBeSet)
 {
     // Lock acquistion
 
@@ -92,7 +62,6 @@ void BT::TreeNode::set_x_pose(float x_pose)
 
 x_pose_ = x_pose;
 }
-
 
 
 float BT::TreeNode::get_x_shift()

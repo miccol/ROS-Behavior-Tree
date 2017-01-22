@@ -4,7 +4,7 @@
 BT::ControlNode::ControlNode(std::string name) : TreeNode::TreeNode(name)
 {
     type_ = BT::CONDITION_NODE;
-    NodeState child_i_status_ = BT::IDLE;
+    ReturnStatus child_i_status_ = BT::IDLE;
 
 }
 

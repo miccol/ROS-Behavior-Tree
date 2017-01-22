@@ -10,7 +10,7 @@ BT::ActionNode::ActionNode(std::string name) : LeafNode::LeafNode(name)
 BT::ActionNode::~ActionNode() {}
 
 
-BT::NodeState BT::ActionNode::Tick(){ return BT::EXIT;}//not used in action node.
+BT::ReturnStatus BT::ActionNode::Tick(){ return BT::EXIT;}//not used in action node.
                                                        //An action node runs the WaitForTick() instead.
 
 

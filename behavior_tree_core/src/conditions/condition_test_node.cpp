@@ -12,7 +12,7 @@ BT::ConditionTestNode::ConditionTestNode(std::string name) : ConditionNode::Cond
 
 BT::ConditionTestNode::~ConditionTestNode() {}
 
-BT::NodeState BT::ConditionTestNode::Tick()
+BT::ReturnStatus BT::ConditionTestNode::Tick()
 {
 
 

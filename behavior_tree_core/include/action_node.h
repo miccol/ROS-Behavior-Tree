@@ -15,14 +15,14 @@ namespace BT
 
         // The method that is going to be executed by the thread
         virtual void WaitForTick() = 0;
-        BT::NodeState Tick();
+        BT::ReturnStatus Tick();
 
         // The method used to interrupt the execution of the node
         virtual bool Halt() = 0;
 
         // Methods used to access the node state without the
         // conditional waiting (only mutual access)
-        bool WriteState(NodeState new_state);
+        bool WriteState(ReturnStatus new_state);
     int DrawType();
     };
 }

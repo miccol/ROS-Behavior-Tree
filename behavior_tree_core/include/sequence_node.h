@@ -13,7 +13,7 @@ public:
     ~SequenceNode();
     int DrawType();
     // The method that is going to be executed by the thread
-    BT::NodeState Tick();
+    BT::ReturnStatus Tick();
 };
 }
 

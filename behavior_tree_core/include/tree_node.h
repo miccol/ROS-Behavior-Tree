@@ -63,7 +63,7 @@ namespace BT
     //   time step, but the task is not yet complete;
     // - "Idle" indicates that the node hasn't run yet.
     // - "Halted" indicates that the node has been halted by its father.
-    enum NodeState {SUCCESS, FAILURE, RUNNING, IDLE, HALTED, EXIT};
+    enum ReturnStatus {SUCCESS, FAILURE, RUNNING, IDLE, HALTED, EXIT};
 
     // Enumerates the options for when a parallel node is considered to have failed:
     // - "FAIL_ON_ONE" indicates that the node will return failure as soon as one of
@@ -94,8 +94,8 @@ namespace BT
     protected:
         // The node state that must be treated in a thread-safe way
         bool is_state_updated_;
-        NodeState status_;
-        NodeState color_state_;
+        ReturnStatus status_;
+        ReturnStatus color_state_;
         boost::mutex state_mutex_;
         boost::mutex color_state_mutex_;
         boost::condition_variable state_condition_variable_;
@@ -122,21 +122,21 @@ namespace BT
         ~TreeNode();
 
         // The method that is going to be executed when the node receive a tick
-        virtual BT::NodeState Tick() = 0;
+        virtual BT::ReturnStatus Tick() = 0;
 
         // The method used to interrupt the execution of the node
         virtual bool Halt() = 0;
 
         // The method that retrive the state of the node
         // (conditional waiting and mutual access)
-       // NodeState GetNodeState();
-        void SetNodeState(NodeState new_state);
-        void SetColorState(NodeState ColorStateToBeSet);
+       // ReturnStatus GetNodeState();
+        void SetNodeState(ReturnStatus new_state);
+        void SetColorState(ReturnStatus ColorStateToBeSet);
 
         // Methods used to access the node state without the
         // conditional waiting (only mutual access)
-        NodeState ReadState();
-        NodeState ReadColorState();
+        ReturnStatus ReadState();
+        ReturnStatus ReadColorState();
         virtual int DrawType() = 0;
         virtual void ResetColorState() = 0;
         virtual int Depth() = 0;
@@ -151,8 +151,8 @@ namespace BT
 
 
 
-        NodeState get_status();
-        void set_status(NodeState new_status);
+        ReturnStatus get_status();
+        void set_status(ReturnStatus new_status);
 
 
         std::string get_name();

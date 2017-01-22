@@ -47,7 +47,7 @@ void BT::SelectorStarNode::Exec()
                 {
                     // 1) if it's an action:
                     // 1.1) read its state;
-                    NodeState ActionState = children_nodes_[i]->ReadState();
+                    ReturnStatus ActionState = children_nodes_[i]->ReadState();
 
                     if (ActionState == BT::IDLE)
                     {

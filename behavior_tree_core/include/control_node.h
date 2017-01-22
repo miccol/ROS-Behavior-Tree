@@ -14,12 +14,12 @@ namespace BT
         std::vector<TreeNode*> children_nodes_;
 
         // Children states
-        std::vector<NodeState> children_states_;
+        std::vector<ReturnStatus> children_states_;
 
         // Vector size
         unsigned int N_of_children_;
         //child i status. Used to rout the ticks
-        NodeState child_i_status_;
+        ReturnStatus child_i_status_;
 
     public:
         // Constructor
@@ -40,7 +40,7 @@ namespace BT
 
         // Methods used to access the node state without the
         // conditional waiting (only mutual access)
-        bool WriteState(NodeState new_state);
+        bool WriteState(ReturnStatus new_state);
     };
 }
 
