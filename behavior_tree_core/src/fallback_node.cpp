@@ -1,18 +1,16 @@
-#include <sequence_node.h>
+#include <fallback_node.h>
 
 
-BT::SequenceNode::SequenceNode(std::string name) : ControlNode::ControlNode(name)
+BT::FallbackNode::FallbackNode(std::string name) : ControlNode::ControlNode(name)
 {
 
 }
 
-BT::SequenceNode::~SequenceNode() {}
+BT::FallbackNode::~FallbackNode() {}
 
-BT::ReturnStatus BT::SequenceNode::Tick()
+BT::ReturnStatus BT::FallbackNode::Tick()
 {
-
     unsigned int i;
-
     // Vector size initialization. N_of_children_ could change at runtime if you edit the tree
     N_of_children_ = children_nodes_.size();
 
@@ -29,7 +27,7 @@ BT::ReturnStatus BT::SequenceNode::Tick()
             if (child_i_status_ != BT::RUNNING)
             {
                 //1.1 If the action status is not running, the sequence node sends a tick to it.
-                DEBUG_STDOUT(get_name() << "NEEDS TO TICK " << children_nodes_[i]->get_name());
+                DEBUG_STDOUT(get_name() << " NEEDS TO TICK " << children_nodes_[i]->get_name());
                 children_nodes_[i]->tick_engine.Tick();
 
                 //waits for the tick to arrive to the child
@@ -40,7 +38,7 @@ BT::ReturnStatus BT::SequenceNode::Tick()
                 }
                 while(child_i_status_ != BT::RUNNING && child_i_status_ != BT::SUCCESS && child_i_status_ != BT::FAILURE);
 
-                if(child_i_status_ == BT::RUNNING || child_i_status_ == BT::FAILURE)
+                if(child_i_status_ == BT::RUNNING || child_i_status_ == BT::SUCCESS)
                 {
                     //the sequence node's status is equal to ActionState if this is running or failure
 
@@ -62,7 +60,7 @@ BT::ReturnStatus BT::SequenceNode::Tick()
            child_i_status_ = children_nodes_[i]->Tick();
         }
 
-        if(child_i_status_ != BT::SUCCESS)
+        if(child_i_status_ != BT::FAILURE)
         {
         // 2.1 -  If the  non-action status is not success, halt the nest children
             DEBUG_STDOUT(get_name() << " is HALTING children from " << (i+1));
@@ -78,10 +76,9 @@ BT::ReturnStatus BT::SequenceNode::Tick()
 }
 
 
-int BT::SequenceNode::DrawType()
+int BT::FallbackNode::DrawType()
 {
     // Lock acquistion
 
-    return BT::SEQUENCE;
+    return BT::SELECTOR;
 }
-

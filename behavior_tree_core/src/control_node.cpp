@@ -4,6 +4,8 @@
 BT::ControlNode::ControlNode(std::string name) : TreeNode::TreeNode(name)
 {
     type_ = BT::CONDITION_NODE;
+    ReturnStatus child_i_status_ = BT::IDLE;
+
 }
 
 BT::ControlNode::~ControlNode() {}
@@ -30,21 +32,12 @@ unsigned int BT::ControlNode::GetChildrenNumber()
 
 bool BT::ControlNode::Halt()
 {
-    // Lock acquistion
-    boost::lock_guard<boost::mutex> LockGuard(state_mutex_);
+    HaltChildren(0);
 
-    state_ = BT::HALTED;
+    set_status(BT::HALTED);
     return true;
 }
 
-bool BT::ControlNode::WriteState(NodeState new_state)
-{
-    // Lock acquistion
-    boost::lock_guard<boost::mutex> LockGuard(state_mutex_);
-
-    state_ = new_state;
-    return true;
-}
 
 
 std::vector<BT::TreeNode*> BT::ControlNode::GetChildren()
@@ -66,48 +59,21 @@ void BT::ControlNode::ResetColorState()
 void BT::ControlNode::HaltChildren(int i){
     for(unsigned int j=i; j<children_nodes_.size(); j++)
     {
-        if (children_nodes_[j]->get_type() != BT::ACTION_NODE && children_states_[j] == BT::RUNNING)
+        if (children_nodes_[j]->get_type() != BT::CONDITION_NODE && children_nodes_[j]->get_status() == BT::RUNNING)
         {
-            // if the control node was running:
-            // halting it;
+            DEBUG_STDOUT("SENDING HALT TO CHILD " << children_nodes_[j]-> get_name());
             children_nodes_[j]->Halt();
 
-            // sync with it (it's waiting on the semaphore);
-            children_nodes_[j]->tick_engine.tick();
-
-            std::cout << get_name() << " halting child number " << j << "!" << std::endl;
         }
-        else if (children_nodes_[j]->get_type() == BT::ACTION_NODE && children_nodes_[j]->ReadState() == BT::RUNNING)
+        else
         {
-            std::cout << get_name() << " trying halting child number " << j << "..." << std::endl;
+            DEBUG_STDOUT("NO NEED TO HALT " << children_nodes_[j]-> get_name() << "STATUS" << children_nodes_[j]->get_status());
+            std::cout <<children_nodes_[j]-> get_name() << children_nodes_[j]->get_status() << std::endl;
 
-            // if it's a action node that hasn't finished its job:
-            // trying to halt it:
-            if (children_nodes_[j]->Halt() == false)
-            {
-                // this means that, before this node could set its child state
-                // to "Halted", the child had already written the action outcome;
-                // sync with him ignoring its state;
-                children_nodes_[j]->tick_engine.tick();
-
-                std::cout << get_name() << " halting of child number " << j << " failed!" << std::endl;
-            }
-
-            std::cout << get_name() << " halting of child number " << j << " succedeed!" << std::endl;
         }
-        else if (children_nodes_[j]->get_type() == BT::ACTION_NODE && children_nodes_[j]->ReadState() != BT::IDLE)
-        {
-            // if it's a action node that has finished its job:
-            // ticking it without saving its returning state;
-            children_nodes_[j]->tick_engine.tick();
-        }
-
-        // updating its vector cell
-        children_states_[j] = BT::IDLE;
     }
 
- }
-
+}
 
 int BT::ControlNode::Depth()
 {

@@ -7,18 +7,24 @@ namespace BT
 {
     class ActionTestNode : public ActionNode
     {
+
     public:
-	NodeState status_;
+
         // Constructor
         ActionTestNode(std::string Name);
         ~ActionTestNode();
 
         // The method that is going to be executed by the thread
-        void Exec();
-        void SetBehavior(NodeState status);
-
+        void WaitForTick();
+    //    BT::ReturnStatus Tick();
+      //  void set_status(ReturnStatus status);
+        void set_time(int time);
+	
         // The method used to interrupt the execution of the node
         bool Halt();
+    private:
+        int time_;
+        ///ReturnStatus status_;
 
     };
 }

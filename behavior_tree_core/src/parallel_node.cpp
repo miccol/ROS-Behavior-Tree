@@ -235,7 +235,7 @@ void BT::ParallelNode::Exec()
                         {
                             // if it's an action:
                             // read its state;
-                            NodeState ActionState = children_nodes_[i]->ReadState();
+                            ReturnStatus ActionState = children_nodes_[i]->ReadState();
 
                             if (ActionState == BT::IDLE)
                             {

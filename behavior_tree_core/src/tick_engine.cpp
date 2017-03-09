@@ -7,7 +7,7 @@ TickEngine::TickEngine(int initial_value)
 
 TickEngine::~TickEngine() {}
 
-void TickEngine::wait()
+void TickEngine::Wait()
 {
     // Lock acquire (need a unique lock for the condition variable usage)
     boost::unique_lock<boost::mutex> UniqueLock(mutex_);
@@ -20,7 +20,7 @@ void TickEngine::wait()
     value_--;
 }
 
-void TickEngine::tick()
+void TickEngine::Tick()
 {
     // Lock acquire
     boost::lock_guard<boost::mutex> LockGuard(mutex_);

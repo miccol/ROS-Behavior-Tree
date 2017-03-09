@@ -46,7 +46,7 @@ void BT::DecoratorNegationNode::Exec()
                 {
                     // 1) if it's an action:
                     // 1.1) read its state;
-                    NodeState ActionState = children_nodes_[0]->ReadState();
+                    ReturnStatus ActionState = children_nodes_[0]->ReadState();
 
                     if (ActionState == BT::IDLE)
                     {

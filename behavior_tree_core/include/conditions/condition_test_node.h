@@ -11,12 +11,12 @@ namespace BT
         // Constructor
         ConditionTestNode(std::string Name);
         ~ConditionTestNode();
-        void SetBehavior(NodeState status);
+        void set_boolean_value(bool boolean_value);
 
         // The method that is going to be executed by the thread
-        void Exec();
+        BT::ReturnStatus Tick();
     private:
-        NodeState status;
+        bool boolean_value_;
     };
 }
 
