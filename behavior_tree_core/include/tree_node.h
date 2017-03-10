@@ -71,6 +71,7 @@ namespace BT
     // - "FAIL_ON_ALL" indicates that all of the node's children must fail before it
     //   returns failure.
     enum FailurePolicy {FAIL_ON_ONE, FAIL_ON_ALL};
+    enum ResetPolity   {ON_SUCCESS_OR_FAILURE,ON_SUCCESS, ON_FAILURE};
 
     // Enumerates the options for when a parallel node is considered to have succeeded:
     // - "SUCCEED_ON_ONE" indicates that the node will return success as soon as one

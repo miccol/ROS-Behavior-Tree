@@ -82,7 +82,7 @@ src/tick_engine.cpp
 #src/parallel_node.cpp
 src/fallback_node.cpp
 src/sequence_node.cpp
-#src/selector_star_node.cpp
+src/fallback_node_with_memory.cpp
 src/sequence_node_with_memory.cpp
 src/tree_node.cpp
 src/actions/action_test_node.cpp

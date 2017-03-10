@@ -62,7 +62,7 @@ void BT::ControlNode::HaltChildren(int i){
     for(unsigned int j=i; j<children_nodes_.size(); j++)
     {
         //TODO FIX this
-        if (children_nodes_[j]->get_type() != BT::CONDITION_NODE  && children_nodes_[j]->get_status() == BT::RUNNING)
+        if (children_nodes_[j]->get_type() != BT::CONDITION_NODE  && children_nodes_[j]->get_status() != BT::IDLE)
         {
             DEBUG_STDOUT("SENDING HALT TO CHILD " << children_nodes_[j]-> get_name());
             children_nodes_[j]->Halt();

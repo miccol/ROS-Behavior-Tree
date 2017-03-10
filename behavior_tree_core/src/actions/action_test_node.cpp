@@ -5,6 +5,8 @@ BT::ActionTestNode::ActionTestNode(std::string name) : ActionNode::ActionNode(na
 {
     type_ = BT::ACTION_NODE;
     // thread_ start
+    boolean_value_ = true;
+
     thread_ = boost::thread(&ActionTestNode::WaitForTick, this);
 }
 
@@ -42,8 +44,16 @@ time_ = 3;
             DEBUG_STDOUT(" STATUS of " << get_name() << " NOT RUNNING !");
         }else
         {
-            set_status(BT::SUCCESS);
-            DEBUG_STDOUT(" Action " << get_name() << " Done!");
+            if(boolean_value_)
+            {
+                set_status(BT::SUCCESS);
+                DEBUG_STDOUT(" Action " << get_name() << " Done!");
+
+            }else
+            {
+                set_status(BT::FAILURE);
+                DEBUG_STDOUT(" Action " << get_name() << " FAILED!");
+            }
 
         }
     }
@@ -71,3 +81,12 @@ bool BT::ActionTestNode::Halt()
 void BT::ActionTestNode::set_time(int time){
     time_ = time;
 }
+
+
+
+void BT::ActionTestNode::set_boolean_value(bool boolean_value)
+{
+    boolean_value_ = boolean_value;
+}
+
+

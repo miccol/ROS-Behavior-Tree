@@ -22,8 +22,11 @@ namespace BT
 	
         // The method used to interrupt the execution of the node
         bool Halt();
+        void set_boolean_value(bool boolean_value);
     private:
         int time_;
+        bool boolean_value_;
+
         ///ReturnStatus status_;
 
     };
