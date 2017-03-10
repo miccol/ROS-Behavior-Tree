@@ -3,7 +3,7 @@
 
 BT::ControlNode::ControlNode(std::string name) : TreeNode::TreeNode(name)
 {
-    type_ = BT::CONDITION_NODE;
+    type_ = BT::CONTROL_NODE;
     ReturnStatus child_i_status_ = BT::IDLE;
 
 }
@@ -32,6 +32,8 @@ unsigned int BT::ControlNode::GetChildrenNumber()
 
 bool BT::ControlNode::Halt()
 {
+    DEBUG_STDOUT("HALTING: "<< get_name());
+
     HaltChildren(0);
 
     set_status(BT::HALTED);
@@ -59,7 +61,8 @@ void BT::ControlNode::ResetColorState()
 void BT::ControlNode::HaltChildren(int i){
     for(unsigned int j=i; j<children_nodes_.size(); j++)
     {
-        if (children_nodes_[j]->get_type() != BT::CONDITION_NODE && children_nodes_[j]->get_status() == BT::RUNNING)
+        //TODO FIX this
+        if (children_nodes_[j]->get_type() != BT::CONDITION_NODE  && children_nodes_[j]->get_status() == BT::RUNNING)
         {
             DEBUG_STDOUT("SENDING HALT TO CHILD " << children_nodes_[j]-> get_name());
             children_nodes_[j]->Halt();

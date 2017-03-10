@@ -10,6 +10,7 @@
 //#include <parallel_node.h>
 #include <fallback_node.h>
 #include <sequence_node.h>
+#include <sequence_node_with_memory.h>
 
 
 //#include <selector_star_node.h>

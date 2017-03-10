@@ -8,7 +8,7 @@
 #include<string>
 #include <control_node.h>
 
-enum status {SUCCESS,FAILURE,RUNNING,IDLE };
+enum status {RUNNING,SUCCESS,FAILURE,IDLE };
 void drawTree(BT::ControlNode* tree_);
 
 void resize(int width, int height);

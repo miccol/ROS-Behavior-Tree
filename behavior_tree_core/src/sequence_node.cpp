@@ -40,39 +40,52 @@ BT::ReturnStatus BT::SequenceNode::Tick()
                 }
                 while(child_i_status_ != BT::RUNNING && child_i_status_ != BT::SUCCESS && child_i_status_ != BT::FAILURE);
 
-                if(child_i_status_ == BT::RUNNING || child_i_status_ == BT::FAILURE)
+                if(child_i_status_ != BT::SUCCESS)
                 {
-                    //the sequence node's status is equal to ActionState if this is running or failure
+                    // 2.1 -  If the  non-action status is not success, halt the nest children
+                    DEBUG_STDOUT(get_name() << " is HALTING children from " << (i+1));
+                    HaltChildren(i+1);
 
+                    set_status(child_i_status_);
+                    return child_i_status_;
+                }
+                // 2.2 -  If the  non-action status is success, continue to the next child in the for loop (if any).
+                if(i == N_of_children_ - 1)
+                {
+                    set_status(child_i_status_);
                     return child_i_status_;
                 }
             }
             else
             {
                 //1.2 if the action is running already, let the action run and return success to the parent node
+                set_status(BT::RUNNING);
                 return BT::RUNNING;
             }
 
-            return BT::EXIT;
+         //   return BT::EXIT;
         }
         else
         {
             // 2 if it's not an action:
             // Send the tick and wait for the response;
-           child_i_status_ = children_nodes_[i]->Tick();
-        }
+            child_i_status_ = children_nodes_[i]->Tick();
 
-        if(child_i_status_ != BT::SUCCESS)
-        {
-        // 2.1 -  If the  non-action status is not success, halt the nest children
-            DEBUG_STDOUT(get_name() << " is HALTING children from " << (i+1));
-            HaltChildren(i+1);
-            return child_i_status_;
-        }
-        // 2.2 -  If the  non-action status is success, continue to the next child in the for loop (if any).
-        if(i == N_of_children_ - 1)
-        {
-             return child_i_status_;
+
+            if(child_i_status_ != BT::SUCCESS)
+            {
+                // 2.1 -  If the  non-action status is not success, halt the nest children
+                DEBUG_STDOUT(get_name() << " is HALTING children from " << (i+1));
+                HaltChildren(i+1);
+                set_status(child_i_status_);
+                return child_i_status_;
+            }
+            // 2.2 -  If the  non-action status is success, continue to the next child in the for loop (if any).
+            if(i == N_of_children_ - 1)
+            {
+                set_status(child_i_status_);
+                return child_i_status_;
+            }
         }
     }
 }
@@ -80,8 +93,6 @@ BT::ReturnStatus BT::SequenceNode::Tick()
 
 int BT::SequenceNode::DrawType()
 {
-    // Lock acquistion
-
     return BT::SEQUENCE;
 }
 

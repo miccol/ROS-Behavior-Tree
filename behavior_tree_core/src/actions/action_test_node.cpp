@@ -1,4 +1,5 @@
 #include <actions/action_test_node.h>
+#include <thread>
 
 BT::ActionTestNode::ActionTestNode(std::string name) : ActionNode::ActionNode(name)
 {
@@ -16,7 +17,7 @@ void BT::ActionTestNode::WaitForTick()
 {
 
 
-time_ = 100;
+time_ = 3;
     while(true)
     {
 
@@ -31,14 +32,20 @@ time_ = 100;
         set_status(BT::RUNNING);
         // Perform action...
         int i = 0;
-        while(get_status() == BT::RUNNING && i++<time_)
+        while(get_status() == BT::RUNNING && i++ < time_)
         {
-            DEBUG_STDOUT(" Action running!");
-            boost::this_thread::sleep(boost::posix_time::milliseconds(800));
+            DEBUG_STDOUT(" Action " << get_name() << "running! Thread id:" << std::this_thread::get_id());
+            boost::this_thread::sleep(boost::posix_time::milliseconds(1000));
         }
+        if(get_status() != BT::RUNNING)
+        {
+            DEBUG_STDOUT(" STATUS of " << get_name() << " NOT RUNNING !");
+        }else
+        {
+            set_status(BT::SUCCESS);
+            DEBUG_STDOUT(" Action " << get_name() << " Done!");
 
-        DEBUG_STDOUT(" OUT !");
-
+        }
     }
 }
 

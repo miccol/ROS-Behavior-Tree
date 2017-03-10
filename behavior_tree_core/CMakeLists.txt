@@ -27,7 +27,7 @@ generate_messages(
 )
 
 
-add_definitions(-Wall -lglut -lGL)
+add_definitions(-Wall -lglut -lGL -std=c++0x)
 
 catkin_package(
   CATKIN_DEPENDS actionlib_msgs
@@ -83,7 +83,7 @@ src/tick_engine.cpp
 src/fallback_node.cpp
 src/sequence_node.cpp
 #src/selector_star_node.cpp
-#src/sequence_star_node.cpp
+src/sequence_node_with_memory.cpp
 src/tree_node.cpp
 src/actions/action_test_node.cpp
 src/conditions/condition_test_node.cpp

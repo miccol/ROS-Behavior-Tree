@@ -63,7 +63,7 @@ namespace BT
     //   time step, but the task is not yet complete;
     // - "Idle" indicates that the node hasn't run yet.
     // - "Halted" indicates that the node has been halted by its father.
-    enum ReturnStatus {SUCCESS, FAILURE, RUNNING, IDLE, HALTED, EXIT};
+    enum ReturnStatus {RUNNING, SUCCESS, FAILURE, IDLE, HALTED, EXIT};
 
     // Enumerates the options for when a parallel node is considered to have failed:
     // - "FAIL_ON_ONE" indicates that the node will return failure as soon as one of
