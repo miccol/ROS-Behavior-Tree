@@ -21,7 +21,7 @@ namespace BT
         void set_time(int time);
 	
         // The method used to interrupt the execution of the node
-        bool Halt();
+        void Halt();
         void set_boolean_value(bool boolean_value);
     private:
         int time_;

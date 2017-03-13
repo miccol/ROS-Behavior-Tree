@@ -79,7 +79,7 @@ src/draw.cpp
 src/exceptions.cpp
 src/leaf_node.cpp
 src/tick_engine.cpp
-#src/parallel_node.cpp
+src/parallel_node.cpp
 src/fallback_node.cpp
 src/sequence_node.cpp
 src/fallback_node_with_memory.cpp

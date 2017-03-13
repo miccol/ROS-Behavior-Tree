@@ -126,7 +126,7 @@ namespace BT
         virtual BT::ReturnStatus Tick() = 0;
 
         // The method used to interrupt the execution of the node
-        virtual bool Halt() = 0;
+        virtual void Halt() = 0;
 
         // The method that retrive the state of the node
         // (conditional waiting and mutual access)

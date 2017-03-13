@@ -30,14 +30,11 @@ unsigned int BT::ControlNode::GetChildrenNumber()
     return children_nodes_.size();
 }
 
-bool BT::ControlNode::Halt()
+void BT::ControlNode::Halt()
 {
     DEBUG_STDOUT("HALTING: "<< get_name());
-
     HaltChildren(0);
-
     set_status(BT::HALTED);
-    return true;
 }
 
 

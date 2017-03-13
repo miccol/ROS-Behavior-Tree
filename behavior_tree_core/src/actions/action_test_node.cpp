@@ -39,11 +39,6 @@ time_ = 3;
             DEBUG_STDOUT(" Action " << get_name() << "running! Thread id:" << std::this_thread::get_id());
             boost::this_thread::sleep(boost::posix_time::milliseconds(1000));
         }
-        if(get_status() != BT::RUNNING)
-        {
-            DEBUG_STDOUT(" STATUS of " << get_name() << " NOT RUNNING !");
-        }else
-        {
             if(boolean_value_)
             {
                 set_status(BT::SUCCESS);
@@ -55,22 +50,14 @@ time_ = 3;
                 DEBUG_STDOUT(" Action " << get_name() << " FAILED!");
             }
 
-        }
+
     }
 }
 
-bool BT::ActionTestNode::Halt()
+void BT::ActionTestNode::Halt()
 {
-    // Lock acquistion
-    DEBUG_STDOUT(" Waiting for Lock to Halt action!");
-
-    //SetColorState(Idle);
-    DEBUG_STDOUT(" Action Halted!");
-
     set_status(BT::HALTED);
-    DEBUG_STDOUT(" HALTED state set!");
-
-    return true;
+    DEBUG_STDOUT("HALTED state set!");
 }
 
 
