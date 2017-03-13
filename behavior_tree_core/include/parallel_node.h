@@ -16,8 +16,14 @@ public:
     BT::ReturnStatus Tick();
     void Halt();
 
+    unsigned int get_threshold_M();
+    void set_threshold_M(unsigned int threshold_M);
+
 private:
     unsigned int threshold_M_;
+    unsigned int success_childred_num_;
+    unsigned int failure_childred_num_;
+
 };
 }
 #endif // PARALLEL_NODE_H

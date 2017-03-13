@@ -33,7 +33,7 @@ namespace BT
         unsigned int GetChildrenNumber();
 	std::vector<TreeNode*> GetChildren();
         // The method used to interrupt the execution of the node
-        bool Halt();
+        void Halt();
         void ResetColorState();
         void HaltChildren(int i);
         int Depth();

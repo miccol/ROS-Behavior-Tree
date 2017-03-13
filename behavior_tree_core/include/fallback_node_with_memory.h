@@ -15,7 +15,7 @@ public:
     int DrawType();
     // The method that is going to be executed by the thread
     BT::ReturnStatus Tick();
-    bool Halt();
+    void Halt();
 private:
     unsigned int current_child_idx_;
     unsigned int reset_policy_;

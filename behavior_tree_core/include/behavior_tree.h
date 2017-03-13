@@ -7,7 +7,7 @@
 
 #include <draw.h>
 
-//#include <parallel_node.h>
+#include <parallel_node.h>
 #include <fallback_node.h>
 #include <sequence_node.h>
 
@@ -15,8 +15,6 @@
 #include <fallback_node_with_memory.h>
 
 
-//#include <selector_star_node.h>
-//#include <sequence_star_node.h>
 //#include <decorator_retry_node.h>
 //#include <decorator_negation_node.h>
 

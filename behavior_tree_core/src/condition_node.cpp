@@ -8,7 +8,7 @@ BT::ConditionNode::ConditionNode(std::string name) : LeafNode::LeafNode(name)
 
 BT::ConditionNode::~ConditionNode() {}
 
-bool BT::ConditionNode::Halt() { return true;}
+void BT::ConditionNode::Halt() {}
 
 int BT::ConditionNode::DrawType()
 {

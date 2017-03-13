@@ -156,7 +156,7 @@ int BT::SequenceNodeWithMemory::DrawType()
 }
 
 
-bool BT::SequenceNodeWithMemory::Halt()
+void BT::SequenceNodeWithMemory::Halt()
 {
     current_child_idx_ = 0;
     BT::ControlNode::Halt();

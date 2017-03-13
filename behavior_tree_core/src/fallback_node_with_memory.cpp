@@ -158,7 +158,7 @@ int BT::FallbackNodeWithMemory::DrawType()
     return BT::SELECTORSTAR;
 }
 
-bool BT::FallbackNodeWithMemory::Halt()
+void BT::FallbackNodeWithMemory::Halt()
 {
     current_child_idx_ = 0;
     BT::ControlNode::Halt();
