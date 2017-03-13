@@ -4,7 +4,8 @@
 
 BT::SequenceNodeWithMemory::SequenceNodeWithMemory(std::string name) : ControlNode::ControlNode(name)
 {
-    BT::SequenceNodeWithMemory(name,BT::ON_SUCCESS_OR_FAILURE);
+    reset_policy_ = BT::ON_SUCCESS_OR_FAILURE;
+    current_child_idx_ = 0;//initialize the current running child
 }
 
 
@@ -155,3 +156,8 @@ int BT::SequenceNodeWithMemory::DrawType()
 }
 
 
+bool BT::SequenceNodeWithMemory::Halt()
+{
+    current_child_idx_ = 0;
+    BT::ControlNode::Halt();
+}
