@@ -9,6 +9,9 @@
 #include <control_node.h>
 
 enum status {RUNNING,SUCCESS,FAILURE,IDLE };
+
+void drawEllipse(float xradius, float yradius);
+
 void drawTree(BT::ControlNode* tree_);
 
 void resize(int width, int height);

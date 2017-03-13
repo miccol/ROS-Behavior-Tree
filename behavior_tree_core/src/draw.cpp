@@ -2,6 +2,9 @@
 
 #include <X11/Xlib.h>
 
+const float DEG2RAD = 3.14159/180.0;
+
+
 BT::ControlNode* tree;
 bool init = false;
 
@@ -24,7 +27,18 @@ double zoom = 1.0f;
 float fraction = 0.1f;
 float zoom_fraction =0.1f;
 
+void drawEllipse(float xpos, float ypos,float xradius, float yradius)
+{
+    glBegin(GL_LINE_LOOP);
 
+    for(int i=0; i < 360; i++)
+    {
+         //convert degrees into radians
+        float degInRad = i*DEG2RAD;
+        glVertex2f(xpos+cos(degInRad)*xradius,  ypos + sin(degInRad)*yradius);
+    }
+    glEnd();
+}
 
 void drawString (void * font, char *s, float x, float y, float z)
 {
@@ -97,7 +111,7 @@ void draw_node(float x, float y, int node_type, const char *leafName, int status
 
 
      }
-        renderBitmapString((x - NODE_WIDTH +0.015), (y - NODE_HEIGHT/2), font,leafName);
+        renderBitmapString((x - NODE_WIDTH + 2*0.015), (y - NODE_HEIGHT/2), font,leafName);
         break;
     default: break;
     }
@@ -111,14 +125,21 @@ void draw_node(float x, float y, int node_type, const char *leafName, int status
         default: break;
     }
 
+    if(node_type == BT::CONDITION)
+    {
+        drawEllipse(x,y,NODE_WIDTH,0.021);
 
-    glBegin(GL_LINE_LOOP);
-    glVertex3f((GLfloat) (x + NODE_WIDTH), (GLfloat) (y - NODE_HEIGHT), (GLfloat) 0.0);
-    glVertex3f((GLfloat) (x + NODE_WIDTH), (GLfloat) (y + NODE_HEIGHT), (GLfloat) 0.0);
-    glVertex3f((GLfloat) (x - NODE_WIDTH), (GLfloat) (y + NODE_HEIGHT), (GLfloat) 0.0);
-    glVertex3f((GLfloat) (x - NODE_WIDTH), (GLfloat) (y - NODE_HEIGHT), (GLfloat) 0.0);
-    glColor3f(0.0, 0.0, 0.0);
-    glEnd();
+    }
+    else
+    {
+        glBegin(GL_LINE_LOOP);
+        glVertex2f((GLfloat) (x + NODE_WIDTH), (GLfloat) (y - NODE_HEIGHT));
+        glVertex2f((GLfloat) (x + NODE_WIDTH), (GLfloat) (y + NODE_HEIGHT));
+        glVertex2f((GLfloat) (x - NODE_WIDTH), (GLfloat) (y + NODE_HEIGHT));
+        glVertex2f((GLfloat) (x - NODE_WIDTH), (GLfloat) (y - NODE_HEIGHT));
+        glColor3f(0.0, 0.0, 0.0);
+        glEnd();
+    }
 }
 
 // draw the edge connecting one node to the other
@@ -431,6 +452,8 @@ void drawTree(BT::ControlNode* tree_)
         XInitThreads();
         glutInit(&argc, argv);      // Initialize GLUT
         init = true;
+        glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH | GLUT_MULTISAMPLE);//antialiasing
+        glEnable(GL_MULTISAMPLE);
     }
     tree = tree_;
     depth = tree->Depth();

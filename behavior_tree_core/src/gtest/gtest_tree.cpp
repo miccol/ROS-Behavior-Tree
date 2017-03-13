@@ -216,7 +216,6 @@ struct ComplexFallbackWithMemoryTest : testing::Test
         action_1 = new BT::ActionTestNode("action 1");
         action_2 = new BT::ActionTestNode("action 2");
         //action_1->set_boolean_value(false);
-        action_1->set_boolean_value(false);
         condition_1 = new BT::ConditionTestNode("condition 1");
         condition_2 = new BT::ConditionTestNode("condition 2");
 
@@ -542,41 +541,62 @@ struct ComplexFallbackWithMemoryTest : testing::Test
 
 
 
-TEST_F(ComplexFallbackWithMemoryTest, ConditionsTrue) {
+//TEST_F(ComplexFallbackWithMemoryTest, ConditionsTrue) {
 
 
-        BT::ReturnStatus state = root->Tick();
-        //    boost::this_thread::sleep(boost::posix_time::milliseconds(1000));
+//        BT::ReturnStatus state = root->Tick();
+//        //    boost::this_thread::sleep(boost::posix_time::milliseconds(1000));
 
-        ASSERT_EQ(BT::IDLE, action_1->get_status());
-        ASSERT_EQ(BT::IDLE, action_2->get_status());
-        ASSERT_EQ(BT::SUCCESS, state);
-        root->Halt();
-
-
-}
-
-TEST_F(ComplexFallbackWithMemoryTest, Condition1False) {
-
-        condition_1->set_boolean_value(false);
-        BT::ReturnStatus state = root->Tick();
-        //    boost::this_thread::sleep(boost::posix_time::milliseconds(1000));
-
-        ASSERT_EQ(BT::IDLE, action_1->get_status());
-        ASSERT_EQ(BT::IDLE, action_2->get_status());
-        ASSERT_EQ(BT::SUCCESS, state);
-        root->Halt();
+//        ASSERT_EQ(BT::IDLE, action_1->get_status());
+//        ASSERT_EQ(BT::IDLE, action_2->get_status());
+//        ASSERT_EQ(BT::SUCCESS, state);
+//        root->Halt();
 
 
-}
+//}
+
+//TEST_F(ComplexFallbackWithMemoryTest, Condition1False) {
+
+//        condition_1->set_boolean_value(false);
+//        BT::ReturnStatus state = root->Tick();
+//        //    boost::this_thread::sleep(boost::posix_time::milliseconds(1000));
+
+//        ASSERT_EQ(BT::IDLE, action_1->get_status());
+//        ASSERT_EQ(BT::IDLE, action_2->get_status());
+//        ASSERT_EQ(BT::SUCCESS, state);
+//        root->Halt();
 
 
-TEST_F(ComplexFallbackWithMemoryTest, ConditionsFalse) {
+//}
+
+
+//TEST_F(ComplexFallbackWithMemoryTest, ConditionsFalse) {
+
+//    condition_1->set_boolean_value(false);
+//    condition_2->set_boolean_value(false);
+//    BT::ReturnStatus state = root->Tick();
+//    //    boost::this_thread::sleep(boost::posix_time::milliseconds(1000));
+
+//    ASSERT_EQ(BT::RUNNING, action_1->get_status());
+//    ASSERT_EQ(BT::IDLE, action_2->get_status());
+//    ASSERT_EQ(BT::RUNNING, state);
+//    root->Halt();
+
+
+//}
+
+
+
+
+TEST_F(ComplexFallbackWithMemoryTest, Conditions1ToTrue) {
 
     condition_1->set_boolean_value(false);
     condition_2->set_boolean_value(false);
     BT::ReturnStatus state = root->Tick();
-    //    boost::this_thread::sleep(boost::posix_time::milliseconds(1000));
+    condition_1->set_boolean_value(true);
+
+
+    state = root->Tick();
 
     ASSERT_EQ(BT::RUNNING, action_1->get_status());
     ASSERT_EQ(BT::IDLE, action_2->get_status());
@@ -586,57 +606,39 @@ TEST_F(ComplexFallbackWithMemoryTest, ConditionsFalse) {
 
 }
 
-
-
-
-TEST_F(ComplexFallbackWithMemoryTest, Conditions1ToFalse) {
-
+TEST_F(ComplexFallbackWithMemoryTest, Conditions2ToTrue) {
     condition_1->set_boolean_value(false);
-        BT::ReturnStatus state = root->Tick();
-        condition_1->set_boolean_value(true);
 
-
-        state = root->Tick();
-
-        ASSERT_EQ(BT::RUNNING, action_1->get_status());
-        ASSERT_EQ(BT::IDLE, action_2->get_status());
-        ASSERT_EQ(BT::RUNNING, state);
-        root->Halt();
-
-
-}
-
-TEST_F(ComplexFallbackWithMemoryTest, Conditions2ToFalse) {
     condition_2->set_boolean_value(false);
 
-        BT::ReturnStatus state = root->Tick();
+    BT::ReturnStatus state = root->Tick();
 
-        condition_2->set_boolean_value(true);
+    condition_2->set_boolean_value(true);
 
-        state = root->Tick();
+    state = root->Tick();
 
-        ASSERT_EQ(BT::RUNNING, action_1->get_status());
-        ASSERT_EQ(BT::IDLE, action_2->get_status());
-        ASSERT_EQ(BT::RUNNING, state);
-        root->Halt();
+    ASSERT_EQ(BT::RUNNING, action_1->get_status());
+    ASSERT_EQ(BT::IDLE, action_2->get_status());
+    ASSERT_EQ(BT::RUNNING, state);
+    root->Halt();
 
 }
 
-TEST_F(ComplexFallbackWithMemoryTest, Action1Done) {
+TEST_F(ComplexFallbackWithMemoryTest, Action1Failed) {
+    action_1->set_boolean_value(false);
+    condition_1->set_boolean_value(false);
+    condition_2->set_boolean_value(false);
 
-        BT::ReturnStatus state = root->Tick();
+    BT::ReturnStatus state = root->Tick();
 
-        condition_2->set_boolean_value(false);
 
-        state = root->Tick();
-        boost::this_thread::sleep(boost::posix_time::milliseconds(5000));
-        state = root->Tick();
-
-        //ASSERT_EQ(BT::IDLE, action_1->get_status());
-        ASSERT_EQ(BT::RUNNING, action_2->get_status());
-       // ASSERT_EQ(BT::RUNNING, state);
-        root->Halt();
-
+    state = root->Tick();
+    boost::this_thread::sleep(boost::posix_time::milliseconds(5000));
+    state = root->Tick();
+    ASSERT_EQ(BT::FAILURE, action_1->get_status());
+    ASSERT_EQ(BT::RUNNING, action_2->get_status());
+    ASSERT_EQ(BT::RUNNING, state);
+    root->Halt();
 
 }
 

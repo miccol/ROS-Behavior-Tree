@@ -10,10 +10,10 @@ int main(int argc, char **argv)
 
         BT::ActionTestNode* action = new BT::ActionTestNode("action");
         BT::ConditionTestNode* condition = new BT::ConditionTestNode("condition");
+        condition->set_boolean_value(true);
 
 
         BT:: SequenceNode* sequence1 = new BT::SequenceNode("seq1");
-        //SequenceStarNode* sequence1 = new SequenceStarNode("seq1");
 
         sequence1->AddChild(condition);
         sequence1->AddChild(action);
