@@ -10,7 +10,8 @@ BT::ParallelNode::~ParallelNode() {}
 
 BT::ReturnStatus BT::ParallelNode::Tick()
 {
-
+    success_childred_num_ = 0;
+    failure_childred_num_ = 0;
     // Vector size initialization. N_of_children_ could change at runtime if you edit the tree
     N_of_children_ = children_nodes_.size();
 
@@ -60,6 +61,8 @@ BT::ReturnStatus BT::ParallelNode::Tick()
         case BT::FAILURE:
             if(++failure_childred_num_ > N_of_children_- threshold_M_)
             {
+                DEBUG_STDOUT("*******PARALLEL" << get_name() << " FAILED****** failure_childred_num_:" << failure_childred_num_);
+
                 success_childred_num_ = 0;
                 failure_childred_num_ = 0;
                 HaltChildren(0);//halts all running children. The execution is hopeless.
@@ -73,7 +76,6 @@ BT::ReturnStatus BT::ParallelNode::Tick()
             //return child_i_status_;
             break;
         default:
-            DEBUG_STDOUT("**********************************");
             break;
 
         }
