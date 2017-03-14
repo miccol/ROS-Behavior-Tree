@@ -6,7 +6,7 @@ BT::ActionTestNode::ActionTestNode(std::string name) : ActionNode::ActionNode(na
     type_ = BT::ACTION_NODE;
     // thread_ start
     boolean_value_ = true;
-
+    time_ = 3;
     thread_ = boost::thread(&ActionTestNode::WaitForTick, this);
 }
 
@@ -19,15 +19,15 @@ void BT::ActionTestNode::WaitForTick()
 {
 
 
-time_ = 3;
+
     while(true)
     {
 
         // Waiting for the first tick to come
-        DEBUG_STDOUT("WAIT FOR TICK");
+        DEBUG_STDOUT(get_name() << " WAIT FOR TICK");
 
         tick_engine.Wait();
-        DEBUG_STDOUT("TICK RECEIVED");
+        DEBUG_STDOUT(get_name() << " TICK RECEIVED");
 
 
         // Running state

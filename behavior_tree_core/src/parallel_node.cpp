@@ -48,26 +48,32 @@ BT::ReturnStatus BT::ParallelNode::Tick()
         switch(child_i_status_)
         {
         case BT::SUCCESS:
-            if(++success_childred_num_ >= threshold_M_)
+            if(++success_childred_num_ == threshold_M_)
             {
-                set_status(child_i_status_);
                 success_childred_num_ = 0;
                 failure_childred_num_ = 0;
+                HaltChildren(0);//halts all running children. The execution is done.
+                set_status(child_i_status_);
                 return child_i_status_;
             }
             break;
         case BT::FAILURE:
             if(++failure_childred_num_ > N_of_children_- threshold_M_)
             {
-                set_status(child_i_status_);
                 success_childred_num_ = 0;
                 failure_childred_num_ = 0;
+                HaltChildren(0);//halts all running children. The execution is hopeless.
+                set_status(child_i_status_);
+
                 return child_i_status_;
             }
             break;
         case BT::RUNNING:
             set_status(child_i_status_);
             //return child_i_status_;
+            break;
+        default:
+            DEBUG_STDOUT("**********************************");
             break;
 
         }
@@ -97,3 +103,6 @@ void BT::ParallelNode::set_threshold_M(unsigned int threshold_M)
 {
     threshold_M_ = threshold_M;
 }
+
+
+
