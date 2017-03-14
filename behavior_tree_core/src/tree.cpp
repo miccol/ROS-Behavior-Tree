@@ -8,8 +8,8 @@ int main(int argc, char **argv)
     {
         int TickPeriod_milliseconds = 1000;
 
-        BT::ActionTestNode* action = new BT::ActionTestNode("0123456789");
-        BT::ConditionTestNode* condition = new BT::ConditionTestNode("0123456789");
+        BT::ActionTestNode* action = new BT::ActionTestNode("1234567 89\n77773737377373737373737373737373737");
+        BT::ConditionTestNode* condition = new BT::ConditionTestNode("01234\n567\n89");
         condition->set_boolean_value(true);
 
 

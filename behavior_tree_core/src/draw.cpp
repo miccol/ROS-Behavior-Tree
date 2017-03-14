@@ -40,25 +40,77 @@ void drawEllipse(float xpos, float ypos,float xradius, float yradius)
     glEnd();
 }
 
-void drawString (void * font, char *s, float x, float y, float z)
+void drawString (void * font, char *string, float x, float y, float z)
 {
-     unsigned int i;
-     glRasterPos3f(x, y, z);
 
-     for (i = 0; i < 2; i++)
-          glutBitmapCharacter (font, s[i]);
+    renderBitmapString(x,y, font,string);
 }
 
+//void drawString (void * font, char *s, float x, float y, float z)
+//{
+//     unsigned int i;
+//     glRasterPos3f(x, y, z);
+
+//     for (i = 0; i < 2; i++)
+//          glutBitmapCharacter (font, s[i]);
+//}
 
 // draw the node itself using a solid square (color coded)
 
+int compute_node_lines(const char *string)
+{
 
+    const char *c;
+    int i = 0;
+    int new_line_num = 1;
+    glRasterPos2f(x, y);
+    for (c=string; *c != '\0'; c++) {
+        if((*c == '\n') || ((*c == ' ' && i > 6) || i > 9))
+        {
+            new_line_num++;
+            i = 0;
+            continue;
+        }
+        i++;
+//        glutBitmapCharacter(font, *c);
+    }
+    return new_line_num;
+}
+
+int compute_max_width(const char *string)
+{
+
+    const char *c;
+    int i = 0;
+    int max_width = 0;
+    glRasterPos2f(x, y);
+    for (c=string; *c != '\0'; c++) {
+        if((*c == '\n') || ((*c == ' ' && i > 6) || i > 9))
+        {
+            if(i > max_width) max_width = i;
+            i = 0;
+            continue;
+        }
+        i++;
+    }
+    return max_width;
+}
 
 void renderBitmapString(float x, float y, void *font,const char *string)
 {
     const char *c;
+    int i = 0;
+    int new_line_num = 0;
     glRasterPos2f(x, y);
     for (c=string; *c != '\0'; c++) {
+        if((*c == '\n') || ((*c == ' ' && i > 6) || i > 9))
+        {
+            new_line_num++;
+            glRasterPos2f(x, y - 0.025*(new_line_num));
+            i = 0;
+            continue;
+        }
+        i++;
         glutBitmapCharacter(font, *c);
     }
 }
@@ -68,7 +120,7 @@ void renderBitmapString(float x, float y, void *font,const char *string)
 void draw_node(float x, float y, int node_type, const char *leafName, int status)
 {
 
-    float NODE_WIDTH = 0.021;
+    float NODE_WIDTH = 0.02;
     float NODE_HEIGHT = 0.02;
     switch (node_type)
     {
@@ -78,7 +130,6 @@ void draw_node(float x, float y, int node_type, const char *leafName, int status
     case BT::SEQUENCESTAR:
         drawString(font, ">*", (x - NODE_WIDTH + 0.01 ), (y - NODE_HEIGHT/2), 0);
         break;
-
     case BT::SELECTOR:
         drawString(font, "?", (x + NODE_WIDTH - 0.025), (y - NODE_HEIGHT/2), 0);
         break;
@@ -93,18 +144,19 @@ void draw_node(float x, float y, int node_type, const char *leafName, int status
         break;
     case BT::ACTION:
        {
+        NODE_HEIGHT = 0.02*(compute_node_lines(leafName));
             std::string st(leafName,0, 15);
-            NODE_WIDTH = 0.01;
-            for (unsigned int i = 0; i < st.size(); i++)
-              NODE_WIDTH +=  0.01;
+            NODE_WIDTH = 0.01*compute_max_width(leafName);
+//            for (unsigned int i = 0; i < st.size(); i++)
+//              NODE_WIDTH +=  0.01;
         }
-        renderBitmapString((x - NODE_WIDTH +0.015), (y - NODE_HEIGHT/2), font,leafName);
+        renderBitmapString((x - NODE_WIDTH +0.015), (y - 0.01), font,leafName);
         glColor3f(0.2, 1.0, 0.2);
         break;
     case BT::CONDITION:
     {
-         std::string st(leafName,0, 15);
-
+        NODE_HEIGHT = 0.02*compute_node_lines(leafName);
+        std::string st(leafName,0, 15);
          NODE_WIDTH = 0.01;
          for (unsigned int i = 0; i < st.size(); i++)
            NODE_WIDTH +=  0.01;
@@ -112,6 +164,8 @@ void draw_node(float x, float y, int node_type, const char *leafName, int status
 
      }
         renderBitmapString((x - NODE_WIDTH + 2*0.015), (y - NODE_HEIGHT/2), font,leafName);
+
+
         break;
     default: break;
     }
@@ -125,13 +179,23 @@ void draw_node(float x, float y, int node_type, const char *leafName, int status
         default: break;
     }
 
-    if(node_type == BT::CONDITION)
+    switch (node_type)
     {
+    case BT::CONDITION:
         drawEllipse(x,y,NODE_WIDTH,0.021);
+        break;
+    case BT::ACTION:
 
-    }
-    else
-    {
+        glBegin(GL_LINE_LOOP);
+        glVertex2f((GLfloat) (x + NODE_WIDTH), (GLfloat) (y - NODE_HEIGHT - 0.015));
+        glVertex2f((GLfloat) (x + NODE_WIDTH), (GLfloat) (y + 0.02));
+        glVertex2f((GLfloat) (x - NODE_WIDTH), (GLfloat) (y + 0.02));
+        glVertex2f((GLfloat) (x - NODE_WIDTH), (GLfloat) (y - NODE_HEIGHT - 0.015));
+        glColor3f(0.0, 0.0, 0.0);
+        glEnd();
+        break;
+
+    default:
         glBegin(GL_LINE_LOOP);
         glVertex2f((GLfloat) (x + NODE_WIDTH), (GLfloat) (y - NODE_HEIGHT));
         glVertex2f((GLfloat) (x + NODE_WIDTH), (GLfloat) (y + NODE_HEIGHT));
@@ -139,6 +203,7 @@ void draw_node(float x, float y, int node_type, const char *leafName, int status
         glVertex2f((GLfloat) (x - NODE_WIDTH), (GLfloat) (y - NODE_HEIGHT));
         glColor3f(0.0, 0.0, 0.0);
         glEnd();
+        break;
     }
 }
 
@@ -158,22 +223,11 @@ void draw_edge(GLfloat parent_x, GLfloat parent_y, GLfloat parent_size, GLfloat 
 void keyboard(unsigned char key, int x, int y)
 {
     if (key == 'q' || key == 'Q')
-        //youbot_common::stopSimulation();
         exit(EXIT_SUCCESS);
 }
 
 
 void resize(int width, int height) {
-        // we ignore the params and do:
-
-//    glutGet(GLUT_WINDOW_WIDTH);
-//    glutGet(GLUT_WINDOW_HEIGHT);
-//    glutReshapeWindow(glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT));
-
-
-
-
-               //The far z clipping coordinate
 
 }
 

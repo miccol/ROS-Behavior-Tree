@@ -18,7 +18,7 @@ void resize(int width, int height);
 
 void draw_status(float x, float y, int node_status);
 
-void drawString (void * font, char *s, float x, float y, float z);
+void drawString (void * font, char *string, float x, float y, float z);
 
 void renderBitmapString(float x, float y, void *font,const char *string);
 
@@ -30,6 +30,9 @@ void keyboard(unsigned char key, int x, int y);
 
 void drawCircle(float radius);
 
+int compute_node_lines(const char *string);
+
+int compute_max_width(const char *string);
 
 
 //void display();
