@@ -45,27 +45,20 @@ BT::ReturnStatus BT::SequenceNodeWithMemory::Tick()
             DEBUG_STDOUT(get_name() << " It is an action " << children_nodes_[current_child_idx_]->get_name() << " with status: " << child_i_status_);
 
 
-            if (child_i_status_ != BT::RUNNING)
+
+            if (child_i_status_ == BT::IDLE || child_i_status_ == BT::HALTED)
             {
-                if(child_i_status_ == BT::IDLE)
-                {
-                    //1.1 If the action status is IDLE, the sequence node sends a tick to it.
-                    DEBUG_STDOUT(get_name() << "NEEDS TO TICK " << children_nodes_[current_child_idx_]->get_name());
-                    children_nodes_[current_child_idx_]->tick_engine.Tick();
-                }
+                //1.1) If the action status is not running, the sequence node sends a tick to it.
+                DEBUG_STDOUT(get_name() << "NEEDS TO TICK " << children_nodes_[current_child_idx_]->get_name());
+                children_nodes_[current_child_idx_]->tick_engine.Tick();
+
                 //waits for the tick to arrive to the child
                 do
                 {
                     child_i_status_ = children_nodes_[current_child_idx_]->get_status();
-                    boost::this_thread::sleep(boost::posix_time::milliseconds(10));
+                    std::this_thread::sleep_for(std::chrono::milliseconds(10));
                 }
                 while(child_i_status_ != BT::RUNNING && child_i_status_ != BT::SUCCESS && child_i_status_ != BT::FAILURE);
-            }
-            else
-            {
-                //1.2 if the action is running already, let the action run and return success to the parent node
-                set_status(BT::RUNNING);
-                return BT::RUNNING;
             }
         }
         else
@@ -74,6 +67,15 @@ BT::ReturnStatus BT::SequenceNodeWithMemory::Tick()
             // Send the tick and wait for the response;
             child_i_status_ = children_nodes_[current_child_idx_]->Tick();
         }
+
+
+        if(child_i_status_ == BT::SUCCESS ||child_i_status_ == BT::FAILURE )
+        {
+
+            children_nodes_[current_child_idx_]->set_status(BT::IDLE);//the child goes in idle if it has returned success or failure.
+
+        }
+
 
 
         if(child_i_status_ != BT::SUCCESS)

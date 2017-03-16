@@ -8,17 +8,38 @@ int main(int argc, char **argv)
     {
         int TickPeriod_milliseconds = 1000;
 
-        BT::ActionTestNode* action = new BT::ActionTestNode("1234567 89\n77773737377373737373737373737373737");
-        BT::ConditionTestNode* condition = new BT::ConditionTestNode("01234\n567\n89");
-        condition->set_boolean_value(true);
+//        BT::ActionTestNode* action = new BT::ActionTestNode("1234567 89\n77773737377373737373737373737373737");
+//        BT::ConditionTestNode* condition = new BT::ConditionTestNode("01234567");
+//        condition->set_boolean_value(true);
 
 
-        BT:: SequenceNode* sequence1 = new BT::SequenceNode("seq1");
+//        BT:: SequenceNode* sequence1 = new BT::SequenceNode("seq1");
 
-        sequence1->AddChild(condition);
-        sequence1->AddChild(action);
+//        sequence1->AddChild(condition);
+//        sequence1->AddChild(action);
 
-        Execute(sequence1, TickPeriod_milliseconds);//from BehaviorTree.cpp
+
+        std::string text = "";
+
+        BT:: SequenceNode* root = new BT::SequenceNode("seq1");
+
+        for (int i = 0; i < 10; i++)
+        {
+            BT:: SequenceNode* seq = new BT::SequenceNode("seq");
+            text = "Action ";
+            text += std::to_string(i);
+            BT::ActionTestNode* action = new BT::ActionTestNode(text);
+            text = "Condition ";
+            text += std::to_string(i);
+            BT::ConditionTestNode* condition = new BT::ConditionTestNode(text);
+            seq->AddChild(condition);
+
+            seq->AddChild(action);
+
+            root->AddChild(seq);
+        }
+
+        Execute(root, TickPeriod_milliseconds);//from BehaviorTree.cpp
 
 }
     catch (BT::BehaviorTreeException& Exception)

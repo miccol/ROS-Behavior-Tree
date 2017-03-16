@@ -8,7 +8,7 @@
 #include<string>
 #include <control_node.h>
 
-enum status {RUNNING,SUCCESS,FAILURE,IDLE };
+//enum status {RUNNING,SUCCESS,FAILURE,IDLE, HALTED };
 
 void drawEllipse(float xradius, float yradius);
 
@@ -33,7 +33,6 @@ void drawCircle(float radius);
 int compute_node_lines(const char *string);
 
 int compute_max_width(const char *string);
-
 
 //void display();
 

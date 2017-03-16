@@ -10,7 +10,7 @@ TickEngine::~TickEngine() {}
 void TickEngine::Wait()
 {
     // Lock acquire (need a unique lock for the condition variable usage)
-    boost::unique_lock<boost::mutex> UniqueLock(mutex_);
+    std::unique_lock<std::mutex> UniqueLock(mutex_);
 
     // If the state is 0 then we have to wait for a signal
     if (value_ == 0)
@@ -23,7 +23,7 @@ void TickEngine::Wait()
 void TickEngine::Tick()
 {
     // Lock acquire
-    boost::lock_guard<boost::mutex> LockGuard(mutex_);
+    std::lock_guard<std::mutex> LockGuard(mutex_);
 
     // State increment
     value_++;

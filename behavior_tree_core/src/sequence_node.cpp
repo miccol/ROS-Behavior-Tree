@@ -29,7 +29,7 @@ BT::ReturnStatus BT::SequenceNode::Tick()
             //1) If the child i is an action, read its state.
             child_i_status_ = children_nodes_[i]->get_status();
 
-            if (child_i_status_ != BT::RUNNING)
+            if (child_i_status_ == BT::IDLE || child_i_status_ == BT::HALTED)
             {
                 //1.1) If the action status is not running, the sequence node sends a tick to it.
                 DEBUG_STDOUT(get_name() << "NEEDS TO TICK " << children_nodes_[i]->get_name());
@@ -39,17 +39,10 @@ BT::ReturnStatus BT::SequenceNode::Tick()
                 do
                 {
                     child_i_status_ = children_nodes_[i]->get_status();
-                    boost::this_thread::sleep(boost::posix_time::milliseconds(10));
+                    std::this_thread::sleep_for(std::chrono::milliseconds(10));
                 }
                 while(child_i_status_ != BT::RUNNING && child_i_status_ != BT::SUCCESS && child_i_status_ != BT::FAILURE);
             }
-            else
-            {
-                //1.2) If the action is running already, let the action run and return success to the parent node
-                set_status(BT::RUNNING);
-                return BT::RUNNING;
-            }
-
         }
         else
         {
@@ -61,15 +54,26 @@ BT::ReturnStatus BT::SequenceNode::Tick()
         if(child_i_status_ != BT::SUCCESS)
         {
             // If the  child status is not success, halt the next children and return the status to your parent.
+            if(child_i_status_ == BT::FAILURE)
+            {
+
+                children_nodes_[i]->set_status(BT::IDLE);//the child goes in idle if it has returned failure.
+            }
+
             DEBUG_STDOUT(get_name() << " is HALTING children from " << (i+1));
             HaltChildren(i+1);
             set_status(child_i_status_);
             return child_i_status_;
         }
-        else if(i == N_of_children_ - 1)
-        {  // If the  child status is success, and it is the last child to be ticked, then the sequence has succeeded.
-            set_status(BT::SUCCESS);
-            return BT::SUCCESS;
+        else
+        {//the child returned success.
+            children_nodes_[i]->set_status(BT::IDLE);
+
+            if(i == N_of_children_ - 1)
+            {  // If the  child status is success, and it is the last child to be ticked, then the sequence has succeeded.
+                set_status(BT::SUCCESS);
+                return BT::SUCCESS;
+            }
         }
     }
 

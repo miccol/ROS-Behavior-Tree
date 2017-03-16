@@ -28,13 +28,14 @@
 
 #endif
 
-#define DEBUG 1 // set debug mode
+//#define DEBUG //uncomment this line if you want to print debug messages
 
 #ifdef DEBUG
 //#define DEBUG_STDERR(x) (std::cerr << (x))
 #define DEBUG_STDOUT(str) do { std::cout << str << std::endl; } while( false )
 
-#else DEBUG_STDOUT(str) do {} while( false )
+#else
+#define DEBUG_STDOUT(str)
 #endif
 
 
@@ -42,8 +43,14 @@
 #include <unistd.h>
 
 #include <string>
-#include <boost/thread.hpp>
-#include <boost/date_time/posix_time/posix_time.hpp>
+//#include <boost/thread.hpp>
+//#include <boost/date_time/posix_time/posix_time.hpp>
+
+#include <thread>
+#include <chrono>
+#include <mutex>
+#include <condition_variable>
+
 
 #include <tick_engine.h>
 #include <exceptions.h>
@@ -97,9 +104,11 @@ namespace BT
         bool is_state_updated_;
         ReturnStatus status_;
         ReturnStatus color_state_;
-        boost::mutex state_mutex_;
-        boost::mutex color_state_mutex_;
-        boost::condition_variable state_condition_variable_;
+
+
+        std::mutex state_mutex_;
+        std::mutex color_state_mutex_;
+        std::condition_variable state_condition_variable_;
         // Node type
         NodeType type_;
         //position and offset for horizontal positioning when drawing
@@ -109,7 +118,7 @@ namespace BT
 
 
         // The thread that will execute the node
-        boost::thread thread_;
+        std::thread thread_;
 
         // Node semaphore to simulate the tick
         // (and to synchronize fathers and children)

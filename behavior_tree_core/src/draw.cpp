@@ -27,15 +27,19 @@ double zoom = 1.0f;
 float fraction = 0.1f;
 float zoom_fraction =0.1f;
 
+
+
+
 void drawEllipse(float xpos, float ypos,float xradius, float yradius)
 {
     glBegin(GL_LINE_LOOP);
 
-    for(int i=0; i < 360; i++)
+    for(int i=0; i < 359; i++)
     {
          //convert degrees into radians
         float degInRad = i*DEG2RAD;
-        glVertex2f(xpos+cos(degInRad)*xradius,  ypos + sin(degInRad)*yradius);
+        glVertex2d(xpos+cos(degInRad)*xradius,  ypos + sin(degInRad)*yradius);
+
     }
     glEnd();
 }
@@ -90,6 +94,11 @@ int compute_max_width(const char *string)
             if(i > max_width) max_width = i;
             i = 0;
             continue;
+        }
+        else
+        {
+            max_width++;
+
         }
         i++;
     }
@@ -151,38 +160,46 @@ void draw_node(float x, float y, int node_type, const char *leafName, int status
 //              NODE_WIDTH +=  0.01;
         }
         renderBitmapString((x - NODE_WIDTH +0.015), (y - 0.01), font,leafName);
-        glColor3f(0.2, 1.0, 0.2);
+       // glColor3f(0.2, 1.0, 0.2);
         break;
     case BT::CONDITION:
     {
         NODE_HEIGHT = 0.02*compute_node_lines(leafName);
         std::string st(leafName,0, 15);
-         NODE_WIDTH = 0.01;
-         for (unsigned int i = 0; i < st.size(); i++)
-           NODE_WIDTH +=  0.01;
+        NODE_WIDTH = 0.01*compute_max_width(leafName);
+
 
 
      }
-        renderBitmapString((x - NODE_WIDTH + 2*0.015), (y - NODE_HEIGHT/2), font,leafName);
-
-
+        renderBitmapString((x - NODE_WIDTH + 2*0.015), (y - 0.01), font,leafName);
         break;
     default: break;
     }
 
     switch (status)
     {
-        case RUNNING:   glColor3f(0.8, 0.8, 0.8); break;
-        case SUCCESS:   glColor3f(0.0, 1.0, 0.0); break;
-        case FAILURE:   glColor3f(1.0, 0.0, 0.0); break;
-        case IDLE:      glColor3f(0.0, 0.0, 0.0); break;
+        case BT::RUNNING:   glColor3f(0.8, 0.8, 0.8); break;
+        case BT::SUCCESS:   glColor3f(0.0, 1.0, 0.0); break;
+        case BT::FAILURE:   glColor3f(1.0, 0.0, 0.0); break;
+        case BT::IDLE:      glColor3f(0.0, 0.0, 0.0); break;
+        case BT::HALTED:      glColor3f(0.0, 0.0, 0.0); break;
         default: break;
     }
 
     switch (node_type)
     {
     case BT::CONDITION:
-        drawEllipse(x,y,NODE_WIDTH,0.021);
+       // drawEllipse(x,y,NODE_WIDTH,NODE_HEIGHT);
+       // drawEllipse(x,y,0.1,0.021);
+        glBegin(GL_LINE_LOOP);
+        glVertex2f((GLfloat) (x + NODE_WIDTH), (GLfloat) (y - NODE_HEIGHT - 0.015));
+        glVertex2f((GLfloat) (x + NODE_WIDTH), (GLfloat) (y + 0.02));
+        glVertex2f((GLfloat) (x - NODE_WIDTH), (GLfloat) (y + 0.02));
+        glVertex2f((GLfloat) (x - NODE_WIDTH), (GLfloat) (y - NODE_HEIGHT - 0.015));
+        glColor3f(0.0, 0.0, 0.0);
+        glEnd();
+        break;
+
         break;
     case BT::ACTION:
 
@@ -294,8 +311,6 @@ void setpositions(BT::TreeNode* tree, GLfloat x_pos, GLfloat y_pos, GLfloat x_of
         for (unsigned int i = 0; i < st.size(); i++)
           NODE_WIDTH +=  0.01;
 
-     //   std::cout << "setting position of " << tree->name << " as " << x_pos + 2*NODE_WIDTH + x_space << std::endl;
-
         tree->set_x_pose(x_pos + 2*NODE_WIDTH + x_space);
     }
     else
@@ -343,7 +358,6 @@ void setpositions(BT::TreeNode* tree, GLfloat x_pos, GLfloat y_pos, GLfloat x_of
 
     }
 
-   // std::cout << "position of " << tree->name << " is " << tree->get_x_pose() << std::endl;
 }
 
 
@@ -363,6 +377,7 @@ void updateTree(BT::TreeNode* tree, GLfloat x_pos, GLfloat y_pos, GLfloat y_offs
 
 
         draw_node((GLfloat) tree->get_x_pose() , (GLfloat) y_pos, tree->DrawType(), tree->get_name().c_str(), tree->ReadColorState());
+        //draw_node((GLfloat) tree->get_x_pose() , (GLfloat) y_pos, tree->DrawType(), tree->get_name().c_str(), tree->get_status());
 
     }
     else
@@ -396,17 +411,15 @@ void updateTree(BT::TreeNode* tree, GLfloat x_pos, GLfloat y_pos, GLfloat y_offs
 
 void display()
 {
-    boost::this_thread::sleep(boost::posix_time::milliseconds(5)); //interrupt point
-
 
     glClearColor( r_color, g_color, b_color, 0.1);
 
     // clear the draw buffer .
     glClear(GL_COLOR_BUFFER_BIT);   // Erase everything
+
     setpositions(tree, x , y, x_offset , 0.1 );
-    //exit(5);
+
     updateTree(tree, x , y , 0.1 );
-   // std::cout << "TREE updated" << std::endl;
     glutSwapBuffers();
     glutPostRedisplay();
 

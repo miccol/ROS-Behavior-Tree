@@ -59,18 +59,25 @@ void BT::ControlNode::HaltChildren(int i){
     for(unsigned int j=i; j<children_nodes_.size(); j++)
     {
         //TODO FIX this
-//        if (children_nodes_[j]->get_type() != BT::CONDITION_NODE  && children_nodes_[j]->get_status() != BT::IDLE)
-        if (children_nodes_[j]->get_status() == BT::RUNNING)
-        {
-            DEBUG_STDOUT("SENDING HALT TO CHILD " << children_nodes_[j]-> get_name());
-            children_nodes_[j]->Halt();
+        //        if (children_nodes_[j]->get_type() != BT::CONDITION_NODE  && children_nodes_[j]->get_status() != BT::IDLE)
 
+        if (children_nodes_[j]->get_type() == BT::CONDITION_NODE)
+        {
+            children_nodes_[i]->ResetColorState();
         }
         else
         {
-            DEBUG_STDOUT("NO NEED TO HALT " << children_nodes_[j]-> get_name() << "STATUS" << children_nodes_[j]->get_status());
-            std::cout <<children_nodes_[j]-> get_name() << children_nodes_[j]->get_status() << std::endl;
 
+            if (children_nodes_[j]->get_status() == BT::RUNNING)
+            {
+                DEBUG_STDOUT("SENDING HALT TO CHILD " << children_nodes_[j]-> get_name());
+                children_nodes_[j]->Halt();
+
+            }
+            else
+            {
+                DEBUG_STDOUT("NO NEED TO HALT " << children_nodes_[j]-> get_name() << "STATUS" << children_nodes_[j]->get_status());
+            }
         }
     }
 

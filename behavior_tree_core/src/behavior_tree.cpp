@@ -6,13 +6,13 @@ void Execute(BT::ControlNode* root,int TickPeriod_milliseconds)
 {
     std::cout << "Start Drawing!" << std::endl;
     // Starts in another thread the drawing of the BT
-    boost::thread t(&drawTree ,root);
+    std::thread t(&drawTree ,root);
 
     root->ResetColorState();
 
     while(true)
     {
-       // std::cout << "Ticking the root node !" << std::endl << std::endl;
+           DEBUG_STDOUT( "Ticking the root node !");
 
         // Ticking the root node
         root->Tick();
@@ -24,7 +24,7 @@ void Execute(BT::ControlNode* root,int TickPeriod_milliseconds)
             //when the root returns a status it resets the colors of the tree
             root->ResetColorState();
         }
-          boost::this_thread::sleep(boost::posix_time::milliseconds(TickPeriod_milliseconds));
+          std::this_thread::sleep_for(std::chrono::milliseconds(TickPeriod_milliseconds));
     }
 
 }

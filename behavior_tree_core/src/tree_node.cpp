@@ -19,7 +19,7 @@ void BT::TreeNode::set_status(ReturnStatus new_status)
     }
 
     // Lock acquistion
-    boost::unique_lock<boost::mutex> UniqueLock(state_mutex_);
+    std::unique_lock<std::mutex> UniqueLock(state_mutex_);
 
     // state_ update
     status_ = new_status;
@@ -28,7 +28,9 @@ void BT::TreeNode::set_status(ReturnStatus new_status)
 BT::ReturnStatus BT::TreeNode::get_status()
 {
     // Lock acquistion
-    boost::lock_guard<boost::mutex> LockGuard(state_mutex_);
+    DEBUG_STDOUT(get_name() << " is setting its status to " << status_);
+
+    std::lock_guard<std::mutex> LockGuard(state_mutex_);
 
     return status_;
 }
