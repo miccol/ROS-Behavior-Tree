@@ -35,18 +35,20 @@ int main(int argc, char **argv)
 
         sequence1->AddChild(condition2);
         sequence1->AddChild(action1);
-  //      sequence1->AddChild(action2);
-        sequence1->AddChild(sequence2);
+        sequence1->AddChild(action2);
+        sequence1->AddChild(action3);
+
+                sequence1->AddChild(sequence2);
 
 
 
         sequence2->AddChild(action2);
-//        sequence2->AddChild(sequence3);
+        sequence2->AddChild(sequence3);
         sequence2->AddChild(condition2);
 
 
-//        sequence3->AddChild(condition3);
-//        sequence3->AddChild(action3);
+        sequence3->AddChild(condition3);
+        sequence3->AddChild(action3);
 
 
 

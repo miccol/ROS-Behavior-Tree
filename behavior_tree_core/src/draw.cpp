@@ -140,49 +140,49 @@ void renderBitmapString(float x, float y, void *font,const char *string)
 void draw_node(float x, float y, int node_type, const char *leafName, int status)
 {
 
-    float NODE_WIDTH = 0.02;
+    float NODE_WIDTH = 0.04;
     float NODE_HEIGHT = 0.02;
     switch (node_type)
     {
     case BT::SELECTORSTAR:
-        drawString(font, "?*", (x + NODE_WIDTH - 0.035), (y - NODE_HEIGHT/2), 0);
+        drawString(font, "?*", (x + NODE_WIDTH/2 -0.005), (y - NODE_HEIGHT/2), 0);
         break;
     case BT::SEQUENCESTAR:
-        drawString(font, ">*", (x - NODE_WIDTH + 0.01 ), (y - NODE_HEIGHT/2), 0);
+        drawString(font, ">*", (x + NODE_WIDTH/2 -0.0051 ), (y - NODE_HEIGHT/2), 0);
         break;
     case BT::SELECTOR:
-        drawString(font, "?", (x + NODE_WIDTH - 0.025), (y - NODE_HEIGHT/2), 0);
+        drawString(font, "?", (x + NODE_WIDTH/2 -0.005), (y - NODE_HEIGHT/2), 0);
         break;
     case BT::SEQUENCE:
-        drawString(font, ">", (x - NODE_WIDTH + 0.015), (y - NODE_HEIGHT/2), 0);
+        drawString(font, ">", (x + NODE_WIDTH/2 -0.005), (y - NODE_HEIGHT/2), 0);
         break;
     case BT::PARALLEL:
-        drawString(font, "=", (x - NODE_WIDTH + 0.01), (y - NODE_HEIGHT/2), 0);
+        drawString(font, "=", (x + NODE_WIDTH/2 -0.005), (y - NODE_HEIGHT/2), 0);
         break;
     case BT::DECORATOR:
-        drawString(font, "D", (x - NODE_WIDTH + 0.01), (y - NODE_HEIGHT/2), 0);
+        drawString(font, "D", (x + NODE_WIDTH/2 -0.005), (y - NODE_HEIGHT/2), 0);
         break;
     case BT::ACTION:
        {
         NODE_HEIGHT = 0.02*(compute_node_lines(leafName));
             std::string st(leafName,0, 15);
-            NODE_WIDTH = 0.01*compute_max_width(leafName);
+            NODE_WIDTH = 0.02*compute_max_width(leafName);
 //            for (unsigned int i = 0; i < st.size(); i++)
 //              NODE_WIDTH +=  0.01;
         }
-        renderBitmapString((x - NODE_WIDTH +0.015), (y - 0.01), font,leafName);
+        renderBitmapString((x +0.015), (y - 0.01), font,leafName);
        // glColor3f(0.2, 1.0, 0.2);
         break;
     case BT::CONDITION:
     {
         NODE_HEIGHT = 0.02*compute_node_lines(leafName);
         std::string st(leafName,0, 15);
-        NODE_WIDTH = 0.01*compute_max_width(leafName);
+        NODE_WIDTH = 0.02*compute_max_width(leafName);
 
 
 
      }
-        renderBitmapString((x - NODE_WIDTH + 2*0.015), (y - 0.01), font,leafName);
+        renderBitmapString((x  + 2*0.015), (y - 0.01), font,leafName);
         break;
     default: break;
     }
@@ -205,8 +205,8 @@ void draw_node(float x, float y, int node_type, const char *leafName, int status
         glBegin(GL_LINE_LOOP);
         glVertex2f((GLfloat) (x + NODE_WIDTH), (GLfloat) (y - NODE_HEIGHT - 0.015));
         glVertex2f((GLfloat) (x + NODE_WIDTH), (GLfloat) (y + 0.02));
-        glVertex2f((GLfloat) (x - NODE_WIDTH), (GLfloat) (y + 0.02));
-        glVertex2f((GLfloat) (x - NODE_WIDTH), (GLfloat) (y - NODE_HEIGHT - 0.015));
+        glVertex2f((GLfloat) (x), (GLfloat) (y + 0.02));
+        glVertex2f((GLfloat) (x), (GLfloat) (y - NODE_HEIGHT - 0.015));
         glColor3f(0.0, 0.0, 0.0);
         glEnd();
         break;
@@ -217,8 +217,8 @@ void draw_node(float x, float y, int node_type, const char *leafName, int status
         glBegin(GL_LINE_LOOP);
         glVertex2f((GLfloat) (x + NODE_WIDTH), (GLfloat) (y - NODE_HEIGHT - 0.015));
         glVertex2f((GLfloat) (x + NODE_WIDTH), (GLfloat) (y + 0.02));
-        glVertex2f((GLfloat) (x - NODE_WIDTH), (GLfloat) (y + 0.02));
-        glVertex2f((GLfloat) (x - NODE_WIDTH), (GLfloat) (y - NODE_HEIGHT - 0.015));
+        glVertex2f((GLfloat) (x), (GLfloat) (y + 0.02));
+        glVertex2f((GLfloat) (x), (GLfloat) (y - NODE_HEIGHT - 0.015));
         glColor3f(0.0, 0.0, 0.0);
         glEnd();
         break;
@@ -227,8 +227,8 @@ void draw_node(float x, float y, int node_type, const char *leafName, int status
         glBegin(GL_LINE_LOOP);
         glVertex2f((GLfloat) (x + NODE_WIDTH), (GLfloat) (y - NODE_HEIGHT));
         glVertex2f((GLfloat) (x + NODE_WIDTH), (GLfloat) (y + NODE_HEIGHT));
-        glVertex2f((GLfloat) (x - NODE_WIDTH), (GLfloat) (y + NODE_HEIGHT));
-        glVertex2f((GLfloat) (x - NODE_WIDTH), (GLfloat) (y - NODE_HEIGHT));
+        glVertex2f((GLfloat) (x), (GLfloat) (y + NODE_HEIGHT));
+        glVertex2f((GLfloat) (x), (GLfloat) (y - NODE_HEIGHT));
         glColor3f(0.0, 0.0, 0.0);
         glEnd();
         break;
@@ -377,6 +377,94 @@ void setpositions(BT::TreeNode* tree, GLfloat x_pos, GLfloat y_pos, GLfloat x_of
 
 
 
+void updateTree(BT::TreeNode* tree, GLfloat x_pos, GLfloat y_pos, GLfloat y_offset )
+{
+
+    //x_offset*pow(2,tree->Depth()-1)
+   // GLfloat x_space = 0.01;
+
+    BT::ControlNode* d = dynamic_cast<BT::ControlNode*> (tree);
+    if (d == NULL)
+    {//if it is a leaf node, draw it
+
+
+        draw_node(x_pos , (GLfloat) y_pos, tree->DrawType(), tree->get_name().c_str(), tree->get_color_status());
+
+    }
+    else
+    {//if it is a control flow node, draw it and its children
+
+        //setpositions(tree, x_pos , y_pos, x_offset , 0.1 );
+        draw_node((GLfloat) x_pos, (GLfloat) y_pos, tree->DrawType(), tree->get_name().c_str(), tree->get_color_status());
+
+
+        std::vector<BT::TreeNode*> children = d->GetChildren();
+        int M = d->GetChildrenNumber();
+
+        std::vector<GLfloat> children_x_end;
+
+        GLfloat max_x_end = 0;
+        GLfloat max_x_start = 0;
+        GLfloat current_x_end = 0;
+
+        for (int i = 0; i < M; i++)
+        {
+
+
+            if(children[i]->DrawType() != BT::ACTION && children[i]->DrawType() != BT::CONDITION)
+            {
+                current_x_end = 0.04;
+            }
+            else
+            {
+
+                current_x_end = 0.02*compute_max_width(children[i]->get_name().c_str());
+            }
+
+            if (i < M-1)
+            {
+
+                max_x_end = max_x_end + current_x_end + x_offset;
+            }
+            else
+            {
+
+                max_x_end = max_x_end + current_x_end;
+
+            }
+            children_x_end.push_back(max_x_end);
+        }
+
+        GLfloat x_min = 0.0;
+        GLfloat x_max = 0.0;
+        //  GLfloat x_space = 0.05;
+        GLfloat x_shift = x_pos - max_x_end/2;
+        GLfloat x_shift_new = 0;
+
+        for (int i = 0; i < M; i++)
+        {
+            if(i > 0)
+            {
+                std::cout << "drawing  " << i << " at " << x_shift + children_x_end.at(i-1) << std::endl;
+                updateTree(children[i], x_shift + children_x_end.at(i-1) , y_pos - y_offset  ,y_offset );
+                // draw_edge(tree->get_x_pose(), y_pos, 0.02, children[i]->get_x_pose() , y_pos - y_offset, 0.02);
+            }
+            else
+            {
+                std::cout << "drawing  " << i << " at " << x_shift << std::endl;
+
+                updateTree(children[i], x_shift , y_pos - y_offset  ,y_offset );
+            }
+        }
+        //exit(0);
+
+
+        //return x_shift_new + (x_min+x_max)/2;
+
+    }
+}
+
+
 
 //void updateTree(BT::TreeNode* tree, GLfloat x_pos, GLfloat y_pos, GLfloat y_offset )
 //{
@@ -423,18 +511,18 @@ void setpositions(BT::TreeNode* tree, GLfloat x_pos, GLfloat y_pos, GLfloat x_of
 //    }
 //}
 
-GLfloat updateTree(BT::TreeNode* tree, GLfloat x_pos, GLfloat y_pos, GLfloat y_offset )
-{
+//GLfloat updateTree(BT::TreeNode* tree, GLfloat x_pos, GLfloat y_pos, GLfloat y_offset )
+//{
 
-    GLfloat x_offset = 0.05;
-    //x_offset*pow(2,tree->Depth()-1)
-   // GLfloat x_space = 0.01;
+//    GLfloat x_offset = 0.05;
+//    //x_offset*pow(2,tree->Depth()-1)
+//   // GLfloat x_space = 0.01;
 
-    BT::ControlNode* d = dynamic_cast<BT::ControlNode*> (tree);
-    if (d == NULL)
-    {//if it is a leaf node, draw it
+//    BT::ControlNode* d = dynamic_cast<BT::ControlNode*> (tree);
+//    if (d == NULL)
+//    {//if it is a leaf node, draw it
 
-        GLfloat this_width = 0.01*compute_max_width(tree->get_name().c_str());
+//        GLfloat this_width = 0.01*compute_max_width(tree->get_name().c_str());
 
 //        if(x_pos > 0)
 //        {
@@ -443,48 +531,48 @@ GLfloat updateTree(BT::TreeNode* tree, GLfloat x_pos, GLfloat y_pos, GLfloat y_o
 
 //        }
 //        else
-        {
+//        {
 
-            draw_node((GLfloat) x_pos  , (GLfloat) y_pos, tree->DrawType(), tree->get_name().c_str(), tree->get_color_status());
-            return x_pos + this_width;
+//            draw_node((GLfloat) x_pos  , (GLfloat) y_pos, tree->DrawType(), tree->get_name().c_str(), tree->get_color_status());
+//            return x_pos + this_width;
 
-        }
-        //std::cout << "child at returns : " << new_pos << std::endl;
-
-
-    }
-    else
-    {//if it is a control flow node, draw it and its children
-        std::vector<BT::TreeNode*> children = d->GetChildren();
-        int M = d->GetChildrenNumber();
-        GLfloat x_min = 0.0;
-        GLfloat x_max = 0.0;
-      //  GLfloat x_space = 0.05;
-        GLfloat x_shift = x_pos;
-        GLfloat x_shift_new = 0.0;
-
-        GLfloat new_pos = x_pos;
-        GLfloat x_start = x_pos;
-        GLfloat x_end = x_pos;
-        bool is_even = true;
+//        }
+//        //std::cout << "child at returns : " << new_pos << std::endl;
 
 
+//    }
+//    else
+//    {//if it is a control flow node, draw it and its children
+//        std::vector<BT::TreeNode*> children = d->GetChildren();
+//        int M = d->GetChildrenNumber();
+//        GLfloat x_min = 0.0;
+//        GLfloat x_max = 0.0;
+//      //  GLfloat x_space = 0.05;
+//        GLfloat x_shift = x_pos;
+//        GLfloat x_shift_new = 0.0;
+
+//        GLfloat new_pos = x_pos;
+//        GLfloat x_start = x_pos;
+//        GLfloat x_end = x_pos;
+//        bool is_even = true;
 
 
-        for (int i = 0; i < M; i++)
-        {
-            std::cout << "drawing child at x_pos: " << new_pos << std::endl;
-
-            x_end = updateTree(children[i], new_pos, y_pos - y_offset  ,y_offset );
-      //      draw_edge(tree->get_x_pose(), y_pos, 0.02, new_pos , y_pos - y_offset, 0.02);
-            new_pos+= x_end;
-        }
-
-        draw_node((x_end - x_start)/2, (GLfloat) y_pos, tree->DrawType(), tree->get_name().c_str(), tree->get_color_status());
 
 
-    }
-}
+//        for (int i = 0; i < M; i++)
+//        {
+//            std::cout << "drawing child at x_pos: " << new_pos << std::endl;
+
+//            x_end = updateTree(children[i], new_pos, y_pos - y_offset  ,y_offset );
+//      //      draw_edge(tree->get_x_pose(), y_pos, 0.02, new_pos , y_pos - y_offset, 0.02);
+//            new_pos+= x_end;
+//        }
+
+//        draw_node((x_end - x_start)/2, (GLfloat) y_pos, tree->DrawType(), tree->get_name().c_str(), tree->get_color_status());
+
+
+//    }
+//}
 
 
 
