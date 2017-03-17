@@ -43,8 +43,6 @@
 #include <unistd.h>
 
 #include <string>
-//#include <boost/thread.hpp>
-//#include <boost/date_time/posix_time/posix_time.hpp>
 
 #include <thread>
 #include <chrono>
@@ -103,7 +101,7 @@ namespace BT
         // The node state that must be treated in a thread-safe way
         bool is_state_updated_;
         ReturnStatus status_;
-        ReturnStatus color_state_;
+        ReturnStatus color_status_;
 
 
         std::mutex state_mutex_;
@@ -141,12 +139,12 @@ namespace BT
         // (conditional waiting and mutual access)
        // ReturnStatus GetNodeState();
         void SetNodeState(ReturnStatus new_state);
-        void SetColorState(ReturnStatus ColorStateToBeSet);
+        void set_color_status(ReturnStatus new_color_status);
 
         // Methods used to access the node state without the
         // conditional waiting (only mutual access)
         ReturnStatus ReadState();
-        ReturnStatus ReadColorState();
+        ReturnStatus get_color_status();
         virtual int DrawType() = 0;
         virtual void ResetColorState() = 0;
         virtual int Depth() = 0;

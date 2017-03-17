@@ -12,14 +12,14 @@ BT::ControlNode::~ControlNode() {}
 
 void BT::ControlNode::AddChild(TreeNode* child)
 {
-    // Checking if the child is not already present
-    for (unsigned int i=0; i<children_nodes_.size(); i++)
-    {
-        if (children_nodes_[i] == child)
-        {
-            throw BehaviorTreeException("'" + child->get_name() + "' is already a '" + get_name() + "' child.");
-        }
-    }
+//    // Checking if the child is not already present
+//    for (unsigned int i=0; i<children_nodes_.size(); i++)
+//    {
+//        if (children_nodes_[i] == child)
+//        {
+//            throw BehaviorTreeException("'" + child->get_name() + "' is already a '" + get_name() + "' child.");
+//        }
+//    }
 
     children_nodes_.push_back(child);
     children_states_.push_back(BT::IDLE);
@@ -48,7 +48,7 @@ std::vector<BT::TreeNode*> BT::ControlNode::GetChildren()
 void BT::ControlNode::ResetColorState()
 {
 
-    SetColorState(BT::IDLE);
+    set_color_status(BT::IDLE);
     for(unsigned int i = 0; i < children_nodes_.size(); i++)
     {
         children_nodes_[i]->ResetColorState();

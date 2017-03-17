@@ -84,23 +84,34 @@ int compute_node_lines(const char *string)
 int compute_max_width(const char *string)
 {
 
-    const char *c;
-    int i = 0;
+    const char *current_char;
+    int current_line_width = 0;
     int max_width = 0;
+
+
     glRasterPos2f(x, y);
-    for (c=string; *c != '\0'; c++) {
-        if((*c == '\n') || ((*c == ' ' && i > 6) || i > 9))
+    for (current_char = string; *current_char != '\0'; current_char++) {
+
+        if((*current_char == '\n') || ((*current_char == ' ' && current_line_width > 6) || current_line_width > 9))
         {
-            if(i > max_width) max_width = i;
-            i = 0;
+            if(current_line_width > max_width)
+            {
+                max_width = current_line_width;
+            }
+            current_line_width = 0;
             continue;
         }
         else
         {
-            max_width++;
+            //max_width++;
 
         }
-        i++;
+        current_line_width++;
+    }
+
+    if (max_width == 0)//if the lable fits in a single line
+    {
+       max_width = current_line_width;
     }
     return max_width;
 }
@@ -296,6 +307,10 @@ float get_x_pos_at(BT::TreeNode* tree, int depth)
 }
 
 
+
+
+
+
 void setpositions(BT::TreeNode* tree, GLfloat x_pos, GLfloat y_pos, GLfloat x_offset, GLfloat y_offset )
 {
 
@@ -363,11 +378,55 @@ void setpositions(BT::TreeNode* tree, GLfloat x_pos, GLfloat y_pos, GLfloat x_of
 
 
 
+//void updateTree(BT::TreeNode* tree, GLfloat x_pos, GLfloat y_pos, GLfloat y_offset )
+//{
+
+//    //x_offset*pow(2,tree->Depth()-1)
+//   // GLfloat x_space = 0.01;
+
+//    BT::ControlNode* d = dynamic_cast<BT::ControlNode*> (tree);
+//    if (d == NULL)
+//    {//if it is a leaf node, draw it
 
 
-void updateTree(BT::TreeNode* tree, GLfloat x_pos, GLfloat y_pos, GLfloat y_offset )
+//        draw_node((GLfloat) tree->get_x_pose() , (GLfloat) y_pos, tree->DrawType(), tree->get_name().c_str(), tree->get_color_status());
+//        //draw_node((GLfloat) tree->get_x_pose() , (GLfloat) y_pos, tree->DrawType(), tree->get_name().c_str(), tree->get_status());
+
+//    }
+//    else
+//    {//if it is a control flow node, draw it and its children
+
+//        setpositions(tree, x_pos , y_pos, x_offset , 0.1 );
+
+
+//        std::vector<BT::TreeNode*> children = d->GetChildren();
+//        int M = d->GetChildrenNumber();
+//        GLfloat x_min = 0.0;
+//        GLfloat x_max = 0.0;
+//      //  GLfloat x_space = 0.05;
+//        GLfloat x_shift = x_pos;
+//        GLfloat x_shift_new = 0.0;
+
+//        for (int i = 0; i < M; i++)
+//        {
+//             updateTree(children[i], x_shift, y_pos - y_offset  ,y_offset );
+//             draw_edge(tree->get_x_pose(), y_pos, 0.02, children[i]->get_x_pose() , y_pos - y_offset, 0.02);
+
+
+//        }
+
+
+//        draw_node((GLfloat) tree->get_x_pose(), (GLfloat) y_pos, tree->DrawType(), tree->get_name().c_str(), tree->get_color_status());
+
+//        //return x_shift_new + (x_min+x_max)/2;
+
+//    }
+//}
+
+GLfloat updateTree(BT::TreeNode* tree, GLfloat x_pos, GLfloat y_pos, GLfloat y_offset )
 {
 
+    GLfloat x_offset = 0.05;
     //x_offset*pow(2,tree->Depth()-1)
    // GLfloat x_space = 0.01;
 
@@ -375,9 +434,23 @@ void updateTree(BT::TreeNode* tree, GLfloat x_pos, GLfloat y_pos, GLfloat y_offs
     if (d == NULL)
     {//if it is a leaf node, draw it
 
+        GLfloat this_width = 0.01*compute_max_width(tree->get_name().c_str());
 
-        draw_node((GLfloat) tree->get_x_pose() , (GLfloat) y_pos, tree->DrawType(), tree->get_name().c_str(), tree->ReadColorState());
-        //draw_node((GLfloat) tree->get_x_pose() , (GLfloat) y_pos, tree->DrawType(), tree->get_name().c_str(), tree->get_status());
+//        if(x_pos > 0)
+//        {
+//            draw_node((GLfloat) x_pos + this_width + x_offset  , (GLfloat) y_pos, tree->DrawType(), tree->get_name().c_str(), tree->get_color_status());
+//            return x_pos + this_width + x_offset;
+
+//        }
+//        else
+        {
+
+            draw_node((GLfloat) x_pos  , (GLfloat) y_pos, tree->DrawType(), tree->get_name().c_str(), tree->get_color_status());
+            return x_pos + this_width;
+
+        }
+        //std::cout << "child at returns : " << new_pos << std::endl;
+
 
     }
     else
@@ -390,18 +463,25 @@ void updateTree(BT::TreeNode* tree, GLfloat x_pos, GLfloat y_pos, GLfloat y_offs
         GLfloat x_shift = x_pos;
         GLfloat x_shift_new = 0.0;
 
+        GLfloat new_pos = x_pos;
+        GLfloat x_start = x_pos;
+        GLfloat x_end = x_pos;
+        bool is_even = true;
+
+
+
+
         for (int i = 0; i < M; i++)
         {
-             updateTree(children[i], x_shift, y_pos - y_offset  ,y_offset );
-             draw_edge(tree->get_x_pose(), y_pos, 0.02, children[i]->get_x_pose() , y_pos - y_offset, 0.02);
+            std::cout << "drawing child at x_pos: " << new_pos << std::endl;
 
-
+            x_end = updateTree(children[i], new_pos, y_pos - y_offset  ,y_offset );
+      //      draw_edge(tree->get_x_pose(), y_pos, 0.02, new_pos , y_pos - y_offset, 0.02);
+            new_pos+= x_end;
         }
 
+        draw_node((x_end - x_start)/2, (GLfloat) y_pos, tree->DrawType(), tree->get_name().c_str(), tree->get_color_status());
 
-        draw_node((GLfloat) tree->get_x_pose(), (GLfloat) y_pos, tree->DrawType(), tree->get_name().c_str(), tree->ReadColorState());
-
-        //return x_shift_new + (x_min+x_max)/2;
 
     }
 }
@@ -417,9 +497,11 @@ void display()
     // clear the draw buffer .
     glClear(GL_COLOR_BUFFER_BIT);   // Erase everything
 
-    setpositions(tree, x , y, x_offset , 0.1 );
+    //setpositions(tree, x , y, x_offset , 0.1 );
 
     updateTree(tree, x , y , 0.1 );
+
+
     glutSwapBuffers();
     glutPostRedisplay();
 

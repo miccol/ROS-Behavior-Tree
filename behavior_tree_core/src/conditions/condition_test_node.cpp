@@ -5,9 +5,6 @@ BT::ConditionTestNode::ConditionTestNode(std::string name) : ConditionNode::Cond
 {
     type_ = BT::CONDITION_NODE;
     boolean_value_ = true;
-
-    // thread_ start
-    //thread_ = boost::thread(&ConditionTestNode::Exec, this);
 }
 
 BT::ConditionTestNode::~ConditionTestNode() {}

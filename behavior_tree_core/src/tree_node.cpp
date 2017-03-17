@@ -15,7 +15,7 @@ void BT::TreeNode::set_status(ReturnStatus new_status)
 
     if(new_status != BT::IDLE)
     {
-        SetColorState(new_status);
+        set_color_status(new_status);
     }
 
     // Lock acquistion
@@ -36,19 +36,20 @@ BT::ReturnStatus BT::TreeNode::get_status()
 }
 
 
-BT::ReturnStatus BT::TreeNode::ReadColorState()
+BT::ReturnStatus BT::TreeNode::get_color_status()
 {
     // Lock acquistion
+    std::lock_guard<std::mutex> LockGuard(color_state_mutex_);
 
-    return color_state_;
+    return color_status_;
 }
 
-void BT::TreeNode::SetColorState(ReturnStatus ColorStateToBeSet)
+void BT::TreeNode::set_color_status(ReturnStatus new_color_status)
 {
     // Lock acquistion
-
+    std::lock_guard<std::mutex> LockGuard(color_state_mutex_);
     // state_ update
-    color_state_ = ColorStateToBeSet;
+    color_status_ = new_color_status;
 }
 
 
