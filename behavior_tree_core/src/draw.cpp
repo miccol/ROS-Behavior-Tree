@@ -402,6 +402,7 @@ void updateTree(BT::TreeNode* tree, GLfloat x_pos, GLfloat y_pos, GLfloat y_offs
         int M = d->GetChildrenNumber();
 
         std::vector<GLfloat> children_x_end;
+        std::vector<GLfloat> children_x_middle_relative;
 
         GLfloat max_x_end = 0;
         GLfloat max_x_start = 0;
@@ -414,11 +415,13 @@ void updateTree(BT::TreeNode* tree, GLfloat x_pos, GLfloat y_pos, GLfloat y_offs
             if(children[i]->DrawType() != BT::ACTION && children[i]->DrawType() != BT::CONDITION)
             {
                 current_x_end = 0.04;
+                children_x_middle_relative.push_back(0.02);
             }
             else
             {
 
                 current_x_end = 0.02*compute_max_width(children[i]->get_name().c_str());
+                children_x_middle_relative.push_back(current_x_end/2);
             }
 
             if (i < M-1)
@@ -447,11 +450,15 @@ void updateTree(BT::TreeNode* tree, GLfloat x_pos, GLfloat y_pos, GLfloat y_offs
             {
                 std::cout << "drawing  " << i << " at " << x_shift + children_x_end.at(i-1) << std::endl;
                 updateTree(children[i], x_shift + children_x_end.at(i-1) , y_pos - y_offset  ,y_offset );
+
+                draw_edge(x_pos + 0.015, y_pos, 0.02, x_shift + children_x_end.at(i-1) + children_x_middle_relative.at(i), y_pos - y_offset, 0.02);
+
                 // draw_edge(tree->get_x_pose(), y_pos, 0.02, children[i]->get_x_pose() , y_pos - y_offset, 0.02);
             }
             else
             {
                 std::cout << "drawing  " << i << " at " << x_shift << std::endl;
+                draw_edge(x_pos + 0.015, y_pos, 0.02, x_shift + children_x_middle_relative.at(i), y_pos - y_offset, 0.02);
 
                 updateTree(children[i], x_shift , y_pos - y_offset  ,y_offset );
             }
