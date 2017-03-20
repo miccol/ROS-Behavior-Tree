@@ -15,6 +15,7 @@ void * font = font_array[0];
 float x = 0.0;
 float y = 0.4;
 float x_offset = 0.01;
+float y_offset = 0.15;
 float r_color = 1;
 float g_color = 1;
 float b_color = 1;
@@ -237,6 +238,31 @@ void draw_node(float x, float y, int node_type, const char *leafName, int status
 
 // draw the edge connecting one node to the other
 void draw_edge(GLfloat parent_x, GLfloat parent_y, GLfloat parent_size, GLfloat child_x, GLfloat child_y, GLfloat child_size)
+{
+    glLineWidth(1.5);
+    glColor3f(0.0, 0.0, 0.0);
+    GLfloat bottom_spacing = 0.1;
+    GLfloat above_spacing = 0.04;
+    glBegin(GL_LINES);
+    glVertex3f(parent_x, parent_y-parent_size,0);
+    glVertex3f(parent_x, child_y+child_size + above_spacing,0);
+    glEnd();
+        glBegin(GL_LINES);
+    glVertex3f(parent_x, child_y+child_size + above_spacing,0);
+    glVertex3f(child_x, child_y+child_size + above_spacing,0);
+    glEnd();
+        glBegin(GL_LINES);
+    glVertex3f(child_x, child_y+child_size + above_spacing,0);
+
+        glVertex3f(child_x, child_y+child_size, 0);
+
+    glEnd();
+
+
+}
+
+// draw the edge connecting one node to the other
+void draw_straight_edge(GLfloat parent_x, GLfloat parent_y, GLfloat parent_size, GLfloat child_x, GLfloat child_y, GLfloat child_size)
 {
     glLineWidth(1.5);
     glColor3f(0.0, 0.0, 0.0);
@@ -594,7 +620,7 @@ void display()
 
     //setpositions(tree, x , y, x_offset , 0.1 );
 
-    updateTree(tree, x , y , 0.1 );
+    updateTree(tree, x , y , y_offset );
 
 
     glutSwapBuffers();
