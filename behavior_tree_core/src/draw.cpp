@@ -27,6 +27,7 @@ double zoom = 1.0f;
 
 float fraction = 0.1f;
 float zoom_fraction =0.1f;
+std::vector<GLfloat> this_x_pos_vect;
 
 
 
@@ -403,6 +404,168 @@ void setpositions(BT::TreeNode* tree, GLfloat x_pos, GLfloat y_pos, GLfloat x_of
 
 
 
+
+
+//GLfloat updateTree(BT::TreeNode* tree, GLfloat x_pos, GLfloat y_pos, GLfloat y_offset , int depth)
+//{
+//    std::cout << "depth " << depth  << std::endl;
+
+//    //x_offset*pow(2,tree->Depth()-1)
+//    // GLfloat x_space = 0.01;
+
+//    BT::ControlNode* d = dynamic_cast<BT::ControlNode*> (tree);
+//    if (d == NULL)
+//    {//if it is a leaf node, draw it
+
+//        draw_node(x_pos , (GLfloat) y_pos, tree->DrawType(), tree->get_name().c_str(), tree->get_color_status());
+
+//        std::cout << "drawing  a leaf node "  << std::endl;
+//        std::cout << "x_pos_vect.size() " << this_x_pos_vect.size()  << std::endl;
+
+//        if ( depth >= this_x_pos_vect.size())
+//        {
+
+//            std::cout << "adding a depth " << depth  << std::endl;
+//            this_x_pos_vect.push_back(x_pos + 0.02*compute_max_width(tree->get_name().c_str()));
+//            std::cout << "x_pos_vect.size() " << this_x_pos_vect.size()  << std::endl;
+
+//        }
+//        else
+//        {
+//            this_x_pos_vect.at(depth) = x_pos + 0.02*compute_max_width(tree->get_name().c_str());
+
+//        }
+//    }
+//    else
+//    {//if it is a control flow node, draw it and its children
+//        std::cout << "drawing  a CFN "  << std::endl;
+
+//        //setpositions(tree, x_pos , y_pos, x_offset , 0.1 );
+//        draw_node((GLfloat) x_pos, (GLfloat) y_pos, tree->DrawType(), tree->get_name().c_str(), tree->get_color_status());
+
+
+//        std::vector<BT::TreeNode*> children = d->GetChildren();
+//        int M = d->GetChildrenNumber();
+
+//        std::vector<GLfloat> children_x_end;
+//        std::vector<GLfloat> children_x_middle_relative;
+//        //std::vector<GLfloat> this_x_pos_vect;
+
+//        GLfloat max_x_end = 0;
+//        GLfloat max_x_start = 0;
+//        GLfloat current_x_end = 0;
+
+//        for (int i = 0; i < M; i++)
+//        {
+
+
+//            if(children[i]->DrawType() != BT::ACTION && children[i]->DrawType() != BT::CONDITION)
+//            {
+//                current_x_end = 0.04;
+//                children_x_middle_relative.push_back(0.02);
+//            }
+//            else
+//            {
+
+//                current_x_end = 0.02*compute_max_width(children[i]->get_name().c_str());
+//                children_x_middle_relative.push_back(current_x_end/2);
+//            }
+
+//            if (i < M-1)
+//            {
+
+//                max_x_end = max_x_end + current_x_end + x_offset;
+//            }
+//            else
+//            {
+
+//                max_x_end = max_x_end + current_x_end;
+
+//            }
+//            children_x_end.push_back(max_x_end);
+//        }
+
+//        GLfloat x_min = 0.0;
+//        GLfloat x_max = 0.0;
+//        //  GLfloat x_space = 0.05;
+//   //     GLfloat x_shift = this_x_pos_vect.at(depth + 1 ) - max_x_end/2;
+//        GLfloat x_shift = x_pos - max_x_end/2;
+//        GLfloat x_shift_new = 0;
+//        std::cout << "drawing the Children "  << std::endl;
+
+//        for (int i = 0; i < M; i++)
+//        {
+//            if(i > 0)
+//            {
+
+//                if (i ==  M - 1)
+//                {
+//                    x_max = x_shift + children_x_middle_relative.at(i) + this_x_pos_vect.at(depth);
+
+
+//                }
+
+//                std::cout << "drawing  " << i << " at " << x_shift + children_x_end.at(i-1) << std::endl;
+//                std::cout << "size of x_pos_vect" << this_x_pos_vect.size()<< std::endl;
+
+//                std::cout << "depth" << depth << std::endl;
+
+//                if (depth + 1 >= this_x_pos_vect.size())
+//                {
+//                updateTree(children[i], x_shift, y_pos - y_offset  ,y_offset,  depth + 1 );
+//               // draw_edge(x_pos + 0.015, y_pos, 0.02, x_shift + children_x_end.at(i-1) + children_x_middle_relative.at(i) , y_pos - y_offset, 0.02);
+//                }
+//                else
+//                {
+
+//                    updateTree(children[i], x_shift + children_x_end.at(i-1) + this_x_pos_vect.at(depth + 1 ), y_pos - y_offset  ,y_offset,  depth + 1 );
+
+//                    draw_edge(x_pos + 0.015, y_pos, 0.02, x_shift + children_x_end.at(i-1) + children_x_middle_relative.at(i) + this_x_pos_vect.at(depth + 1 ), y_pos - y_offset, 0.02);
+
+//                }
+
+
+//                // draw_edge(tree->get_x_pose(), y_pos, 0.02, children[i]->get_x_pose() , y_pos - y_offset, 0.02);
+//            }
+//            else
+//            {
+//                x_min = x_shift + children_x_middle_relative.at(i) + this_x_pos_vect.at(depth);
+//                std::cout << "drawing  " << i << " at " << x_shift << std::endl;
+//               // draw_edge(x_pos + 0.015, y_pos, 0.02, x_shift + children_x_middle_relative.at(i) + this_x_pos_vect.at(depth), y_pos - y_offset, 0.02);
+//                if (depth + 1 >= this_x_pos_vect.size())
+//                {
+//                updateTree(children[i], x_shift  , y_pos - y_offset  ,y_offset, depth + 1  );
+//                }
+//                else
+//                {
+
+//                    updateTree(children[i], x_shift + this_x_pos_vect.at(depth + 1) , y_pos - y_offset  ,y_offset, depth + 1  );
+
+//                }
+//            }
+//        }
+
+
+
+
+//        //exit(0);
+
+
+//        //return x_shift_new + (x_min+x_max)/2;
+
+////        if (this_x_pos_vect.size() > depth)
+////        {
+////            this_x_pos_vect.at(depth) = x_pos + 0.02;
+////        }
+////        else
+////        {
+////           this_x_pos_vect.push_back(x_pos + 0.02);
+////        }
+//    }
+//}
+
+
+
 void updateTree(BT::TreeNode* tree, GLfloat x_pos, GLfloat y_pos, GLfloat y_offset )
 {
 
@@ -453,7 +616,7 @@ void updateTree(BT::TreeNode* tree, GLfloat x_pos, GLfloat y_pos, GLfloat y_offs
             if (i < M-1)
             {
 
-                max_x_end = max_x_end + current_x_end + x_offset;
+                max_x_end = max_x_end + current_x_end + x_space;
             }
             else
             {
@@ -544,68 +707,6 @@ void updateTree(BT::TreeNode* tree, GLfloat x_pos, GLfloat y_pos, GLfloat y_offs
 //    }
 //}
 
-//GLfloat updateTree(BT::TreeNode* tree, GLfloat x_pos, GLfloat y_pos, GLfloat y_offset )
-//{
-
-//    GLfloat x_offset = 0.05;
-//    //x_offset*pow(2,tree->Depth()-1)
-//   // GLfloat x_space = 0.01;
-
-//    BT::ControlNode* d = dynamic_cast<BT::ControlNode*> (tree);
-//    if (d == NULL)
-//    {//if it is a leaf node, draw it
-
-//        GLfloat this_width = 0.01*compute_max_width(tree->get_name().c_str());
-
-//        if(x_pos > 0)
-//        {
-//            draw_node((GLfloat) x_pos + this_width + x_offset  , (GLfloat) y_pos, tree->DrawType(), tree->get_name().c_str(), tree->get_color_status());
-//            return x_pos + this_width + x_offset;
-
-//        }
-//        else
-//        {
-
-//            draw_node((GLfloat) x_pos  , (GLfloat) y_pos, tree->DrawType(), tree->get_name().c_str(), tree->get_color_status());
-//            return x_pos + this_width;
-
-//        }
-//        //std::cout << "child at returns : " << new_pos << std::endl;
-
-
-//    }
-//    else
-//    {//if it is a control flow node, draw it and its children
-//        std::vector<BT::TreeNode*> children = d->GetChildren();
-//        int M = d->GetChildrenNumber();
-//        GLfloat x_min = 0.0;
-//        GLfloat x_max = 0.0;
-//      //  GLfloat x_space = 0.05;
-//        GLfloat x_shift = x_pos;
-//        GLfloat x_shift_new = 0.0;
-
-//        GLfloat new_pos = x_pos;
-//        GLfloat x_start = x_pos;
-//        GLfloat x_end = x_pos;
-//        bool is_even = true;
-
-
-
-
-//        for (int i = 0; i < M; i++)
-//        {
-//            std::cout << "drawing child at x_pos: " << new_pos << std::endl;
-
-//            x_end = updateTree(children[i], new_pos, y_pos - y_offset  ,y_offset );
-//      //      draw_edge(tree->get_x_pose(), y_pos, 0.02, new_pos , y_pos - y_offset, 0.02);
-//            new_pos+= x_end;
-//        }
-
-//        draw_node((x_end - x_start)/2, (GLfloat) y_pos, tree->DrawType(), tree->get_name().c_str(), tree->get_color_status());
-
-
-//    }
-//}
 
 
 
@@ -619,9 +720,13 @@ void display()
     glClear(GL_COLOR_BUFFER_BIT);   // Erase everything
 
     //setpositions(tree, x , y, x_offset , 0.1 );
+    if(this_x_pos_vect.empty())
+    {
+      //  this_x_pos_vect.push_back(0.0);
+    }
 
-    updateTree(tree, x , y , y_offset );
-
+    updateTree(tree, x , y, y_offset);
+   // exit(2);
 
     glutSwapBuffers();
     glutPostRedisplay();

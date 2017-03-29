@@ -12,7 +12,7 @@
 
 void drawEllipse(float xradius, float yradius);
 
-GLfloat drawTree(BT::ControlNode* tree_);
+void drawTree(BT::ControlNode* tree_);
 
 void resize(int width, int height);
 
