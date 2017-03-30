@@ -8,24 +8,25 @@
 #include <behavior_tree_core/BTAction.h>
 namespace BT
 {
-    class ROSAction : public ActionNode
-    {
-    public:
-        // Constructor
-        ROSAction(std::string name);
-        ~ROSAction();
+class ROSAction : public ActionNode
+{
+public:
+    // Constructor
+    ROSAction(std::string name);
+    ~ROSAction();
 
-        // The method that is going to be executed by the thread
-        void Exec();
+    // The method that is going to be executed by the thread
+    void WaitForTick();
 
-        // The method used to interrupt the execution of the node
-        bool Halt();
+    // The method used to interrupt the execution of the node
+    void Halt();
 
-  	//actionlib::SimpleActionClient<bt_actions::BTAction> ac();
+    //actionlib::SimpleActionClient<bt_actions::BTAction> ac();
 
-	  behavior_tree_core::BTResult node_result;
-          behavior_tree_core::BTGoal goal;
-    };
+    behavior_tree_core::BTResult node_result;
+    behavior_tree_core::BTGoal goal;
+
+};
 }
 
 #endif

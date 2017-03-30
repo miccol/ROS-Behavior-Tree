@@ -25,7 +25,7 @@ protected:
 public:
 
   BTAction(std::string name) :
-    as_(nh_, name, boost::bind(&BTAction::executeCB, this, _1), false),
+    as_(nh_, name, boost::bind(&BTAction::execute_callback, this, _1), false),
     action_name_(name)
   {
  //start the action server (action in sense of Actionlib not BT action)
@@ -39,19 +39,19 @@ public:
   {
 
   }
-  void executeCB(const behavior_tree_core::BTGoalConstPtr &goal)
+  void execute_callback(const behavior_tree_core::BTGoalConstPtr &goal)
   {
     if(true){
-    setStatus(SUCCESS);
+    set_status(SUCCESS);
     }else{
-    setStatus(FAILURE);
+    set_status(FAILURE);
     }
   }
 
 
 
   //returns the status to the client (Behavior Tree)
-    void setStatus(int status){
+    void set_status(int status){
         //Set The feedback and result of BT.action
         feedback_.status = status;
         result_.status = feedback_.status;

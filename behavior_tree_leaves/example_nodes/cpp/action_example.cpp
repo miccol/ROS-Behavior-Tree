@@ -24,7 +24,7 @@ public:
 
 
   BTAction(std::string name) :
-    as_(nh_, name, boost::bind(&BTAction::executeCB, this, _1), false),
+    as_(nh_, name, boost::bind(&BTAction::execute_callback, this, _1), false),
     action_name_(name)
   {
    //Starts the action server
@@ -39,7 +39,7 @@ public:
 
   }
 
-  void executeCB(const behavior_tree_core::BTGoalConstPtr &goal)
+  void execute_callback(const behavior_tree_core::BTGoalConstPtr &goal)
   {
 
     // publish info to the console for the user
@@ -69,14 +69,14 @@ public:
 
     if (i == 5)
     {
-        setStatus(SUCCESS);
+        set_status(SUCCESS);
     }
 
   }
 
 
 //returns the status to the client (Behavior Tree)
-  void setStatus(int status){
+  void set_status(int status){
       //Set The feedback and result of BT.action
       feedback_.status = status;
       result_.status = feedback_.status;

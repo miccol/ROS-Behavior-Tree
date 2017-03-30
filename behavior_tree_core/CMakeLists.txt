@@ -35,6 +35,7 @@ catkin_package(
 )
 
 
+
 #########################################################
 # FIND GLUT
 #########################################################
@@ -87,8 +88,8 @@ src/sequence_node_with_memory.cpp
 src/tree_node.cpp
 src/actions/action_test_node.cpp
 src/conditions/condition_test_node.cpp
-#src/actions/ros_action.cpp
-#src/conditions/ros_condition.cpp
+src/actions/ros_action.cpp
+src/conditions/ros_condition.cpp
 )
 
 
