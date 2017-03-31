@@ -375,7 +375,6 @@ void updateTree(BT::TreeNode* tree, GLfloat x_pos, GLfloat y_pos, GLfloat y_offs
         {
             if(i > 0)
             {
-                std::cout << "drawing  " << i << " at " << x_shift + children_x_end.at(i-1) << std::endl;
                 updateTree(children[i], x_shift + children_x_end.at(i-1) , y_pos - y_offset  ,y_offset );
 
                 draw_edge(x_pos + 0.015, y_pos, 0.02, x_shift + children_x_end.at(i-1) + children_x_middle_relative.at(i), y_pos - y_offset, 0.02);
@@ -384,7 +383,6 @@ void updateTree(BT::TreeNode* tree, GLfloat x_pos, GLfloat y_pos, GLfloat y_offs
             }
             else
             {
-                std::cout << "drawing  " << i << " at " << x_shift << std::endl;
                 draw_edge(x_pos + 0.015, y_pos, 0.02, x_shift + children_x_middle_relative.at(i), y_pos - y_offset, 0.02);
 
                 updateTree(children[i], x_shift , y_pos - y_offset  ,y_offset );

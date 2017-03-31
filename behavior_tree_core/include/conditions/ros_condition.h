@@ -7,18 +7,21 @@
 #include <behavior_tree_core/BTAction.h>
 namespace BT
 {
-    class ROSCondition : public ConditionNode
-    {
-    public:
-        // Constructor
-        ROSCondition(std::string Name);
-        ~ROSCondition();
+class ROSCondition : public ConditionNode
+{
+protected:
+    actionlib::SimpleActionClient<behavior_tree_core::BTAction> action_client_;
+    behavior_tree_core::BTResult node_result;
+    behavior_tree_core::BTGoal goal;
+public:
+    // Constructor
+    ROSCondition(std::string Name);
+    ~ROSCondition();
 
-        // The method that is going to be executed by the thread
-        void Exec();
-	  behavior_tree_core::BTResult node_result;
-          behavior_tree_core::BTGoal goal;
-    };
+    // The method that is going to be executed by the thread
+    ReturnStatus Tick();
+
+};
 }
 
 #endif

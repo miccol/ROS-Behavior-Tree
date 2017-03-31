@@ -21,8 +21,8 @@
 
 #include <actions/action_test_node.h>
 #include <conditions/condition_test_node.h>
-//#include <actions/ros_action.h>
-//#include <conditions/ros_condition.h>
+#include <actions/ros_action.h>
+#include <conditions/ros_condition.h>
 
 
 #include <exceptions.h>

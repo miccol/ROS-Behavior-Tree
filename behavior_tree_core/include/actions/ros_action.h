@@ -10,6 +10,10 @@ namespace BT
 {
 class ROSAction : public ActionNode
 {
+protected:
+    actionlib::SimpleActionClient<behavior_tree_core::BTAction> action_client_;
+    behavior_tree_core::BTResult node_result;
+    behavior_tree_core::BTGoal goal;
 public:
     // Constructor
     ROSAction(std::string name);
@@ -21,10 +25,6 @@ public:
     // The method used to interrupt the execution of the node
     void Halt();
 
-    //actionlib::SimpleActionClient<bt_actions::BTAction> ac();
-
-    behavior_tree_core::BTResult node_result;
-    behavior_tree_core::BTGoal goal;
 
 };
 }
