@@ -1,4 +1,4 @@
-<strong>NEWS</strong>: Version 1.2 available in beta (version1.2 branch) with better visualization and use of Google code styling.
+<strong>NEWS</strong>: Version 1.3 available in beta (version1.2 branch) with better visualization and use of Google code styling.
 
 ROS-Behavior-Tree ![License MIT](https://img.shields.io/dub/l/vibe-d.svg)
 ====
