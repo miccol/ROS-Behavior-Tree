@@ -6,15 +6,15 @@
 
 namespace BT
 {
-    /// Exception class
-    class BehaviorTreeException : public std::exception
-    {
-    private:
-        const char* Message;
-    public:
-        BehaviorTreeException(const std::string Message);
-        const char* what();
-    };
+/// Exception class
+class BehaviorTreeException : public std::exception
+{
+private:
+    const char* Message;
+public:
+    BehaviorTreeException(const std::string Message);
+    const char* what();
+};
 }
 
 #endif

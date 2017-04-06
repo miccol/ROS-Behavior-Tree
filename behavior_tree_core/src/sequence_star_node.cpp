@@ -105,7 +105,8 @@ void BT::SequenceStarNode::Exec()
 
                     // 3.4) the "for" loop must end here.
                     break;
-                } else if (children_states_[i] == BT::SUCCESS) //If the child i returns success, the sequence star node can tick the next child
+                }
+                else if (children_states_[i] == BT::SUCCESS)   //If the child i returns success, the sequence star node can tick the next child
                 {
                     i++;
                 }

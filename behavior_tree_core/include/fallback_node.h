@@ -5,16 +5,16 @@
 
 namespace BT
 {
-    class FallbackNode : public ControlNode
-    {
-    public:
-        // Constructor
-        FallbackNode(std::string name);
-        ~FallbackNode();
-        int DrawType();
-        // The method that is going to be executed by the thread
-        BT::ReturnStatus Tick();
-    };
+class FallbackNode : public ControlNode
+{
+public:
+    // Constructor
+    FallbackNode(std::string name);
+    ~FallbackNode();
+    int DrawType();
+    // The method that is going to be executed by the thread
+    BT::ReturnStatus Tick();
+};
 }
 
 #endif

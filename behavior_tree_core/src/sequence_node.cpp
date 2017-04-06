@@ -19,11 +19,11 @@ BT::ReturnStatus BT::SequenceNode::Tick()
 
     for (unsigned int i = 0; i < N_of_children_; i++)
     {
-/*      Ticking an action is different from ticking a condition. An action executed some portion of code in another thread.
-        We want this thread detached so we can cancel its execution (when the action no longer receive ticks).
-        Hence we cannot just call the method Tick() from the action as doing so will block the execution of the tree.
-        For this reason if a child of this node is an action, then we send the tick using the tick engine. Otherwise we call the method Tick() and wait for the response.
-*/
+        /*      Ticking an action is different from ticking a condition. An action executed some portion of code in another thread.
+                We want this thread detached so we can cancel its execution (when the action no longer receive ticks).
+                Hence we cannot just call the method Tick() from the action as doing so will block the execution of the tree.
+                For this reason if a child of this node is an action, then we send the tick using the tick engine. Otherwise we call the method Tick() and wait for the response.
+        */
         if (children_nodes_[i]->get_type() == BT::ACTION_NODE)
         {
             //1) If the child i is an action, read its state.
@@ -66,11 +66,13 @@ BT::ReturnStatus BT::SequenceNode::Tick()
             return child_i_status_;
         }
         else
-        {//the child returned success.
+        {
+            //the child returned success.
             children_nodes_[i]->set_status(BT::IDLE);
 
             if(i == N_of_children_ - 1)
-            {  // If the  child status is success, and it is the last child to be ticked, then the sequence has succeeded.
+            {
+                // If the  child status is success, and it is the last child to be ticked, then the sequence has succeeded.
                 set_status(BT::SUCCESS);
                 return BT::SUCCESS;
             }

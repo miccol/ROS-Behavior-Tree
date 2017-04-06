@@ -10,8 +10,11 @@ BT::ActionNode::ActionNode(std::string name) : LeafNode::LeafNode(name)
 BT::ActionNode::~ActionNode() {}
 
 
-BT::ReturnStatus BT::ActionNode::Tick(){ return BT::EXIT;}//not used in action node.
-                                                       //An action node runs the WaitForTick() instead throuh the tick engine.
+BT::ReturnStatus BT::ActionNode::Tick()
+{
+    return BT::EXIT;   //not used in action node.
+}
+//An action node runs the WaitForTick() instead throuh the tick engine.
 
 
 int BT::ActionNode::DrawType()

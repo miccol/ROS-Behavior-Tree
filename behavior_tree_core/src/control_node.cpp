@@ -55,7 +55,8 @@ void BT::ControlNode::ResetColorState()
     }
 }
 
-void BT::ControlNode::HaltChildren(int i){
+void BT::ControlNode::HaltChildren(int i)
+{
     for(unsigned int j=i; j<children_nodes_.size(); j++)
     {
         //TODO FIX this
@@ -85,17 +86,17 @@ void BT::ControlNode::HaltChildren(int i){
 
 int BT::ControlNode::Depth()
 {
-        int depMax = 0;
-        int dep = 0;
-        for (int i = 0; i < children_nodes_.size(); i++)
+    int depMax = 0;
+    int dep = 0;
+    for (int i = 0; i < children_nodes_.size(); i++)
+    {
+        dep = (children_nodes_[i]->Depth());
+        if (dep > depMax)
         {
-            dep = (children_nodes_[i]->Depth());
-           if (dep > depMax)
-           {
-               depMax = dep;
-           }
-
+            depMax = dep;
         }
-      return 1 + depMax;
+
+    }
+    return 1 + depMax;
 }
 

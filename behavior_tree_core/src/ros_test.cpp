@@ -20,13 +20,13 @@ int main(int argc, char **argv)
 
         Execute(sequence1, TickPeriod_milliseconds);//from BehaviorTree.cpp
 
-}
+    }
     catch (BT::BehaviorTreeException& Exception)
     {
         std::cout << Exception.what() << std::endl;
     }
 
-return 0;
+    return 0;
 }
 
 

@@ -5,16 +5,16 @@
 
 namespace BT
 {
-    class SelectorStarNode : public ControlNode
-    {
-    public:
-        // Constructor
-        SelectorStarNode(std::string name);
-        ~SelectorStarNode();
-        int DrawType();
-        // The method that is going to be executed by the thread
-        void Exec();
-    };
+class SelectorStarNode : public ControlNode
+{
+public:
+    // Constructor
+    SelectorStarNode(std::string name);
+    ~SelectorStarNode();
+    int DrawType();
+    // The method that is going to be executed by the thread
+    void Exec();
+};
 }
 
 #endif

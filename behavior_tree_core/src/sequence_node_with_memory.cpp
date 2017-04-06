@@ -94,7 +94,8 @@ BT::ReturnStatus BT::SequenceNodeWithMemory::Tick()
             // If the  child status is success, continue to the next child (if any, hence if(current_child_ != N_of_children_ - 1) ) in the for loop (if any).
             current_child_idx_++;
 
-        }else
+        }
+        else
         {
             //if it the last child.
             if(child_i_status_ == BT::SUCCESS)

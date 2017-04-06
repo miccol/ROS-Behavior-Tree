@@ -96,15 +96,16 @@ void BT::SelectorStarNode::Exec()
                     WriteState(BT::IDLE);
                     if (children_states_[i] == BT::SUCCESS)
                     {
-                     i = 0; // Final state_ of rhe selector node. child index reinitialized
-                     }
+                        i = 0; // Final state_ of rhe selector node. child index reinitialized
+                    }
 
 
                     std::cout << get_name() << " returning " << children_states_[i] << "!" << std::endl;
 
                     // 3.4) the while loop must end here.
                     break;
-                } else if(children_states_[i] == BT::FAILURE)//if child i has failed the selector star node can tick the next child
+                }
+                else if(children_states_[i] == BT::FAILURE)  //if child i has failed the selector star node can tick the next child
                 {
                     i ++;
                 }

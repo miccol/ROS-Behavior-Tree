@@ -11,108 +11,110 @@ class BTAction
 {
 protected:
 
-  ros::NodeHandle nh_;
-  // NodeHandle instance must be created before this line. Otherwise strange error may occur.
-  actionlib::SimpleActionServer<behavior_tree_core::BTAction> as_;
-  std::string action_name_;
-  // create messages that are used to published feedback/result
-  behavior_tree_core::BTFeedback feedback_; //action feedback (SUCCESS, FAILURE)
-  behavior_tree_core::BTResult result_;//action feedback  (same as feedback for us)
+    ros::NodeHandle nh_;
+    // NodeHandle instance must be created before this line. Otherwise strange error may occur.
+    actionlib::SimpleActionServer<behavior_tree_core::BTAction> as_;
+    std::string action_name_;
+    // create messages that are used to published feedback/result
+    behavior_tree_core::BTFeedback feedback_; //action feedback (SUCCESS, FAILURE)
+    behavior_tree_core::BTResult result_;//action feedback  (same as feedback for us)
 
 
 public:
 
 
-  BTAction(std::string name) :
-    as_(nh_, name, boost::bind(&BTAction::executeCB, this, _1), false),
-    action_name_(name)
-  {
-   //Starts the action server
-    as_.start();
-
-
-  }
-
-  ~BTAction(void)
-  {
-
-
-  }
-
-  void executeCB(const behavior_tree_core::BTGoalConstPtr &goal)
-  {
-
-    // publish info to the console for the user
-    ROS_INFO("Starting Action");
-
-    // start executing the action
-    while(/*YOUR LOOP CONDITION (IF ANY)*/)
+    BTAction(std::string name) :
+        as_(nh_, name, boost::bind(&BTAction::executeCB, this, _1), false),
+        action_name_(name)
     {
-      // check that preempt has not been requested by the client
-      if (as_.isPreemptRequested() || !ros::ok())
-      {
-        ROS_INFO("Action Halted");
+        //Starts the action server
+        as_.start();
 
 
- /*
-            HERE THE CODE TO EXECUTE WHEN THE  BEHAVIOR TREE DOES HALT THE ACTION
-*/
+    }
+
+    ~BTAction(void)
+    {
 
 
-        // set the action state to preempted
-        as_.setPreempted();
-        success = false;
-        break;
-      }
+    }
+
+    void executeCB(const behavior_tree_core::BTGoalConstPtr &goal)
+    {
+
+        // publish info to the console for the user
+        ROS_INFO("Starting Action");
+
+        // start executing the action
+        while(/*YOUR LOOP CONDITION (IF ANY)*/)
+        {
+            // check that preempt has not been requested by the client
+            if (as_.isPreemptRequested() || !ros::ok())
+            {
+                ROS_INFO("Action Halted");
 
 
-      ROS_INFO("Executing Action");
-/*
-          HERE THE CODE TO EXECUTE AS LONG AS THE BEHAVIOR TREE DOES NOT HALT THE ACTION
-*/
+                /*
+                           HERE THE CODE TO EXECUTE WHEN THE  BEHAVIOR TREE DOES HALT THE ACTION
+                */
+
+
+                // set the action state to preempted
+                as_.setPreempted();
+                success = false;
+                break;
+            }
+
+
+            ROS_INFO("Executing Action");
+            /*
+                      HERE THE CODE TO EXECUTE AS LONG AS THE BEHAVIOR TREE DOES NOT HALT THE ACTION
+            */
 
 
 
-   }
-    //If the action succeeded
-         setStatus(SUCCESS);
-    //If the action Failed
-         setStatus(FAILURE);
+        }
+        //If the action succeeded
+        setStatus(SUCCESS);
+        //If the action Failed
+        setStatus(FAILURE);
 
-  }
+    }
 
 
 //returns the status to the client (Behavior Tree)
-  void setStatus(int status){
-      //Set The feedback and result of BT.action
-      feedback_.status = status;
-      result_.status = feedback_.status;
-      // publish the feedback
-      as_.publishFeedback(feedback_);
-      // setSucceeded means that it has finished the action (it has returned SUCCESS or FAILURE).
-      as_.setSucceeded(result_);
+    void setStatus(int status)
+    {
+        //Set The feedback and result of BT.action
+        feedback_.status = status;
+        result_.status = feedback_.status;
+        // publish the feedback
+        as_.publishFeedback(feedback_);
+        // setSucceeded means that it has finished the action (it has returned SUCCESS or FAILURE).
+        as_.setSucceeded(result_);
 
-      switch(status){//Print for convenience
-      case SUCCESS:
-        ROS_INFO("Action %s Succeeded", ros::this_node::getName().c_str() );
-        break;
-      case FAILURE:
-          ROS_INFO("Action %s Failed", ros::this_node::getName().c_str() );
-        break;
-      default:
-        break;
-      }
-  }
+        switch(status) //Print for convenience
+        {
+        case SUCCESS:
+            ROS_INFO("Action %s Succeeded", ros::this_node::getName().c_str() );
+            break;
+        case FAILURE:
+            ROS_INFO("Action %s Failed", ros::this_node::getName().c_str() );
+            break;
+        default:
+            break;
+        }
+    }
 };
 
 
 int main(int argc, char** argv)
 {
-  ros::init(argc, argv, /*name of your action as a std::string*/);
-      ROS_INFO(" Enum: %d",RUNNING);
-      ROS_INFO(" Action Ready for Ticks");
-  BTAction bt_action(ros::this_node::getName());
-  ros::spin();
+    ros::init(argc, argv, /*name of your action as a std::string*/);
+    ROS_INFO(" Enum: %d",RUNNING);
+    ROS_INFO(" Action Ready for Ticks");
+    BTAction bt_action(ros::this_node::getName());
+    ros::spin();
 
-  return 0;
+    return 0;
 }

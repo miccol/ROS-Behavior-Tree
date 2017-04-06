@@ -15,9 +15,9 @@ BT::ReturnStatus BT::ConditionTestNode::Tick()
 
     //    while(true)
     {
-	
+
         // Waiting for a tick to come
-     //   tick_engine.wait();
+        //   tick_engine.wait();
 
         if(get_status() == BT::EXIT)
         {
@@ -40,7 +40,7 @@ BT::ReturnStatus BT::ConditionTestNode::Tick()
             return BT::FAILURE;
 
         }
-	
+
 
 
     }
@@ -51,8 +51,8 @@ BT::ReturnStatus BT::ConditionTestNode::Tick()
 
 
 
-	void BT::ConditionTestNode::set_boolean_value(bool boolean_value)
-	{
-		boolean_value_ = boolean_value;
-	}
+void BT::ConditionTestNode::set_boolean_value(bool boolean_value)
+{
+    boolean_value_ = boolean_value;
+}
 

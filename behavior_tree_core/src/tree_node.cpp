@@ -56,28 +56,28 @@ void BT::TreeNode::set_color_status(ReturnStatus new_color_status)
 float BT::TreeNode::get_x_pose()
 {
 
-return x_pose_;
+    return x_pose_;
 }
 
 
 void BT::TreeNode::set_x_pose(float x_pose)
 {
 
-x_pose_ = x_pose;
+    x_pose_ = x_pose;
 }
 
 
 float BT::TreeNode::get_x_shift()
 {
 
-return x_shift_;
+    return x_shift_;
 }
 
 
 void BT::TreeNode::set_x_shift(float x_shift)
 {
 
-x_shift_ = x_shift;
+    x_shift_ = x_shift;
 }
 
 
@@ -85,7 +85,7 @@ x_shift_ = x_shift;
 void BT::TreeNode::set_name(std::string new_name)
 {
 
-name_ = new_name;
+    name_ = new_name;
 
 }
 
@@ -93,7 +93,7 @@ name_ = new_name;
 std::string BT::TreeNode::get_name()
 {
 
-return name_;
+    return name_;
 
 }
 
@@ -101,7 +101,7 @@ return name_;
 BT::NodeType BT::TreeNode::get_type()
 {
 
-return type_;
+    return type_;
 
 }
 

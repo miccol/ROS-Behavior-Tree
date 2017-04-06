@@ -5,31 +5,31 @@
 
 namespace BT
 {
-    class ActionTestNode : public ActionNode
-    {
+class ActionTestNode : public ActionNode
+{
 
-    public:
+public:
 
-        // Constructor
-        ActionTestNode(std::string Name);
-        ~ActionTestNode();
+    // Constructor
+    ActionTestNode(std::string Name);
+    ~ActionTestNode();
 
-        // The method that is going to be executed by the thread
-        void WaitForTick();
+    // The method that is going to be executed by the thread
+    void WaitForTick();
     //    BT::ReturnStatus Tick();
-      //  void set_status(ReturnStatus status);
-        void set_time(int time);
-	
-        // The method used to interrupt the execution of the node
-        void Halt();
-        void set_boolean_value(bool boolean_value);
-    private:
-        int time_;
-        bool boolean_value_;
+    //  void set_status(ReturnStatus status);
+    void set_time(int time);
 
-        ///ReturnStatus status_;
+    // The method used to interrupt the execution of the node
+    void Halt();
+    void set_boolean_value(bool boolean_value);
+private:
+    int time_;
+    bool boolean_value_;
 
-    };
+    ///ReturnStatus status_;
+
+};
 }
 
 #endif

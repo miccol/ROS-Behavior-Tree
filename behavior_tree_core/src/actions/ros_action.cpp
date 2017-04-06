@@ -21,34 +21,36 @@ BT::ROSAction::~ROSAction() {}
 void BT::ROSAction::WaitForTick()
 {
 
-      while(true)
-      {
-          // Waiting for a tick to come
-          tick_engine.Wait();
+    while(true)
+    {
+        // Waiting for a tick to come
+        tick_engine.Wait();
 
-          // Running state
-          node_result.status = BT::RUNNING;
-          set_status(BT::RUNNING);
-          // Perform action...
-          ROS_INFO("I am running the request to %s",get_name().c_str());
-          action_client_.sendGoal(goal);
-          do
-          {
-              node_result = *(action_client_.getResult());//checking the result
-          } while(node_result.status == BT::RUNNING && get_status() != BT::HALTED);
+        // Running state
+        node_result.status = BT::RUNNING;
+        set_status(BT::RUNNING);
+        // Perform action...
+        ROS_INFO("I am running the request to %s",get_name().c_str());
+        action_client_.sendGoal(goal);
+        do
+        {
+            node_result = *(action_client_.getResult());//checking the result
+        }
+        while(node_result.status == BT::RUNNING && get_status() != BT::HALTED);
 
-          if(get_status() == BT::HALTED)
-          {
-              ROS_INFO("The Node is Halted");
-              ROS_INFO("I am Halting the client");
-              action_client_.cancelGoal();
-          }
-          else{
-              ROS_INFO("The Server Has Replied");
-              // Set this node status according to what the external node replied
-              set_status((ReturnStatus)node_result.status);
-          }
-      }
+        if(get_status() == BT::HALTED)
+        {
+            ROS_INFO("The Node is Halted");
+            ROS_INFO("I am Halting the client");
+            action_client_.cancelGoal();
+        }
+        else
+        {
+            ROS_INFO("The Server Has Replied");
+            // Set this node status according to what the external node replied
+            set_status((ReturnStatus)node_result.status);
+        }
+    }
 }
 
 

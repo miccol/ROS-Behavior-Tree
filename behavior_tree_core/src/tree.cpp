@@ -43,7 +43,7 @@ int main(int argc, char **argv)
 
 
         sequence2->AddChild(action2);
-       // sequence2->AddChild(sequence3);
+        // sequence2->AddChild(sequence3);
         sequence2->AddChild(condition2);
 
 
@@ -77,13 +77,13 @@ int main(int argc, char **argv)
 
         Execute(sequence1, TickPeriod_milliseconds);//from BehaviorTree.cpp
 
-}
+    }
     catch (BT::BehaviorTreeException& Exception)
     {
         std::cout << Exception.what() << std::endl;
     }
 
-return 0;
+    return 0;
 }
 
 

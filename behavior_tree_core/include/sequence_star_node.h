@@ -5,16 +5,16 @@
 
 namespace BT
 {
-    class SequenceStarNode : public ControlNode
-    {
-    public:
-        // Constructor
-        SequenceStarNode(std::string name);
-        ~SequenceStarNode();
+class SequenceStarNode : public ControlNode
+{
+public:
+    // Constructor
+    SequenceStarNode(std::string name);
+    ~SequenceStarNode();
     int DrawType();
-        // The method that is going to be executed by the thread
-        void Exec();
-    };
+    // The method that is going to be executed by the thread
+    void Exec();
+};
 }
 
 #endif

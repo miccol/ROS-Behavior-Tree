@@ -45,13 +45,12 @@ void BT::ActionTestNode::WaitForTick()
             {
                 set_status(BT::SUCCESS);
                 DEBUG_STDOUT(" Action " << get_name() << " Done!");
-                i = 0;
 
-            }else
+            }
+            else
             {
                 set_status(BT::FAILURE);
                 DEBUG_STDOUT(" Action " << get_name() << " FAILED!");
-                i = 0;
 
             }
         }
@@ -70,7 +69,8 @@ void BT::ActionTestNode::Halt()
 //    status_ = status;
 //}
 
-void BT::ActionTestNode::set_time(int time){
+void BT::ActionTestNode::set_time(int time)
+{
     time_ = time;
 }
 

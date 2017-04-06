@@ -7,7 +7,7 @@ struct SimpleSequenceTest : testing::Test
 {
     BT:: SequenceNode* root;
     BT::ActionTestNode* action;
-     BT::ConditionTestNode* condition;
+    BT::ConditionTestNode* condition;
     SimpleSequenceTest()
     {
         action = new BT::ActionTestNode("action");
@@ -28,7 +28,7 @@ struct ComplexSequenceTest : testing::Test
     BT::ConditionTestNode* condition_1;
     BT::ConditionTestNode* condition_2;
 
-     BT:: SequenceNode* seq_conditions;
+    BT:: SequenceNode* seq_conditions;
 
     ComplexSequenceTest()
     {
@@ -88,7 +88,7 @@ struct SimpleFallbackTest : testing::Test
 {
     BT:: FallbackNode* root;
     BT::ActionTestNode* action;
-     BT::ConditionTestNode* condition;
+    BT::ConditionTestNode* condition;
     SimpleFallbackTest()
     {
         action = new BT::ActionTestNode("action");
@@ -139,7 +139,7 @@ struct BehaviorTreeTest : testing::Test
     BT::ConditionTestNode* condition_1;
     BT::ConditionTestNode* condition_2;
 
-     BT:: FallbackNode* sel_conditions;
+    BT:: FallbackNode* sel_conditions;
 
     BehaviorTreeTest()
     {
@@ -164,7 +164,7 @@ struct SimpleSequenceWithMemoryTest : testing::Test
 {
     BT:: SequenceNodeWithMemory* root;
     BT::ActionTestNode* action;
-     BT::ConditionTestNode* condition;
+    BT::ConditionTestNode* condition;
     SimpleSequenceWithMemoryTest()
     {
         action = new BT::ActionTestNode("action");
@@ -189,8 +189,8 @@ struct ComplexSequenceWithMemoryTest : testing::Test
     BT::ConditionTestNode* condition_1;
     BT::ConditionTestNode* condition_2;
 
-     BT:: SequenceNodeWithMemory* seq_conditions;
-     BT:: SequenceNodeWithMemory* seq_actions;
+    BT:: SequenceNodeWithMemory* seq_conditions;
+    BT:: SequenceNodeWithMemory* seq_actions;
 
     ComplexSequenceWithMemoryTest()
     {
@@ -220,7 +220,7 @@ struct SimpleFallbackWithMemoryTest : testing::Test
 {
     BT::FallbackNodeWithMemory* root;
     BT::ActionTestNode* action;
-     BT::ConditionTestNode* condition;
+    BT::ConditionTestNode* condition;
     SimpleFallbackWithMemoryTest()
     {
         action = new BT::ActionTestNode("action");
@@ -245,8 +245,8 @@ struct ComplexFallbackWithMemoryTest : testing::Test
     BT::ConditionTestNode* condition_1;
     BT::ConditionTestNode* condition_2;
 
-     BT:: FallbackNodeWithMemory* fal_conditions;
-     BT:: FallbackNodeWithMemory* fal_actions;
+    BT:: FallbackNodeWithMemory* fal_conditions;
+    BT:: FallbackNodeWithMemory* fal_actions;
 
     ComplexFallbackWithMemoryTest()
     {
@@ -365,7 +365,8 @@ struct ComplexParallelTest : testing::Test
 
 
 
-TEST_F(SimpleSequenceTest, ConditionTrue) {
+TEST_F(SimpleSequenceTest, ConditionTrue)
+{
 
     std::cout << "Ticking the root node !" << std::endl << std::endl;
     // Ticking the root node
@@ -378,7 +379,8 @@ TEST_F(SimpleSequenceTest, ConditionTrue) {
 }
 
 
-TEST_F(SimpleSequenceTest, ConditionTurnToFalse) {
+TEST_F(SimpleSequenceTest, ConditionTurnToFalse)
+{
 
     BT::ReturnStatus state = root->Tick();
 
@@ -393,70 +395,75 @@ TEST_F(SimpleSequenceTest, ConditionTurnToFalse) {
 }
 
 
-TEST_F(ComplexSequenceTest, ComplexSequenceConditionsTrue) {
+TEST_F(ComplexSequenceTest, ComplexSequenceConditionsTrue)
+{
 
-        BT::ReturnStatus state = root->Tick();
+    BT::ReturnStatus state = root->Tick();
 
-        ASSERT_EQ(BT::RUNNING, action_1->get_status());
-        ASSERT_EQ(BT::RUNNING, state);
-        root->Halt();
+    ASSERT_EQ(BT::RUNNING, action_1->get_status());
+    ASSERT_EQ(BT::RUNNING, state);
+    root->Halt();
 
 
 }
 
 
-TEST_F(ComplexSequence2ActionsTest, ConditionsTrue) {
+TEST_F(ComplexSequence2ActionsTest, ConditionsTrue)
+{
 
-        BT::ReturnStatus state = root->Tick();
+    BT::ReturnStatus state = root->Tick();
 
-        state = root->Tick();
+    state = root->Tick();
 
-        std::this_thread::sleep_for(std::chrono::seconds(5));
-        state = root->Tick();
-        state = root->Tick();
+    std::this_thread::sleep_for(std::chrono::seconds(5));
+    state = root->Tick();
+    state = root->Tick();
 
 
-        ASSERT_EQ(BT::RUNNING, state);
-        ASSERT_EQ(BT::RUNNING, action_1->get_status());
-        ASSERT_EQ(BT::RUNNING, seq_1->get_status());
-        ASSERT_EQ(BT::HALTED, seq_2->get_status());
-        ASSERT_EQ(BT::HALTED, action_2->get_status());
+    ASSERT_EQ(BT::RUNNING, state);
+    ASSERT_EQ(BT::RUNNING, action_1->get_status());
+    ASSERT_EQ(BT::RUNNING, seq_1->get_status());
+    ASSERT_EQ(BT::HALTED, seq_2->get_status());
+    ASSERT_EQ(BT::HALTED, action_2->get_status());
 
-        root->Halt();
-
-}
-
-TEST_F(ComplexSequenceTest, ComplexSequenceConditions1ToFalse) {
-
-        BT::ReturnStatus state = root->Tick();
-
-        condition_1->set_boolean_value(false);
-
-        state = root->Tick();
-
-        ASSERT_EQ(BT::FAILURE, state);
-        ASSERT_EQ(BT::HALTED, action_1->get_status());
-        root->Halt();
+    root->Halt();
 
 }
 
-TEST_F(ComplexSequenceTest, ComplexSequenceConditions2ToFalse) {
+TEST_F(ComplexSequenceTest, ComplexSequenceConditions1ToFalse)
+{
 
-        BT::ReturnStatus state = root->Tick();
+    BT::ReturnStatus state = root->Tick();
 
-        condition_2->set_boolean_value(false);
+    condition_1->set_boolean_value(false);
 
-        state = root->Tick();
+    state = root->Tick();
 
-        ASSERT_EQ(BT::FAILURE, state);
-        ASSERT_EQ(BT::HALTED, action_1->get_status());
-        root->Halt();
+    ASSERT_EQ(BT::FAILURE, state);
+    ASSERT_EQ(BT::HALTED, action_1->get_status());
+    root->Halt();
+
+}
+
+TEST_F(ComplexSequenceTest, ComplexSequenceConditions2ToFalse)
+{
+
+    BT::ReturnStatus state = root->Tick();
+
+    condition_2->set_boolean_value(false);
+
+    state = root->Tick();
+
+    ASSERT_EQ(BT::FAILURE, state);
+    ASSERT_EQ(BT::HALTED, action_1->get_status());
+    root->Halt();
 
 }
 
 
 
-TEST_F(SimpleFallbackTest, ConditionTrue) {
+TEST_F(SimpleFallbackTest, ConditionTrue)
+{
 
     std::cout << "Ticking the root node !" << std::endl << std::endl;
     // Ticking the root node
@@ -470,7 +477,8 @@ TEST_F(SimpleFallbackTest, ConditionTrue) {
 }
 
 
-TEST_F(SimpleFallbackTest, ConditionToFalse) {
+TEST_F(SimpleFallbackTest, ConditionToFalse)
+{
 
     condition->set_boolean_value(false);
 
@@ -487,71 +495,76 @@ TEST_F(SimpleFallbackTest, ConditionToFalse) {
 }
 
 
-TEST_F(ComplexFallbackTest, Condition1ToTrue) {
-
-       condition_1->set_boolean_value(false);
-       condition_2->set_boolean_value(false);
-
-        BT::ReturnStatus state = root->Tick();
-
-        condition_1->set_boolean_value(true);
-
-        state = root->Tick();
-
-        ASSERT_EQ(BT::SUCCESS, state);
-
-        ASSERT_EQ(BT::HALTED, action_1->get_status());
-        root->Halt();
-
-}
-
-TEST_F(ComplexFallbackTest, Condition2ToTrue) {
+TEST_F(ComplexFallbackTest, Condition1ToTrue)
+{
 
     condition_1->set_boolean_value(false);
     condition_2->set_boolean_value(false);
 
-     BT::ReturnStatus state = root->Tick();
+    BT::ReturnStatus state = root->Tick();
 
-     condition_2->set_boolean_value(true);
+    condition_1->set_boolean_value(true);
 
-     state = root->Tick();
+    state = root->Tick();
 
-     ASSERT_EQ(BT::SUCCESS, state);
-     ASSERT_EQ(BT::HALTED, action_1->get_status());
-     root->Halt();
+    ASSERT_EQ(BT::SUCCESS, state);
+
+    ASSERT_EQ(BT::HALTED, action_1->get_status());
+    root->Halt();
+
+}
+
+TEST_F(ComplexFallbackTest, Condition2ToTrue)
+{
+
+    condition_1->set_boolean_value(false);
+    condition_2->set_boolean_value(false);
+
+    BT::ReturnStatus state = root->Tick();
+
+    condition_2->set_boolean_value(true);
+
+    state = root->Tick();
+
+    ASSERT_EQ(BT::SUCCESS, state);
+    ASSERT_EQ(BT::HALTED, action_1->get_status());
+    root->Halt();
 
 }
 
 
 
-TEST_F(BehaviorTreeTest, Condition1ToFalseCondition2True) {
+TEST_F(BehaviorTreeTest, Condition1ToFalseCondition2True)
+{
 
     condition_1->set_boolean_value(false);
     condition_2->set_boolean_value(true);
 
-     BT::ReturnStatus state = root->Tick();
+    BT::ReturnStatus state = root->Tick();
 
-     ASSERT_EQ(BT::RUNNING, state);
-     ASSERT_EQ(BT::RUNNING, action_1->get_status());
-     root->Halt();
+    ASSERT_EQ(BT::RUNNING, state);
+    ASSERT_EQ(BT::RUNNING, action_1->get_status());
+    root->Halt();
 
 }
 
-TEST_F(BehaviorTreeTest, Condition2ToFalseCondition1True) {
+TEST_F(BehaviorTreeTest, Condition2ToFalseCondition1True)
+{
 
     condition_2->set_boolean_value(false);
     condition_1->set_boolean_value(true);
 
-     BT::ReturnStatus state = root->Tick();
+    BT::ReturnStatus state = root->Tick();
 
-     ASSERT_EQ(BT::RUNNING, state);
-     ASSERT_EQ(BT::RUNNING, action_1->get_status());
-     root->Halt();
+    ASSERT_EQ(BT::RUNNING, state);
+    ASSERT_EQ(BT::RUNNING, action_1->get_status());
+    root->Halt();
 
 }
 
 
-TEST_F(SimpleSequenceWithMemoryTest, ConditionTrue) {
+TEST_F(SimpleSequenceWithMemoryTest, ConditionTrue)
+{
 
     std::cout << "Ticking the root node !" << std::endl << std::endl;
     // Ticking the root node
@@ -565,7 +578,8 @@ TEST_F(SimpleSequenceWithMemoryTest, ConditionTrue) {
 }
 
 
-TEST_F(SimpleSequenceWithMemoryTest, ConditionTurnToFalse) {
+TEST_F(SimpleSequenceWithMemoryTest, ConditionTurnToFalse)
+{
 
     BT::ReturnStatus state = root->Tick();
 
@@ -583,66 +597,15 @@ TEST_F(SimpleSequenceWithMemoryTest, ConditionTurnToFalse) {
 
 
 
-TEST_F(ComplexSequenceWithMemoryTest, ConditionsTrue) {
+TEST_F(ComplexSequenceWithMemoryTest, ConditionsTrue)
+{
 
-        BT::ReturnStatus state = root->Tick();
+    BT::ReturnStatus state = root->Tick();
 
-        ASSERT_EQ(BT::RUNNING, action_1->get_status());
-        ASSERT_EQ(BT::IDLE, action_2->get_status());
-        ASSERT_EQ(BT::RUNNING, state);
-        root->Halt();
-
-
-}
-
-
-
-
-TEST_F(ComplexSequenceWithMemoryTest, Conditions1ToFalse) {
-
-        BT::ReturnStatus state = root->Tick();
-
-        condition_1->set_boolean_value(false);
-
-        state = root->Tick();
-
-        ASSERT_EQ(BT::RUNNING, action_1->get_status());
-        ASSERT_EQ(BT::IDLE, action_2->get_status());
-        ASSERT_EQ(BT::RUNNING, state);
-        root->Halt();
-
-
-}
-
-TEST_F(ComplexSequenceWithMemoryTest, Conditions2ToFalse) {
-
-        BT::ReturnStatus state = root->Tick();
-
-        condition_2->set_boolean_value(false);
-
-        state = root->Tick();
-
-        ASSERT_EQ(BT::RUNNING, action_1->get_status());
-        ASSERT_EQ(BT::IDLE, action_2->get_status());
-        ASSERT_EQ(BT::RUNNING, state);
-        root->Halt();
-
-}
-
-TEST_F(ComplexSequenceWithMemoryTest, Action1Done) {
-
-        BT::ReturnStatus state = root->Tick();
-
-        condition_2->set_boolean_value(false);
-
-        state = root->Tick();
-        std::this_thread::sleep_for(std::chrono::seconds(10));
-        state = root->Tick();
-
-        //ASSERT_EQ(BT::IDLE, action_1->get_status());
-        ASSERT_EQ(BT::RUNNING, action_2->get_status());
-       // ASSERT_EQ(BT::RUNNING, state);
-        root->Halt();
+    ASSERT_EQ(BT::RUNNING, action_1->get_status());
+    ASSERT_EQ(BT::IDLE, action_2->get_status());
+    ASSERT_EQ(BT::RUNNING, state);
+    root->Halt();
 
 
 }
@@ -650,7 +613,63 @@ TEST_F(ComplexSequenceWithMemoryTest, Action1Done) {
 
 
 
-TEST_F(SimpleFallbackWithMemoryTest, ConditionFalse) {
+TEST_F(ComplexSequenceWithMemoryTest, Conditions1ToFalse)
+{
+
+    BT::ReturnStatus state = root->Tick();
+
+    condition_1->set_boolean_value(false);
+
+    state = root->Tick();
+
+    ASSERT_EQ(BT::RUNNING, action_1->get_status());
+    ASSERT_EQ(BT::IDLE, action_2->get_status());
+    ASSERT_EQ(BT::RUNNING, state);
+    root->Halt();
+
+
+}
+
+TEST_F(ComplexSequenceWithMemoryTest, Conditions2ToFalse)
+{
+
+    BT::ReturnStatus state = root->Tick();
+
+    condition_2->set_boolean_value(false);
+
+    state = root->Tick();
+
+    ASSERT_EQ(BT::RUNNING, action_1->get_status());
+    ASSERT_EQ(BT::IDLE, action_2->get_status());
+    ASSERT_EQ(BT::RUNNING, state);
+    root->Halt();
+
+}
+
+TEST_F(ComplexSequenceWithMemoryTest, Action1Done)
+{
+
+    BT::ReturnStatus state = root->Tick();
+
+    condition_2->set_boolean_value(false);
+
+    state = root->Tick();
+    std::this_thread::sleep_for(std::chrono::seconds(10));
+    state = root->Tick();
+
+    //ASSERT_EQ(BT::IDLE, action_1->get_status());
+    ASSERT_EQ(BT::RUNNING, action_2->get_status());
+    // ASSERT_EQ(BT::RUNNING, state);
+    root->Halt();
+
+
+}
+
+
+
+
+TEST_F(SimpleFallbackWithMemoryTest, ConditionFalse)
+{
 
     std::cout << "Ticking the root node !" << std::endl << std::endl;
     // Ticking the root node
@@ -665,7 +684,8 @@ TEST_F(SimpleFallbackWithMemoryTest, ConditionFalse) {
 }
 
 
-TEST_F(SimpleFallbackWithMemoryTest, ConditionTurnToTrue) {
+TEST_F(SimpleFallbackWithMemoryTest, ConditionTurnToTrue)
+{
 
     condition->set_boolean_value(false);
 
@@ -683,34 +703,37 @@ TEST_F(SimpleFallbackWithMemoryTest, ConditionTurnToTrue) {
 
 
 
-TEST_F(ComplexFallbackWithMemoryTest, ConditionsTrue) {
+TEST_F(ComplexFallbackWithMemoryTest, ConditionsTrue)
+{
 
 
-        BT::ReturnStatus state = root->Tick();
+    BT::ReturnStatus state = root->Tick();
 
-        ASSERT_EQ(BT::IDLE, action_1->get_status());
-        ASSERT_EQ(BT::IDLE, action_2->get_status());
-        ASSERT_EQ(BT::SUCCESS, state);
-        root->Halt();
-
-
-}
-
-TEST_F(ComplexFallbackWithMemoryTest, Condition1False) {
-
-        condition_1->set_boolean_value(false);
-        BT::ReturnStatus state = root->Tick();
-
-        ASSERT_EQ(BT::IDLE, action_1->get_status());
-        ASSERT_EQ(BT::IDLE, action_2->get_status());
-        ASSERT_EQ(BT::SUCCESS, state);
-        root->Halt();
+    ASSERT_EQ(BT::IDLE, action_1->get_status());
+    ASSERT_EQ(BT::IDLE, action_2->get_status());
+    ASSERT_EQ(BT::SUCCESS, state);
+    root->Halt();
 
 
 }
 
+TEST_F(ComplexFallbackWithMemoryTest, Condition1False)
+{
 
-TEST_F(ComplexFallbackWithMemoryTest, ConditionsFalse) {
+    condition_1->set_boolean_value(false);
+    BT::ReturnStatus state = root->Tick();
+
+    ASSERT_EQ(BT::IDLE, action_1->get_status());
+    ASSERT_EQ(BT::IDLE, action_2->get_status());
+    ASSERT_EQ(BT::SUCCESS, state);
+    root->Halt();
+
+
+}
+
+
+TEST_F(ComplexFallbackWithMemoryTest, ConditionsFalse)
+{
 
     condition_1->set_boolean_value(false);
     condition_2->set_boolean_value(false);
@@ -727,7 +750,8 @@ TEST_F(ComplexFallbackWithMemoryTest, ConditionsFalse) {
 
 
 
-TEST_F(ComplexFallbackWithMemoryTest, Conditions1ToTrue) {
+TEST_F(ComplexFallbackWithMemoryTest, Conditions1ToTrue)
+{
 
     condition_1->set_boolean_value(false);
     condition_2->set_boolean_value(false);
@@ -745,7 +769,8 @@ TEST_F(ComplexFallbackWithMemoryTest, Conditions1ToTrue) {
 
 }
 
-TEST_F(ComplexFallbackWithMemoryTest, Conditions2ToTrue) {
+TEST_F(ComplexFallbackWithMemoryTest, Conditions2ToTrue)
+{
     condition_1->set_boolean_value(false);
 
     condition_2->set_boolean_value(false);
@@ -763,7 +788,8 @@ TEST_F(ComplexFallbackWithMemoryTest, Conditions2ToTrue) {
 
 }
 
-TEST_F(ComplexFallbackWithMemoryTest, Action1Failed) {
+TEST_F(ComplexFallbackWithMemoryTest, Action1Failed)
+{
     action_1->set_boolean_value(false);
     condition_1->set_boolean_value(false);
     condition_2->set_boolean_value(false);
@@ -782,7 +808,8 @@ TEST_F(ComplexFallbackWithMemoryTest, Action1Failed) {
 }
 
 
-TEST_F(SimpleParallelTest, ConditionsTrue) {
+TEST_F(SimpleParallelTest, ConditionsTrue)
+{
 
     BT::ReturnStatus state = root->Tick();
 
@@ -796,7 +823,8 @@ TEST_F(SimpleParallelTest, ConditionsTrue) {
 }
 
 
-TEST_F(SimpleParallelTest, Threshold_3) {
+TEST_F(SimpleParallelTest, Threshold_3)
+{
 
     root->set_threshold_M(3);
     action_2->set_time(200);
@@ -813,7 +841,8 @@ TEST_F(SimpleParallelTest, Threshold_3) {
 }
 
 
-TEST_F(SimpleParallelTest, Threshold_1) {
+TEST_F(SimpleParallelTest, Threshold_1)
+{
 
     root->set_threshold_M(1);
     BT::ReturnStatus state = root->Tick();
@@ -825,7 +854,8 @@ TEST_F(SimpleParallelTest, Threshold_1) {
     root->Halt();
 
 }
-TEST_F(ComplexParallelTest, ConditionsTrue) {
+TEST_F(ComplexParallelTest, ConditionsTrue)
+{
 
     BT::ReturnStatus state = root->Tick();
 
@@ -845,7 +875,8 @@ TEST_F(ComplexParallelTest, ConditionsTrue) {
 
 
 
-TEST_F(ComplexParallelTest, Condition3False) {
+TEST_F(ComplexParallelTest, Condition3False)
+{
 
     condition_3->set_boolean_value(false);
     BT::ReturnStatus state = root->Tick();
@@ -868,7 +899,8 @@ TEST_F(ComplexParallelTest, Condition3False) {
 }
 
 
-TEST_F(ComplexParallelTest, Condition3FalseAction1Done) {
+TEST_F(ComplexParallelTest, Condition3FalseAction1Done)
+{
     action_2->set_time(10);
     action_3->set_time(10);
 
@@ -901,7 +933,7 @@ TEST_F(ComplexParallelTest, Condition3FalseAction1Done) {
 
     ASSERT_EQ(BT::IDLE, action_1->get_status());
     ASSERT_EQ(BT::IDLE, parallel_1->get_status());
-  //  ASSERT_EQ(BT::HALTED, action_2->get_status());
+    //  ASSERT_EQ(BT::HALTED, action_2->get_status());
     ASSERT_EQ(BT::IDLE, action_3->get_status());
     ASSERT_EQ(BT::IDLE, parallel_2->get_status());
     ASSERT_EQ(BT::SUCCESS, state);
