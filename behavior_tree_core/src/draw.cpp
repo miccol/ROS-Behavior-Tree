@@ -11,6 +11,10 @@ bool init = false;
 
 void * font_array[3] = {GLUT_BITMAP_8_BY_13,GLUT_BITMAP_8_BY_13,GLUT_BITMAP_8_BY_13};
 void * font = font_array[0];
+float additional_spacing_array[10];
+bool is_number_pressed_array[10];
+unsigned char number_char[4] = {'0','1','2','3'};
+
 
 float x = 0.0;
 float y = 0.4;
@@ -276,9 +280,32 @@ void draw_straight_edge(GLfloat parent_x, GLfloat parent_y, GLfloat parent_size,
 // Keyboard callback function ( called on keyboard event handling )
 void keyboard(unsigned char key, int x, int y)
 {
-    if (key == 'q' || key == 'Q')
-        exit(EXIT_SUCCESS);
+    for (int i = 1; i < 4; i++)
+    {
+        if (key == number_char[i])
+        {
+            is_number_pressed_array[i] = true;
+        }
+        else
+        {
+            is_number_pressed_array[i] = false;
+        }
+    }
 }
+
+
+void keyboard_release(unsigned char key, int x, int y)
+{
+    for (int i = 1; i < 4; i++)
+    {
+        if (key == number_char[i])
+        {
+            is_number_pressed_array[i] = false;
+        }
+    }
+
+}
+
 
 
 void resize(int width, int height) {
@@ -304,7 +331,7 @@ void drawCircle(float radius)
 }
 
 
-void updateTree(BT::TreeNode* tree, GLfloat x_pos, GLfloat y_pos, GLfloat y_offset )
+void updateTree(BT::TreeNode* tree, GLfloat x_pos, GLfloat y_pos, GLfloat y_offset, int depth )
 {
 
     //x_offset*pow(2,tree->Depth()-1)
@@ -354,7 +381,7 @@ void updateTree(BT::TreeNode* tree, GLfloat x_pos, GLfloat y_pos, GLfloat y_offs
             if (i < M-1)
             {
 
-                max_x_end = max_x_end + current_x_end + x_space;
+                max_x_end = max_x_end + current_x_end + x_space + additional_spacing_array[depth];
             }
             else
             {
@@ -375,7 +402,7 @@ void updateTree(BT::TreeNode* tree, GLfloat x_pos, GLfloat y_pos, GLfloat y_offs
         {
             if(i > 0)
             {
-                updateTree(children[i], x_shift + children_x_end.at(i-1) , y_pos - y_offset  ,y_offset );
+                updateTree(children[i], x_shift + children_x_end.at(i-1) , y_pos - y_offset  ,y_offset, depth +1 );
 
                 draw_edge(x_pos + 0.015, y_pos, 0.02, x_shift + children_x_end.at(i-1) + children_x_middle_relative.at(i), y_pos - y_offset, 0.02);
 
@@ -385,7 +412,7 @@ void updateTree(BT::TreeNode* tree, GLfloat x_pos, GLfloat y_pos, GLfloat y_offs
             {
                 draw_edge(x_pos + 0.015, y_pos, 0.02, x_shift + children_x_middle_relative.at(i), y_pos - y_offset, 0.02);
 
-                updateTree(children[i], x_shift , y_pos - y_offset  ,y_offset );
+                updateTree(children[i], x_shift , y_pos - y_offset  ,y_offset, depth + 1 );
             }
         }
         //exit(0);
@@ -409,7 +436,7 @@ void display()
     glClear(GL_COLOR_BUFFER_BIT);   // Erase everything
 
 
-    updateTree(tree, x , y, y_offset);
+    updateTree(tree, x , y, y_offset, 1);
 
     glutSwapBuffers();
     glutPostRedisplay();
@@ -422,43 +449,55 @@ void processSpecialKeys(int key, int xx, int yy) {
 
 
     switch (key) {
-        case GLUT_KEY_UP :
-            y +=  fraction;
-            break;
-        case GLUT_KEY_DOWN :
-            y -=  fraction;
-            break;
-        case GLUT_KEY_LEFT:
-            x -=  fraction;
-            break;
-        case GLUT_KEY_RIGHT:
-            x +=  fraction;
-            break;
-        case  GLUT_KEY_PAGE_UP:
-         x_space +=  fraction;
-            break;
-        case  GLUT_KEY_PAGE_DOWN:
-            x_space -=  fraction;
-            break;
-        case  GLUT_KEY_F1:
+    case GLUT_KEY_UP :
+        y +=  fraction;
+        break;
+    case GLUT_KEY_DOWN :
+        y -=  fraction;
+        break;
+    case GLUT_KEY_LEFT:
+        x -=  fraction;
+        break;
+    case GLUT_KEY_RIGHT:
+        x +=  fraction;
+        break;
+    case  GLUT_KEY_PAGE_UP:
+        for (int i = 1; i < 10; i++)
+        {
+            if(is_number_pressed_array[i])
+            {
+                additional_spacing_array[i] += fraction;
+            }
+        }
+        break;
+    case  GLUT_KEY_PAGE_DOWN:
+        for (int i = 1; i < 10; i++)
+        {
+            if(is_number_pressed_array[i] && additional_spacing_array[i] >= 0 )
+            {
+                additional_spacing_array[i] -= fraction;
+            }
+        }
+        break;
+    case  GLUT_KEY_F1:
         if (r_color < 1)  r_color +=  fraction;
-             break;
-        case  GLUT_KEY_F2:
+        break;
+    case  GLUT_KEY_F2:
         if (r_color > 0) r_color -=  fraction;
-            break;
-        case  GLUT_KEY_F3:
+        break;
+    case  GLUT_KEY_F3:
         if (g_color < 1) g_color +=  fraction;
-             break;
-        case  GLUT_KEY_F4:
+        break;
+    case  GLUT_KEY_F4:
         if (g_color > 0) g_color -=  fraction;
-            break;
-        case  GLUT_KEY_F5:
+        break;
+    case  GLUT_KEY_F5:
         if (b_color < 1) b_color +=  fraction;
-             break;
-        case  GLUT_KEY_F6:
+        break;
+    case  GLUT_KEY_F6:
         if (b_color > 0) b_color -=  fraction;
-            break;
-        case GLUT_KEY_HOME:
+        break;
+    case GLUT_KEY_HOME:
         if (zoom < 1.0f)
         {
             glScalef( 1.0f  +zoom_fraction ,1.0f  +zoom_fraction,1.0f );
@@ -468,14 +507,12 @@ void processSpecialKeys(int key, int xx, int yy) {
             glScalef( 1.0f,1.0f,1.0f );
 
         }
-            break;
-        case GLUT_KEY_END:
+        break;
+    case GLUT_KEY_END:
         glScalef( 1.0f  - zoom_fraction,1.0f  - zoom_fraction,1.0f );
         zoom -=zoom_fraction;
 
         break;
-
-
     }
 }
 
@@ -529,7 +566,9 @@ void drawTree(BT::ControlNode* tree_)
     glutDisplayFunc(display);   // Register display callback
 
 
-    glutKeyboardFunc(keyboard); // Register keyboard callback
+    glutKeyboardFunc(keyboard); // Register keyboard presscallback
+    glutKeyboardUpFunc(keyboard_release); // Register keyboard release callback
+
     glutSpecialFunc(processSpecialKeys); //Register keyboard arrow callback
 
     glutMainLoop();             // Enter main event loop
