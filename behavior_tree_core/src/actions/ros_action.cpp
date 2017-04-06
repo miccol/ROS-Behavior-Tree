@@ -21,10 +21,6 @@ BT::ROSAction::~ROSAction() {}
 void BT::ROSAction::WaitForTick()
 {
 
-
-
-
-      node_result.status = BT::RUNNING;//
       while(true)
       {
           // Waiting for a tick to come
@@ -32,6 +28,7 @@ void BT::ROSAction::WaitForTick()
 
           // Running state
           node_result.status = BT::RUNNING;
+          set_status(BT::RUNNING);
           // Perform action...
           ROS_INFO("I am running the request to %s",get_name().c_str());
           action_client_.sendGoal(goal);
