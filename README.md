@@ -13,13 +13,18 @@ Please refer to the following paper when using the library:
 
 bibtex entry:
 
-`@article{colledanchise2016behavior,
-  title={How {B}ehavior {T}rees {M}odularize {H}ybrid {C}ontrol {S}ystems and {G}eneralize {S}equential {B}ehavior {C}ompositions, the {S}ubsumption    {A}rchitecture, and {D}ecision {T}rees},
-  author={Colledanchise, Michele and {\"O}gren, Petter},
-  journal={IEEE Transactions on Robotics},
-  year={2016},
-  publisher={IEEE}
-}`
+`@ARTICLE{7790863, 
+author={M. Colledanchise and P. Ögren}, 
+journal={IEEE Transactions on Robotics}, 
+title={How Behavior Trees Modularize Hybrid Control Systems and Generalize Sequential Behavior Compositions, the Subsumption Architecture, and Decision Trees}, 
+year={2017}, 
+volume={33}, 
+number={2}, 
+pages={372-389}, 
+keywords={Computer architecture;Decision trees;High definition video;Robot control;Switches;Behavior trees (BTs);decision trees;finite state machines (FSMs);hybrid dynamical systems (HDSs);modularity;sequential behavior compositions;subsumption architecture}, 
+doi={10.1109/TRO.2016.2633567}, 
+ISSN={1552-3098}, 
+month={April},}`
 
 INFO
 ------------
