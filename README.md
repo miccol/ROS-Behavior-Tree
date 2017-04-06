@@ -15,7 +15,9 @@ bibtex entry:
 
 `@ARTICLE{7790863, 
 author={M. Colledanchise and P. Ögren}, 
+
 journal={IEEE Transactions on Robotics}, 
+
 title={How Behavior Trees Modularize Hybrid Control Systems and Generalize Sequential Behavior Compositions, the Subsumption Architecture, and Decision Trees}, 
 year={2017}, 
 volume={33}, 
