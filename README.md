@@ -46,8 +46,12 @@ BUILD STATUS
     <th width="13%">Hydro</th>
     <th width="13%">Indigo</th>
     <th width="13%">Jade</th>
-  </tr>
+    <th width="13%">Kinetic</th>
+</tr>
     <td><b>Release</b></td>
+    <td align="center">
+      <img src="http://build.ros.org/view/Jdev/job/Jdev__behavior_tree__ubuntu_trusty_amd64/badge/icon"/>
+    </td>
     <td align="center">
       <img src="http://build.ros.org/view/Jdev/job/Jdev__behavior_tree__ubuntu_trusty_amd64/badge/icon"/>
     </td>
