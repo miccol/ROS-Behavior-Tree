@@ -2,7 +2,7 @@
 
 ROS-Behavior-Tree ![License MIT](https://img.shields.io/dub/l/vibe-d.svg)
 ====
-![Version](https://img.shields.io/badge/version-v1.1-orange.svg) <br/> 
+![Version](https://img.shields.io/badge/version-v1.3-orange.svg) <br/> 
 A ROS behavior tree library. The leaf nodes (user defined) can be either in `C++` or `python`.
 
 REFERENCE
@@ -69,8 +69,8 @@ Regarding visualization purposes:
 * [Opengl](https://www.opengl.org/)
 * [Glut](https://www.opengl.org/resources/libraries/glut/)
 
-Regarding thread usage:
-* [Boost](http://www.boost.org/)
+Regarding unit tests:
+* [GTest](https://github.com/google/googletest)
 
 BT NODES SUPPORT
 ----------------
