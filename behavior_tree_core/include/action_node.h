@@ -1,7 +1,7 @@
 #ifndef BEHAVIORTREECORE_ACTIONNODE_H
 #define BEHAVIORTREECORE_ACTIONNODE_H
 
-#include "leaf_node.h"
+#include <leaf_node.h>
 
 namespace BT
 {

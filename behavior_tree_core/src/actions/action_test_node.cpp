@@ -12,8 +12,6 @@ BT::ActionTestNode::ActionTestNode(std::string name) : ActionNode::ActionNode(na
 
 BT::ActionTestNode::~ActionTestNode() {}
 
-//BT::ReturnStatus BT::ActionTestNode::Tick(){ return BT::EXIT;}
-
 
 void BT::ActionTestNode::WaitForTick()
 {
@@ -64,10 +62,6 @@ void BT::ActionTestNode::Halt()
     DEBUG_STDOUT("HALTED state set!");
 }
 
-
-//void BT::ActionTestNode::set_status(ReturnStatus status){
-//    status_ = status;
-//}
 
 void BT::ActionTestNode::set_time(int time)
 {
