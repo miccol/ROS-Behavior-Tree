@@ -11,7 +11,6 @@ find_package(catkin REQUIRED COMPONENTS
   message_generation
   roscpp
   roslib
-  tf
   rospy
   std_msgs
   behavior_tree_core
@@ -22,7 +21,7 @@ roslaunch_add_file_check(launch)
 ## System dependencies are found with CMake's conventions
 # find_package(Boost REQUIRED COMPONENTS system)
 # System dependencies are found with CMake's conventions
-find_package(Boost REQUIRED COMPONENTS system thread program_options)
+#find_package(Boost REQUIRED COMPONENTS system thread program_options)
 
 
 
@@ -141,31 +140,31 @@ include_directories(
 set(COMMON_LIB ${catkin_LIBRARIES} ${Boost_LIBRARIES})
 
 
-add_executable(ActionClient src/ActionClient.cpp)
+add_executable(action_client src/action_client.cpp)
 
 target_link_libraries(
-  ActionClient
+  action_client
   ${catkin_LIBRARIES}
 )
 
 add_dependencies(
- ActionClient
+ action_client
   ${behavior_tree_leaves_EXPORTED_TARGETS}
   ${PROJECT_NAME}_generate_messages_cpp
   behavior_tree_core_generate_messages_cpp
 )
 
 
-add_executable(ConditionClient src/ConditionClient.cpp)
+add_executable(condition_client src/condition_client.cpp)
 
 
 target_link_libraries(
-  ConditionClient
+  condition_client
   ${catkin_LIBRARIES}
 )
 
 add_dependencies(
- ConditionClient
+ condition_client
   ${behavior_tree_leaves_EXPORTED_TARGETS}
   ${PROJECT_NAME}_generate_messages_cpp
   behavior_tree_core_generate_messages_cpp
@@ -174,30 +173,30 @@ add_dependencies(
 
 
 
-add_executable(ActionExample example_nodes/cpp/ActionExample.cpp)
+add_executable(action_example example_nodes/cpp/action_example.cpp)
 
 target_link_libraries(
-  ActionExample
+  action_example
   ${catkin_LIBRARIES}
 )
 
 add_dependencies(
- ActionExample
+ action_example
   ${behavior_tree_leaves_EXPORTED_TARGETS}
   ${PROJECT_NAME}_generate_messages_cpp
   behavior_tree_core_generate_messages_cpp
 )
 
 
-add_executable(ConditionExample example_nodes/cpp/ConditionExample.cpp)
+add_executable(condition_example example_nodes/cpp/condition_example.cpp)
 
 target_link_libraries(
-  ConditionExample
+  condition_example
   ${catkin_LIBRARIES}
 )
 
 add_dependencies(
- ConditionExample
+ condition_example
   ${behavior_tree_leaves_EXPORTED_TARGETS}
   ${PROJECT_NAME}_generate_messages_cpp
   behavior_tree_core_generate_messages_cpp

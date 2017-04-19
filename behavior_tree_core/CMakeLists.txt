@@ -27,12 +27,13 @@ generate_messages(
 )
 
 
-add_definitions(-Wall -lglut -lGL)
+add_definitions(-Wall -lglut -lGL -std=c++0x)
 
 catkin_package(
   CATKIN_DEPENDS actionlib_msgs
   INCLUDE_DIRS include
 )
+
 
 
 #########################################################
@@ -57,41 +58,59 @@ if(NOT OPENGL_FOUND)
     message(ERROR " OPENGL not found!")
 endif(NOT OPENGL_FOUND)
 
+#########################################################
+# FIND GTest
+#########################################################
+find_package(GTest)
+include_directories(${GTEST_INCLUDE_DIRS})
+
+
 INCLUDE_DIRECTORIES(${catkin_INCLUDE_DIRS} include)
 
 file(GLOB_RECURSE BTHeadLibrary include/*.h)
 
 set(BTSrcLibrary
-src/ActionNode.cpp
-src/BehaviorTree.cpp
-src/ConditionNode.cpp
-src/ControlNode.cpp
-src/DecoratorRetryNode.cpp
-src/DecoratorNegationNode.cpp
-src/Draw.cpp
-src/Exceptions.cpp
-src/LeafNode.cpp
-src/NodeSemaphore.cpp
-src/ParallelNode.cpp
-src/SelectorNode.cpp
-src/SequenceNode.cpp
-src/SelectorStarNode.cpp
-src/SequenceStarNode.cpp
-src/TreeNode.cpp
-src/Actions/ActionTestNode.cpp
-src/Conditions/ConditionTestNode.cpp
-src/Actions/ROSAction.cpp
-src/Conditions/ROSCondition.cpp
+src/action_node.cpp
+src/behavior_tree.cpp
+src/condition_node.cpp
+src/control_node.cpp
+#src/decorator_retry_node.cpp
+#src/decorator_negation_node.cpp
+src/draw.cpp
+src/exceptions.cpp
+src/leaf_node.cpp
+src/tick_engine.cpp
+src/parallel_node.cpp
+src/fallback_node.cpp
+src/sequence_node.cpp
+src/fallback_node_with_memory.cpp
+src/sequence_node_with_memory.cpp
+src/tree_node.cpp
+src/actions/action_test_node.cpp
+src/conditions/condition_test_node.cpp
+src/actions/ros_action.cpp
+src/conditions/ros_condition.cpp
 )
 
 
-add_executable(test src/test.cpp ${BTSrcLibrary} ${BTHeadLibrary})
-target_link_libraries(test ${catkin_LIBRARIES} ${OPENGL_LIBRARIES} ${GLUT_LIBRARY})
-add_dependencies(test behavior_tree_core_generate_messages_cpp)
 
 
 add_executable(tree src/tree.cpp ${BTSrcLibrary} ${BTHeadLibrary})
 target_link_libraries(tree ${catkin_LIBRARIES} ${OPENGL_LIBRARIES} ${GLUT_LIBRARY})
 add_dependencies(tree behavior_tree_core_generate_messages_cpp)
+
+
+add_executable(gtest_tree src/gtest/gtest_tree.cpp ${BTSrcLibrary} ${BTHeadLibrary})
+target_link_libraries(gtest_tree ${catkin_LIBRARIES} ${OPENGL_LIBRARIES} ${GLUT_LIBRARY} ${GTEST_LIBRARIES})
+add_dependencies(gtest_tree behavior_tree_core_generate_messages_cpp)
+
+add_executable(gtest_ros src/gtest/external_ros_nodes_test.cpp ${BTSrcLibrary} ${BTHeadLibrary})
+target_link_libraries(gtest_ros ${catkin_LIBRARIES} ${OPENGL_LIBRARIES} ${GLUT_LIBRARY} ${GTEST_LIBRARIES})
+add_dependencies(gtest_ros behavior_tree_core_generate_messages_cpp)
+
+
+#add_executable(ros_test src/ros_test.cpp ${BTSrcLibrary} ${BTHeadLibrary})
+#target_link_libraries(ros_test ${catkin_LIBRARIES} ${OPENGL_LIBRARIES} ${GLUT_LIBRARY})
+#add_dependencies(ros_test behavior_tree_core_generate_messages_cpp)
 
 

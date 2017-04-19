@@ -1,5 +1,5 @@
 <launch>
-  <node name="action" pkg="behavior_tree_leaves" type="ActionExample" />
-  <node name="condition" pkg="behavior_tree_leaves" type="ConditionExample" />
-  <node name="tree" pkg="behavior_tree_core" type="tree" />
+  <node name="action" pkg="behavior_tree_leaves" type="action_example" />
+  <node name="condition" pkg="behavior_tree_leaves" type="condition_example" />
+  <node name="test" pkg="behavior_tree_core" type="gtest_ros" />
 </launch>
