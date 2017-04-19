@@ -94,13 +94,13 @@ BT NODES SUPPORT
 
 SETUP
 -----------
+**USER MANUAL avaulable inside the repo's folder**
 
 The first step to use BT++ is to retrieve its source code. You can either download it 
 here (https://github.com/miccol/ROS-Behavior-Tree) or clone the repository:
 
 `$ cd /path/to/catkin_ws/src` <br/>
 `$ git clone https://github.com/miccol/ROS-Behavior-Tree.git`<br/>
-`$ mv Behavior−Tree behavior_tree` <br/>
 
 Once you have the repository. Compile the library:
 
