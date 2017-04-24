@@ -2,6 +2,7 @@
 #define ACTIONTEST_H
 
 #include <action_node.h>
+#include <thread>
 
 namespace BT
 {
@@ -26,8 +27,6 @@ public:
 private:
     int time_;
     bool boolean_value_;
-
-    ///ReturnStatus status_;
 
 };
 }
