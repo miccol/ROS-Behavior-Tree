@@ -14,8 +14,6 @@ void drawEllipse(float xradius, float yradius);
 
 void drawTree(BT::ControlNode* tree_);
 
-void resize(int width, int height);
-
 void draw_status(float x, float y, int node_status);
 
 void drawString (void * font, char *string, float x, float y, float z);
