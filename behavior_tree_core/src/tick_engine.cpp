@@ -35,6 +35,7 @@ void TickEngine::Wait()
 void TickEngine::Tick()
 {
     // Lock acquire
+
     std::lock_guard<std::mutex> LockGuard(mutex_);
 
     // State increment
