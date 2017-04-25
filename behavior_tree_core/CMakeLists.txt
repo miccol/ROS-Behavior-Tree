@@ -92,21 +92,28 @@ src/actions/ros_action.cpp
 src/conditions/ros_condition.cpp
 )
 
+# Compile the core library with name ${PROJECT_NAME}=behavior_tree_core
+# You can create executables which target to this library for using BTs
+add_library(${PROJECT_NAME} ${BTSrcLibrary} ${BTHeadLibrary})
+target_link_libraries(${PROJECT_NAME} ${catkin_LIBRARIES} ${OPENGL_LIBRARIES} ${GLUT_LIBRARY})
+add_dependencies(${PROJECT_NAME} behavior_tree_core_generate_messages_cpp)
 
+add_executable(tree src/tree.cpp)
+target_link_libraries(tree
+  ${catkin_LIBRARIES}
+  ${PROJECT_NAME})
 
+add_executable(gtest_tree src/gtest/gtest_tree.cpp)
+target_link_libraries(gtest_tree
+  ${catkin_LIBRARIES}
+  ${PROJECT_NAME}
+  ${GTEST_LIBRARIES})
 
-add_executable(tree src/tree.cpp ${BTSrcLibrary} ${BTHeadLibrary})
-target_link_libraries(tree ${catkin_LIBRARIES} ${OPENGL_LIBRARIES} ${GLUT_LIBRARY})
-add_dependencies(tree behavior_tree_core_generate_messages_cpp)
-
-
-add_executable(gtest_tree src/gtest/gtest_tree.cpp ${BTSrcLibrary} ${BTHeadLibrary})
-target_link_libraries(gtest_tree ${catkin_LIBRARIES} ${OPENGL_LIBRARIES} ${GLUT_LIBRARY} ${GTEST_LIBRARIES})
-add_dependencies(gtest_tree behavior_tree_core_generate_messages_cpp)
-
-add_executable(gtest_ros src/gtest/external_ros_nodes_test.cpp ${BTSrcLibrary} ${BTHeadLibrary})
-target_link_libraries(gtest_ros ${catkin_LIBRARIES} ${OPENGL_LIBRARIES} ${GLUT_LIBRARY} ${GTEST_LIBRARIES})
-add_dependencies(gtest_ros behavior_tree_core_generate_messages_cpp)
+add_executable(gtest_ros src/gtest/external_ros_nodes_test.cpp)
+target_link_libraries(gtest_ros
+  ${catkin_LIBRARIES}
+  ${PROJECT_NAME}
+  ${GTEST_LIBRARIES})
 
 
 #add_executable(ros_test src/ros_test.cpp ${BTSrcLibrary} ${BTHeadLibrary})
