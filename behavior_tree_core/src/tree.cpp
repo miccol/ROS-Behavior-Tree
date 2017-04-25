@@ -22,7 +22,7 @@ int main(int argc, char **argv)
         int TickPeriod_milliseconds = 1000;
 
         BT::ActionTestNode* action1 = new BT::ActionTestNode("Action 1");
-        BT::ConditionTestNode* condition1 = new BT::ConditionTestNode("Condition 1");
+        // BT::ConditionTestNode* condition1 = new BT::ConditionTestNode("Condition 1");  // commented-out as unused
         BT:: SequenceNode* sequence1 = new BT::SequenceNode("seq1");
 
 
@@ -35,9 +35,10 @@ int main(int argc, char **argv)
         BT:: SequenceNode* sequence3 = new BT::SequenceNode("seq1");
 
 
-        BT::ActionTestNode* action4 = new BT::ActionTestNode("Action 4");
-        BT::ConditionTestNode* condition4 = new BT::ConditionTestNode("Condition 4");
-        BT:: SequenceNode* sequence4 = new BT::SequenceNode("seq1");
+        // Commented-out as unused variables
+        // BT::ActionTestNode* action4 = new BT::ActionTestNode("Action 4");
+        // BT::ConditionTestNode* condition4 = new BT::ConditionTestNode("Condition 4");
+        // BT:: SequenceNode* sequence4 = new BT::SequenceNode("seq1");
 
 
         sequence1->AddChild(condition2);

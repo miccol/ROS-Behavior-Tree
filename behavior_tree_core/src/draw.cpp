@@ -250,7 +250,7 @@ void draw_edge(GLfloat parent_x, GLfloat parent_y,
 {
     glLineWidth(1.5);
     glColor3f(0.0, 0.0, 0.0);
-    GLfloat bottom_spacing = 0.1;
+    // GLfloat bottom_spacing = 0.1;  // commented-out as unused variable
     GLfloat above_spacing = 0.04;
 
     glBegin(GL_LINES);
@@ -342,7 +342,7 @@ void updateTree(BT::TreeNode* tree, GLfloat x_pos, GLfloat y_pos, GLfloat y_offs
         std::vector<GLfloat> children_x_middle_relative;
 
         GLfloat max_x_end = 0;
-        GLfloat max_x_start = 0;
+        // GLfloat max_x_start = 0;  // commented out as unused variable
         GLfloat current_x_end = 0;
 
         for (int i = 0; i < M; i++)
@@ -369,10 +369,10 @@ void updateTree(BT::TreeNode* tree, GLfloat x_pos, GLfloat y_pos, GLfloat y_offs
             children_x_end.push_back(max_x_end);
         }
 
-        GLfloat x_min = 0.0;
-        GLfloat x_max = 0.0;
+        // GLfloat x_min = 0.0;  // commented-out as unused variable
+        // GLfloat x_max = 0.0;  // commented-out as unused variable
         GLfloat x_shift = x_pos - max_x_end/2;
-        GLfloat x_shift_new = 0;
+        // GLfloat x_shift_new = 0;  // commented-out as unused variable
 
         for (int i = 0; i < M; i++)
         {
