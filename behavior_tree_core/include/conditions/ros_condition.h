@@ -11,8 +11,8 @@
 */
 
 
-#ifndef ROS_CONDITION_H
-#define ROS_CONDITION_H
+#ifndef CONDITIONS_ROS_CONDITION_H
+#define CONDITIONS_ROS_CONDITION_H
 
 #include <condition_node.h>
 #include <string>
@@ -38,4 +38,4 @@ public:
 };
 }  // namespace BT
 
-#endif  // ROS_CONDITION_H
+#endif  // CONDITIONS_ROS_CONDITION_H

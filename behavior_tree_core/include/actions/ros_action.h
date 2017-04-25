@@ -11,8 +11,8 @@
 */
 
 
-#ifndef ROS_ACTION_H
-#define ROS_ACTION_H
+#ifndef ACTIONS_ROS_ACTION_H
+#define ACTIONS_ROS_ACTION_H
 
 #include <action_node.h>
 #include <string>
@@ -44,4 +44,4 @@ public:
 };
 }  // namespace BT
 
-#endif  // ROS_ACTION_H
+#endif  // ACTIONS_ROS_ACTION_H
