@@ -601,13 +601,13 @@ TEST_F(ComplexSequenceWithMemoryTest, Conditions2ToFalse)
 
 TEST_F(ComplexSequenceWithMemoryTest, Action1Done)
 {
-    BT::ReturnStatus state = root->Tick();
+    root->Tick();
 
     condition_2->set_boolean_value(false);
 
-    state = root->Tick();
+    root->Tick();
     std::this_thread::sleep_for(std::chrono::seconds(10));
-    state = root->Tick();
+    root->Tick();
 
     ASSERT_EQ(BT::RUNNING, action_2->get_status());
 
