@@ -92,7 +92,7 @@ int BT::ControlNode::Depth()
 {
     int depMax = 0;
     int dep = 0;
-    for (int i = 0; i < children_nodes_.size(); i++)
+    for (unsigned int i = 0; i < children_nodes_.size(); i++)
     {
         dep = (children_nodes_[i]->Depth());
         if (dep > depMax)
