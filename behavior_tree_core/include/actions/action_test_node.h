@@ -11,8 +11,8 @@
 */
 
 
-#ifndef ACTION_TEST_NODE_H
-#define ACTION_TEST_NODE_H
+#ifndef ACTIONS_ACTION_TEST_NODE_H
+#define ACTIONS_ACTION_TEST_NODE_H
 
 #include <action_node.h>
 #include <string>
@@ -36,4 +36,4 @@ private:
 };
 }  // namespace BT
 
-#endif  // ACTION_TEST_NODE_H
+#endif  // ACTIONS_ACTION_TEST_NODE_H

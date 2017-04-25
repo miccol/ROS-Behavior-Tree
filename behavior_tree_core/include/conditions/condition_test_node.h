@@ -11,8 +11,8 @@
 */
 
 
-#ifndef CONDITION_TEST_NODE_H
-#define CONDITION_TEST_NODE_H
+#ifndef CONDITIONS_CONDITION_TEST_NODE_H
+#define CONDITIONS_CONDITION_TEST_NODE_H
 
 #include <condition_node.h>
 #include <string>
@@ -33,4 +33,4 @@ private:
 };
 }  // namespace BT
 
-#endif  // CONDITION_TEST_NODE_H
+#endif  // CONDITIONS_CONDITION_TEST_NODE_H
