@@ -89,6 +89,7 @@ BT::ReturnStatus BT::SequenceNode::Tick()
             }
         }
     }
+    return BT::EXIT;
 }
 
 int BT::SequenceNode::DrawType()

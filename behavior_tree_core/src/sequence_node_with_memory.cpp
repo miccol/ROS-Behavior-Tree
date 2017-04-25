@@ -117,6 +117,7 @@ BT::ReturnStatus BT::SequenceNodeWithMemory::Tick()
             return child_i_status_;
         }
     }
+    return BT::EXIT;
 }
 
 

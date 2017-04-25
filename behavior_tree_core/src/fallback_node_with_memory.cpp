@@ -115,6 +115,7 @@ BT::ReturnStatus BT::FallbackNodeWithMemory::Tick()
             return child_i_status_;
         }
     }
+    return BT::EXIT;
 }
 
 

@@ -86,6 +86,7 @@ BT::ReturnStatus BT::FallbackNode::Tick()
             }
         }
     }
+    return BT::EXIT;
 }
 
 int BT::FallbackNode::DrawType()
