@@ -41,11 +41,15 @@
 
 #endif
 
-//#define DEBUG //uncomment this line if you want to print debug messages
+  // #define DEBUG  // uncomment this line if you want to print debug messages
 
 #ifdef DEBUG
-//#define DEBUG_STDERR(x) (std::cerr << (x))
-#define DEBUG_STDOUT(str) do { std::cout << str << std::endl; } while( false )
+  // #define DEBUG_STDERR(x) (std::cerr << (x))
+#define DEBUG_STDOUT(str) do
+{
+std::cout << str << std::endl;
+}
+while( false )
 
 #else
 #define DEBUG_STDOUT(str)
@@ -71,7 +75,7 @@ namespace BT
 // Enumerates the possible types of a node, for drawinf we have do discriminate whoich control node it is:
 
 enum NodeType {ACTION_NODE, CONDITION_NODE, CONTROL_NODE};
-enum DrawNodeType {PARALLEL, SELECTOR, SEQUENCE, SEQUENCESTAR, SELECTORSTAR, ACTION, CONDITION,DECORATOR};
+enum DrawNodeType {PARALLEL, SELECTOR, SEQUENCE, SEQUENCESTAR, SELECTORSTAR, ACTION, CONDITION, DECORATOR};
 // Enumerates the states every node can be in after execution during a particular
 // time step:
 // - "Success" indicates that the node has completed running during this time step;
@@ -89,7 +93,7 @@ enum ReturnStatus {RUNNING, SUCCESS, FAILURE, IDLE, HALTED, EXIT};
 // - "FAIL_ON_ALL" indicates that all of the node's children must fail before it
 //   returns failure.
 enum FailurePolicy {FAIL_ON_ONE, FAIL_ON_ALL};
-enum ResetPolity   {ON_SUCCESS_OR_FAILURE,ON_SUCCESS, ON_FAILURE};
+enum ResetPolity   {ON_SUCCESS_OR_FAILURE, ON_SUCCESS, ON_FAILURE};
 
 // Enumerates the options for when a parallel node is considered to have succeeded:
 // - "SUCCEED_ON_ONE" indicates that the node will return success as soon as one
@@ -97,9 +101,6 @@ enum ResetPolity   {ON_SUCCESS_OR_FAILURE,ON_SUCCESS, ON_FAILURE};
 // - "BT::SUCCEED_ON_ALL" indicates that all of the node's children must succeed before
 //   it returns success.
 enum SuccessPolicy {SUCCEED_ON_ONE, SUCCEED_ON_ALL};
-
-// If "BT::FAIL_ON_ONE" and "BT::SUCCEED_ON_ONE" are both active and are both trigerred in the
-// same time step, failure will take precedence.
 
 // Abstract base class for Behavior Tree Nodes
 class TreeNode
@@ -122,12 +123,10 @@ protected:
     std::condition_variable state_condition_variable_;
     // Node type
     NodeType type_;
-    //position and offset for horizontal positioning when drawing
+    // position and offset for horizontal positioning when drawing
     float x_shift_, x_pose_;
 
 public:
-
-
     // The thread that will execute the node
     std::thread thread_;
 
@@ -139,7 +138,7 @@ public:
 
 
     // The constructor and the distructor
-    TreeNode(std::string name);
+    explicit TreeNode(std::string name);
     ~TreeNode();
 
     // The method that is going to be executed when the node receive a tick
@@ -163,7 +162,7 @@ public:
     virtual int Depth() = 0;
 
 
-    //Getters and setters
+    //  Getters and setters
     void set_x_pose(float x_pose);
     float get_x_pose();
 
@@ -180,9 +179,7 @@ public:
     void set_name(std::string new_name);
 
     NodeType get_type();
-
-
 };
-}  // namespace BR
+}  // namespace BT
 
 #endif  // TREE_NODE_H
