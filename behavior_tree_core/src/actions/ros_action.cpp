@@ -15,7 +15,9 @@
 #include <string>
 
 
-BT::ROSAction::ROSAction(std::string name) : action_client_(name, true), ActionNode::ActionNode(name)
+BT::ROSAction::ROSAction(std::string name) :
+  ActionNode::ActionNode(name),
+  action_client_(name, true)
 {
     actionlib::SimpleActionClient<behavior_tree_core::BTAction> action_client_(get_name(), true);
     ROS_INFO("Waiting For the Acutator named %s to start", get_name().c_str());
