@@ -1,34 +1,39 @@
-#ifndef ACTIONTEST_H
-#define ACTIONTEST_H
+/* Copyright (C) 2015-2017 Michele Colledanchise - All Rights Reserved
+*
+*   Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"),
+*   to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense,
+*   and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+*   The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+*
+*   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+*   FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
+*   WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+*/
+
+
+#ifndef ACTION_TEST_NODE_H
+#define ACTION_TEST_NODE_H
 
 #include <action_node.h>
-#include <thread>
-
+#include <string>
 namespace BT
 {
 class ActionTestNode : public ActionNode
 {
-
 public:
-
     // Constructor
-    ActionTestNode(std::string Name);
+    explicit ActionTestNode(std::string Name);
     ~ActionTestNode();
 
-    // The method that is going to be executed by the thread
     void WaitForTick();
-    //    BT::ReturnStatus Tick();
-    //  void set_status(ReturnStatus status);
     void set_time(int time);
 
-    // The method used to interrupt the execution of the node
     void Halt();
     void set_boolean_value(bool boolean_value);
 private:
     int time_;
     bool boolean_value_;
-
 };
-}
+}  // namespace BT
 
-#endif
+#endif  // ACTION_TEST_NODE_H

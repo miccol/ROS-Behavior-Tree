@@ -14,6 +14,7 @@
 #define FALLBACK_NODE_H
 
 #include <control_node.h>
+#include <string>
 
 namespace BT
 {
