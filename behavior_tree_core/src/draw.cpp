@@ -64,7 +64,7 @@ void drawEllipse(float xpos, float ypos, float xradius, float yradius)
     glEnd();
 }
 
-void drawString(void * font, char *string, float x, float y, float z)
+void drawString(void * font, const char *string, float x, float y, float z)
 {
     renderBitmapString(x, y, font, string);
 }
