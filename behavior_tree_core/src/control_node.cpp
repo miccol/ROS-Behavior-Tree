@@ -18,7 +18,10 @@
 BT::ControlNode::ControlNode(std::string name) : TreeNode::TreeNode(name)
 {
     type_ = BT::CONTROL_NODE;
-    ReturnStatus child_i_status_ = BT::IDLE;
+
+    // TODO(...) In case it is desired to set to idle remove the ReturnStatus
+    // type in order to set the member variable
+    // ReturnStatus child_i_status_ = BT::IDLE;  // commented out as unused
 }
 
 BT::ControlNode::~ControlNode() {}
@@ -92,7 +95,7 @@ int BT::ControlNode::Depth()
 {
     int depMax = 0;
     int dep = 0;
-    for (int i = 0; i < children_nodes_.size(); i++)
+    for (unsigned int i = 0; i < children_nodes_.size(); i++)
     {
         dep = (children_nodes_[i]->Depth());
         if (dep > depMax)
