@@ -45,11 +45,8 @@
 
 #ifdef DEBUG
   // #define DEBUG_STDERR(x) (std::cerr << (x))
-#define DEBUG_STDOUT(str) do
-{
-std::cout << str << std::endl;
-}
-while( false )
+#define DEBUG_STDOUT(str) do { std::cout << str << std::endl; } while( false )  // NOLINT(whitespace/braces)
+
 
 #else
 #define DEBUG_STDOUT(str)
