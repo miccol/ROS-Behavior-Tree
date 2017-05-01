@@ -43,32 +43,55 @@ std::string DotBt::defineNodeDot(TreeNode* node)
   switch (node->DrawType())
   {
     case SELECTORSTAR:
-      output += "[label=\"?*\" shape=\"box\"];";
+      output += "[label=\"?*\" shape=\"box\"";
       break;
     case BT::SEQUENCESTAR:
-      output += "[label=\">*\" shape=\"box\"];";
+      output += "[label=\">*\" shape=\"box\"";
       break;
     case BT::SELECTOR:
-      output += "[label=\"?\" shape=\"box\"];";
+      output += "[label=\"?\" shape=\"box\"";
       break;
     case BT::SEQUENCE:
-      output += "[label=\">\" shape=\"box\"];";
+      output += "[label=\">\" shape=\"box\"";
       break;
     case BT::PARALLEL:
-      output += "[label=\"=>\" shape=\"box\"];";
+      output += "[label=\"=>\" shape=\"box\"";
       break;
     case BT::DECORATOR:
-      output += "[label=\"D\" shape=\"diamond\"];";
+      output += "[label=\"D\" shape=\"diamond\"";
       break;
     case BT::ACTION:
-      output += "[label=\"" + node->get_name() + "\" shape=\"box\" fillcolor=\"green\" style=\"filled\"];";
+      output += "[label=\"" + node->get_name() + "\" shape=\"box\" fillcolor=\"palegreen\" style=\"filled\"";
       break;
     case BT::CONDITION:
-      output += "[label=\"" + node->get_name() + "\" shape=\"ellipse\" fillcolor=\"green\" style=\"filled\"];";
+      output += "[label=\"" + node->get_name() + "\" shape=\"ellipse\" fillcolor=\"khaki1\" style=\"filled\"";
       break;
     default:
       break;
   }
+
+  switch (node->get_color_status())
+  {
+    case BT::RUNNING:
+      output += " color=\"black\" ];";
+      break;
+    case BT::SUCCESS:
+      output += " color=\"green\" ];";
+      break;
+    case BT::FAILURE:
+      output += " color=\"red\" ];";
+      break;
+    case BT::IDLE:
+      output += " color=\"gray88\" ];";
+      break;
+    case BT::HALTED:
+      output += " color=\"orange\" ];";
+      break;
+    default:
+      output += " color=\"gray88\" ];";
+      break;
+  }
+
   return output;
 }
 
