@@ -61,10 +61,10 @@ std::string DotBt::defineNodeDot(TreeNode* node)
       output += "[label=\"D\" shape=\"diamond\"];";
       break;
     case BT::ACTION:
-      output += "[label=\"" + node->get_name() + "\" shape=\"box\"];";
+      output += "[label=\"" + node->get_name() + "\" shape=\"box\" fillcolor=\"green\" style=\"filled\"];";
       break;
     case BT::CONDITION:
-      output += "[label=\"" + node->get_name() + "\" shape=\"ellipse\"];";
+      output += "[label=\"" + node->get_name() + "\" shape=\"ellipse\" fillcolor=\"green\" style=\"filled\"];";
       break;
     default:
       break;
