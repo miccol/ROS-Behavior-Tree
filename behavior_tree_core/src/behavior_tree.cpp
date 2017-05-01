@@ -12,14 +12,20 @@
 
 
 #include<behavior_tree.h>
+#include <dot_bt.h>
 
 
 
 void Execute(BT::ControlNode* root, int TickPeriod_milliseconds)
 {
-    std::cout << "Start Drawing!" << std::endl;
+    std::string bt_dotcode_topic = "/bt_dotcode";
+    double rate = 50;
+    std::cout << "Start publishing the tree in topic: " << bt_dotcode_topic
+              << " with rate: " << rate << " Hz" << std::endl;
+
     // Starts in another thread the drawing of the BT
-    std::thread t(&drawTree, root);
+    BT::DotBt dotbt(root, bt_dotcode_topic, rate);
+    std::thread t(&BT::DotBt::publish, dotbt);
 
     root->ResetColorState();
 
