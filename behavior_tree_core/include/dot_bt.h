@@ -32,7 +32,9 @@ namespace BT
 class DotBt
 {
 public:
-  explicit DotBt(TreeNode* root, double ros_rate = 50);
+  explicit DotBt(TreeNode* root,
+                 const std::string& topic = "/bt_dotcode",
+                 double ros_rate = 50);
   ~DotBt();
   void produceDot(TreeNode* node, TreeNode* parent = NULL);
   std::string getDotFile();
@@ -55,9 +57,10 @@ private:
 
   ros::NodeHandle n_;
   ros::Publisher dotbt_publisher_;
-  ros::Rate loop_rate_;
   
   TreeNode* root_;
+  std::string topic_;
+  ros::Rate loop_rate_;
 };
 }  // namespace BT
 

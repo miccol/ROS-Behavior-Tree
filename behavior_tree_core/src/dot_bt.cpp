@@ -24,11 +24,12 @@
 
 namespace BT
 {
-DotBt::DotBt(TreeNode* root, double ros_rate) :
-  loop_rate_(ros_rate),
-  root_(root)
+DotBt::DotBt(TreeNode* root, const std::string& topic, double ros_rate) :
+  root_(root),
+  topic_(topic),
+  loop_rate_(ros_rate)
 {
-  dotbt_publisher_ = n_.advertise<std_msgs::String>("/bt_dotcode", 1);
+  dotbt_publisher_ = n_.advertise<std_msgs::String>(topic_, 1);
 }
 
 DotBt::~DotBt() {}
