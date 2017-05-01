@@ -70,6 +70,8 @@ DEPENDENCIES
 Regarding visualization purposes:
 * [Opengl](https://www.opengl.org/)
 * [Glut](https://www.opengl.org/resources/libraries/glut/)
+* [xdot](https://github.com/jbohren/xdot): For visualizing using DOT language.
+* [rqt_dot](https://github.com/jbohren/rqt_dot): For visualizing the tree in RQT with DOT language.
 
 Regarding unit tests:
 * [GTest](https://github.com/google/googletest)
@@ -110,6 +112,13 @@ Once you have the repository. Compile the library:
 Check the installation by launching an example.
 
 `$ roslaunch behavior_tree_leaves test_behavior_tree.launch` <br/>
+
+Run `rqt_dot` plugin for the visualization in ROS and put the ROS topic in
+which the tree is published. The default topic is `/bt_dotcode`.
+
+```
+rosrun rqt_dot rqt_dot
+```
 
 LICENSE
 -------
