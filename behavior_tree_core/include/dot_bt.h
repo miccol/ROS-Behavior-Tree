@@ -23,6 +23,7 @@
 
 #include <string>
 #include <tree_node.h>
+#include <boost/algorithm/string.hpp>
 
 namespace BT
 {
@@ -35,6 +36,17 @@ public:
   void produceDot(TreeNode* node);
 private:
   std::string defineNodeDot(TreeNode* node);
+
+  /**
+   * @brief Returns the alias of a node.
+   *
+   * In general tranforms a string to lower case and replace the space with
+   * underscores. E.g. the string "My String" will be returned as "my_string".
+   *
+   * @param name The initial string as input
+   * @returns The final string as output.
+   */
+  std::string getAlias(const std::string &name);
 };
 }  // namespace BT
 

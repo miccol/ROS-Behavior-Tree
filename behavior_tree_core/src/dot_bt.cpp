@@ -28,8 +28,8 @@ DotBt::~DotBt() {}
 std::string DotBt::defineNodeDot(TreeNode* node)
 {
   std::string output;
-  //output = RqtBt::getAlias(tree->get_name()) + " ";
-  output = "temp_node ";
+  output = getAlias(node->get_name()) + " ";
+  //output = "temp_node ";
 
   switch (node->DrawType())
   {
@@ -71,5 +71,21 @@ void DotBt::produceDot(TreeNode* node)
  
   dot_file += "\n}";
  std::cout << dot_file << std::endl;
+}
+
+std::string DotBt::getAlias(const std::string &name)
+{
+  // Transform name to lower case
+  std::string out = boost::to_lower_copy<std::string>(name);
+
+  // Replace spaces with underscore
+  for (std::string::iterator it = out.begin(); it != out.end(); ++it)
+  {
+    if (*it == ' ')
+    {
+      *it = '_';
+    }
+  }
+  return out;
 }
 }  // namespace BT
