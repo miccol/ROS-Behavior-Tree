@@ -19,6 +19,7 @@
  */
 
 #include <dot_bt.h>
+#include <control_node.h>
 
 namespace BT
 {
@@ -63,14 +64,34 @@ std::string DotBt::defineNodeDot(TreeNode* node)
   return output;
 }
 
-void DotBt::produceDot(TreeNode* node)
+void DotBt::produceDot(TreeNode* node, TreeNode* parent)
 {
-  std::string dot_file;
-  dot_file = "digraph behavior_tree {\n";
-  dot_file += defineNodeDot(node);
- 
-  dot_file += "\n}";
- std::cout << dot_file << std::endl;
+  if (parent == NULL)
+  {
+    dot_file_ = "digraph behavior_tree {\n";
+  }
+
+  dot_file_ += defineNodeDot(node) + "\n";
+
+  if (parent != NULL)
+  {
+    dot_file_ += getAlias(parent->get_name()) + " -> " + getAlias(node->get_name()) + ";\n";
+  }
+
+  BT::ControlNode* n = dynamic_cast<BT::ControlNode*> (node);
+  if (n != NULL)
+  {
+    std::vector<TreeNode *> children = n->GetChildren();
+    for (unsigned int i = 0; i < children.size(); i++)
+    {
+      produceDot(children.at(i), node);
+    }
+  }
+
+  if (parent == NULL)
+  {
+    dot_file_ += "\n}";
+  }
 }
 
 std::string DotBt::getAlias(const std::string &name)
@@ -87,5 +108,10 @@ std::string DotBt::getAlias(const std::string &name)
     }
   }
   return out;
+}
+
+std::string DotBt::getDotFile()
+{
+  return dot_file_;
 }
 }  // namespace BT

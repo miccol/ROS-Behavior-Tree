@@ -33,7 +33,8 @@ class DotBt
 public:
   explicit DotBt();
   ~DotBt();
-  void produceDot(TreeNode* node);
+  void produceDot(TreeNode* node, TreeNode* parent = NULL);
+  std::string getDotFile();
 private:
   std::string defineNodeDot(TreeNode* node);
 
@@ -47,6 +48,8 @@ private:
    * @returns The final string as output.
    */
   std::string getAlias(const std::string &name);
+
+  std::string dot_file_;
 };
 }  // namespace BT
 
