@@ -18,14 +18,14 @@
  * DEALINGS IN THE SOFTWARE.
  */
 
-#include <rqt_bt.h>
+#include <dot_bt.h>
 
 namespace BT
 {
-RqtBt::RqtBt() {}
-RqtBt::~RqtBt() {}
+DotBt::DotBt() {}
+DotBt::~DotBt() {}
 
-std::string RqtBt::defineNodeDot(TreeNode* node)
+std::string DotBt::defineNodeDot(TreeNode* node)
 {
   std::string output;
   //output = RqtBt::getAlias(tree->get_name()) + " ";
@@ -63,7 +63,7 @@ std::string RqtBt::defineNodeDot(TreeNode* node)
   return output;
 }
 
-void RqtBt::produceDot(TreeNode* node)
+void DotBt::produceDot(TreeNode* node)
 {
   std::string dot_file;
   dot_file = "digraph behavior_tree {\n";

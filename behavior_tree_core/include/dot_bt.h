@@ -18,8 +18,8 @@
  * DEALINGS IN THE SOFTWARE.
  */
 
-#ifndef RQT_BT_H
-#define RQT_BT_H
+#ifndef DOT_BT_H
+#define DOT_BT_H
 
 #include <string>
 #include <tree_node.h>
@@ -27,15 +27,15 @@
 namespace BT
 {
 
-class RqtBt
+class DotBt
 {
 public:
-  explicit RqtBt();
-  ~RqtBt();
+  explicit DotBt();
+  ~DotBt();
   void produceDot(TreeNode* node);
 private:
   std::string defineNodeDot(TreeNode* node);
 };
 }  // namespace BT
 
-#endif  // RQT_BT_H
+#endif  // DOT_BT_H
