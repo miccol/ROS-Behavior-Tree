@@ -20,10 +20,17 @@
 
 #include <dot_bt.h>
 #include <control_node.h>
+#include <std_msgs/String.h>
 
 namespace BT
 {
-DotBt::DotBt() {}
+DotBt::DotBt(TreeNode* root, double ros_rate) :
+  loop_rate_(ros_rate),
+  root_(root)
+{
+  dotbt_publisher_ = n_.advertise<std_msgs::String>("/bt_dotcode", 1);
+}
+
 DotBt::~DotBt() {}
 
 std::string DotBt::defineNodeDot(TreeNode* node)
@@ -113,5 +120,18 @@ std::string DotBt::getAlias(const std::string &name)
 std::string DotBt::getDotFile()
 {
   return dot_file_;
+}
+
+void DotBt::publish()
+{
+  std_msgs::String msg;
+  while (ros::ok())
+  {
+    produceDot(root_);
+    msg.data = dot_file_;
+    dotbt_publisher_.publish(msg);
+    ros::spinOnce();
+    loop_rate_.sleep();
+  }
 }
 }  // namespace BT

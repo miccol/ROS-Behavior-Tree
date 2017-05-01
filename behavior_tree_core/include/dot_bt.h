@@ -22,6 +22,7 @@
 #define DOT_BT_H
 
 #include <string>
+#include <ros/ros.h>
 #include <tree_node.h>
 #include <boost/algorithm/string.hpp>
 
@@ -31,10 +32,11 @@ namespace BT
 class DotBt
 {
 public:
-  explicit DotBt();
+  explicit DotBt(TreeNode* root, double ros_rate = 50);
   ~DotBt();
   void produceDot(TreeNode* node, TreeNode* parent = NULL);
   std::string getDotFile();
+  void publish();
 private:
   std::string defineNodeDot(TreeNode* node);
 
@@ -50,6 +52,12 @@ private:
   std::string getAlias(const std::string &name);
 
   std::string dot_file_;
+
+  ros::NodeHandle n_;
+  ros::Publisher dotbt_publisher_;
+  ros::Rate loop_rate_;
+  
+  TreeNode* root_;
 };
 }  // namespace BT
 
