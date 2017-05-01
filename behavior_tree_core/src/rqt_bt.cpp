@@ -22,6 +22,54 @@
 
 namespace BT
 {
-  RqtBt::RqtBt() {}
-  RqtBt::~RqtBt() {}
+RqtBt::RqtBt() {}
+RqtBt::~RqtBt() {}
+
+std::string RqtBt::defineNodeDot(TreeNode* node)
+{
+  std::string output;
+  //output = RqtBt::getAlias(tree->get_name()) + " ";
+  output = "temp_node ";
+
+  switch (node->DrawType())
+  {
+    case SELECTORSTAR:
+      output += "[label=\"?*\" shape=\"box\"];";
+      break;
+    case BT::SEQUENCESTAR:
+      output += "[label=\">*\" shape=\"box\"];";
+      break;
+    case BT::SELECTOR:
+      output += "[label=\"?\" shape=\"box\"];";
+      break;
+    case BT::SEQUENCE:
+      output += "[label=\">\" shape=\"box\"];";
+      break;
+    case BT::PARALLEL:
+      output += "[label=\"=>\" shape=\"box\"];";
+      break;
+    case BT::DECORATOR:
+      output += "[label=\"D\" shape=\"diamond\"];";
+      break;
+    case BT::ACTION:
+      output += "[label=\"" + node->get_name() + "\" shape=\"box\"];";
+      break;
+    case BT::CONDITION:
+      output += "[label=\"" + node->get_name() + "\" shape=\"ellipse\"];";
+      break;
+    default:
+      break;
+  }
+  return output;
+}
+
+void RqtBt::produceDot(TreeNode* node)
+{
+  std::string dot_file;
+  dot_file = "digraph behavior_tree {\n";
+  dot_file += defineNodeDot(node);
+ 
+  dot_file += "\n}";
+ std::cout << dot_file << std::endl;
+}
 }  // namespace BT

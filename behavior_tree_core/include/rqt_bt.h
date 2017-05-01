@@ -21,15 +21,20 @@
 #ifndef RQT_BT_H
 #define RQT_BT_H
 
+#include <string>
+#include <tree_node.h>
+
 namespace BT
 {
 
 class RqtBt
 {
 public:
-    // Constructor
-    explicit RqtBt();
-    ~RqtBt();
+  explicit RqtBt();
+  ~RqtBt();
+  void produceDot(TreeNode* node);
+private:
+  std::string defineNodeDot(TreeNode* node);
 };
 }  // namespace BT
 
