@@ -45,19 +45,19 @@ std::string DotBt::defineNodeDot(TreeNode* node)
   switch (node->DrawType())
   {
     case SELECTORSTAR:
-      output += "[label=\"?*\" shape=\"box\"";
+      output += "[label=\"*\n?\" shape=\"box\"";
       break;
     case BT::SEQUENCESTAR:
-      output += "[label=\">*\" shape=\"box\"";
+      output += "[label=\"*\n-->\" shape=\"box\"";
       break;
     case BT::SELECTOR:
       output += "[label=\"?\" shape=\"box\"";
       break;
     case BT::SEQUENCE:
-      output += "[label=\">\" shape=\"box\"";
+      output += "[label=\"-->\" shape=\"box\"";
       break;
     case BT::PARALLEL:
-      output += "[label=\"=>\" shape=\"box\"";
+      output += "[label=\"-->\n-->\" shape=\"box\"";
       break;
     case BT::DECORATOR:
       output += "[label=\"D\" shape=\"diamond\"";
