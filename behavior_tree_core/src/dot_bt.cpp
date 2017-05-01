@@ -37,9 +37,11 @@ DotBt::~DotBt() {}
 std::string DotBt::defineNodeDot(TreeNode* node)
 {
   std::string output;
-  output = getAlias(node->get_name()) + " ";
-  //output = "temp_node ";
 
+  // Create an alias for naming the DOT object.
+  output = getAlias(node->get_name()) + " ";
+
+  // Find the type of the node and its shape and symbol (label).
   switch (node->DrawType())
   {
     case SELECTORSTAR:
@@ -70,6 +72,7 @@ std::string DotBt::defineNodeDot(TreeNode* node)
       break;
   }
 
+  // Get the current status of the node for the coloring.
   switch (node->get_color_status())
   {
     case BT::RUNNING:
@@ -97,18 +100,22 @@ std::string DotBt::defineNodeDot(TreeNode* node)
 
 void DotBt::produceDot(TreeNode* node, TreeNode* parent)
 {
+  // If this node is the root of the tree initialize the directed graph
   if (parent == NULL)
   {
     dot_file_ = "digraph behavior_tree {\n";
   }
 
+  // Add the definition of this node
   dot_file_ += defineNodeDot(node) + "\n";
 
+  // If the node has a parent, add it as a child of its parent.
   if (parent != NULL)
   {
     dot_file_ += getAlias(parent->get_name()) + " -> " + getAlias(node->get_name()) + ";\n";
   }
 
+  // If this node has children run recursively for each child.
   BT::ControlNode* n = dynamic_cast<BT::ControlNode*> (node);
   if (n != NULL)
   {
@@ -119,6 +126,7 @@ void DotBt::produceDot(TreeNode* node, TreeNode* parent)
     }
   }
 
+  // In case every recursive calls returns to the root call, close the file.
   if (parent == NULL)
   {
     dot_file_ += "\n}";
@@ -149,6 +157,8 @@ std::string DotBt::getDotFile()
 void DotBt::publish()
 {
   std_msgs::String msg;
+
+  // Start the loop for publishing the tree
   while (ros::ok())
   {
     produceDot(root_);
