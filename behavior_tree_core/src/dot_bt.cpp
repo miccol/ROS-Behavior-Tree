@@ -21,6 +21,7 @@
 #include <dot_bt.h>
 #include <control_node.h>
 #include <std_msgs/String.h>
+#include <cctype>
 
 namespace BT
 {
@@ -45,28 +46,28 @@ std::string DotBt::defineNodeDot(TreeNode* node)
   switch (node->DrawType())
   {
     case SELECTORSTAR:
-      output += "[label=\"*\n?\" shape=\"box\"";
+      output += "[label=\"*\n?\" penwidth=\"2\"  shape=\"box\"";
       break;
     case BT::SEQUENCESTAR:
-      output += "[label=\"*\n-->\" shape=\"box\"";
+      output += "[label=\"*\n-->\" penwidth=\"2\"  shape=\"box\"";
       break;
     case BT::SELECTOR:
-      output += "[label=\"?\" shape=\"box\"";
+      output += "[label=\"?\" penwidth=\"2\"  shape=\"box\"";
       break;
     case BT::SEQUENCE:
-      output += "[label=\"-->\" shape=\"box\"";
+      output += "[label=\"-->\" penwidth=\"2\"  shape=\"box\"";
       break;
     case BT::PARALLEL:
-      output += "[label=\"-->\n-->\" shape=\"box\"";
+      output += "[label=\"-->\n-->\" penwidth=\"2\"  shape=\"box\"";
       break;
     case BT::DECORATOR:
-      output += "[label=\"D\" shape=\"diamond\"";
+      output += "[label=\"D\" penwidth=\"2\" shape=\"diamond\"";
       break;
     case BT::ACTION:
-      output += "[label=\"" + node->get_name() + "\" shape=\"box\" fillcolor=\"palegreen\" style=\"filled\"";
+      output += "[label=\"" + node->get_name() + "\" penwidth=\"2\" shape=\"box\" fillcolor=\"palegreen\" style=\"filled\"";
       break;
     case BT::CONDITION:
-      output += "[label=\"" + node->get_name() + "\" shape=\"ellipse\" fillcolor=\"khaki1\" style=\"filled\"";
+      output += "[label=\"" + node->get_name() + "\" penwidth=\"2\" shape=\"ellipse\" fillcolor=\"khaki1\" style=\"filled\"";
       break;
     default:
       break;
@@ -103,7 +104,7 @@ void DotBt::produceDot(TreeNode* node, TreeNode* parent)
   // If this node is the root of the tree initialize the directed graph
   if (parent == NULL)
   {
-    dot_file_ = "digraph behavior_tree {\n";
+    dot_file_ = "graph behavior_tree {\n";
   }
 
   // Add the definition of this node
@@ -112,7 +113,7 @@ void DotBt::produceDot(TreeNode* node, TreeNode* parent)
   // If the node has a parent, add it as a child of its parent.
   if (parent != NULL)
   {
-    dot_file_ += getAlias(parent->get_name()) + " -> " + getAlias(node->get_name()) + ";\n";
+    dot_file_ += getAlias(parent->get_name()) + " -- " + getAlias(node->get_name()) + ";\n";
   }
 
   // If this node has children run recursively for each child.
@@ -138,10 +139,18 @@ std::string DotBt::getAlias(const std::string &name)
   // Transform name to lower case
   std::string out = boost::to_lower_copy<std::string>(name);
 
-  // Replace spaces with underscore
+  // If first character is digit add a letter at the beginning
+  // in order to avoid weird aliases
+  if (std::isdigit(out.at(0)))
+  {
+    out.insert(0, "a");
+  }
+
+
+  // Replace spaces and dashes with underscore
   for (std::string::iterator it = out.begin(); it != out.end(); ++it)
   {
-    if (*it == ' ')
+    if (*it == ' ' || *it == '-')
     {
       *it = '_';
     }
