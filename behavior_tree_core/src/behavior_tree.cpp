@@ -13,6 +13,7 @@
 
 #include<behavior_tree.h>
 #include <dot_bt.h>
+#include <ros/ros.h>
 
 
 
@@ -20,8 +21,8 @@ void Execute(BT::ControlNode* root, int TickPeriod_milliseconds)
 {
     std::string bt_dotcode_topic = "/bt_dotcode";
     double rate = 50;
-    std::cout << "Start publishing the tree in topic: " << bt_dotcode_topic
-              << " with rate: " << rate << " Hz" << std::endl;
+    ROS_INFO_STREAM("Start publishing the tree in topic: " << bt_dotcode_topic
+                    << " with rate: " << rate << " Hz");
 
     // Starts in another thread the drawing of the BT
     BT::DotBt dotbt(root, bt_dotcode_topic, rate);
@@ -29,7 +30,7 @@ void Execute(BT::ControlNode* root, int TickPeriod_milliseconds)
 
     root->ResetColorState();
 
-    while (true)
+    while (ros::ok())
     {
         DEBUG_STDOUT("Ticking the root node !");
 
