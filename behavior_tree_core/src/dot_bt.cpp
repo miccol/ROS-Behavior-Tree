@@ -22,6 +22,7 @@
 #include <control_node.h>
 #include <std_msgs/String.h>
 #include <cctype>
+#include <algorithm>
 
 namespace BT
 {
@@ -35,12 +36,9 @@ DotBt::DotBt(TreeNode* root, const std::string& topic, double ros_rate) :
 
 DotBt::~DotBt() {}
 
-std::string DotBt::defineNodeDot(TreeNode* node)
+std::string DotBt::defineNodeDot(TreeNode* node, const std::string& alias)
 {
-  std::string output;
-
-  // Create an alias for naming the DOT object.
-  output = getAlias(node->get_name()) + " ";
+  std::string output = alias + " ";
 
   // Find the type of the node and its shape and symbol (label).
   switch (node->DrawType())
@@ -99,21 +97,34 @@ std::string DotBt::defineNodeDot(TreeNode* node)
   return output;
 }
 
-void DotBt::produceDot(TreeNode* node, TreeNode* parent)
+void DotBt::produceDot(TreeNode* node, TreeNode* parent, const std::string& parent_alias)
 {
   // If this node is the root of the tree initialize the directed graph
   if (parent == NULL)
   {
     dot_file_ = "graph behavior_tree {\n";
+    aliases.clear();
   }
 
+  // Create an alias for naming the DOT object.
+  std::string alias = getAlias(node->get_name());
+
+  // Search if this alias exists (the nodes has the same names or the node has
+  // multiple parents. In this case change the alias in order to use a
+  // different visualization instance for this case.
+  if (std::find(aliases.begin(), aliases.end(), alias) != aliases.end())
+  {
+    alias += "x";
+  }
+  aliases.push_back(alias);
+
   // Add the definition of this node
-  dot_file_ += defineNodeDot(node) + "\n";
+  dot_file_ += defineNodeDot(node, alias) + "\n";
 
   // If the node has a parent, add it as a child of its parent.
   if (parent != NULL)
   {
-    dot_file_ += getAlias(parent->get_name()) + " -- " + getAlias(node->get_name()) + ";\n";
+    dot_file_ += parent_alias + " -- " + alias + ";\n";
   }
 
   // If this node has children run recursively for each child.
@@ -123,7 +134,7 @@ void DotBt::produceDot(TreeNode* node, TreeNode* parent)
     std::vector<TreeNode *> children = n->GetChildren();
     for (unsigned int i = 0; i < children.size(); i++)
     {
-      produceDot(children.at(i), node);
+      produceDot(children.at(i), node, alias);
     }
   }
 

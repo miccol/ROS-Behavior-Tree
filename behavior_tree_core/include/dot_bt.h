@@ -36,7 +36,10 @@ namespace BT
  * describes the current BT running. It also provide ROS publisher for
  * publishing this code in a ROS topic. Then, the user can use the rqt_dot
  * plugin in order to visualize in real-time the current tree and the status of
- * each node.
+ * each node. Regarding multi-parenting this class visualize the node multiple
+ * times under its different parents, in order to have a straight-forward
+ * visualization. Notice that in the implementation level the same node will be
+ * ticked.
  *
  * Find below an example of use:
  *
@@ -100,8 +103,10 @@ private:
    * @param node The current node.
    * @param parent The parent of the current node. Defaults to NULL for the
    * root of the tree.
+   * @param parent_alias The alias of the parent to be used in the DOT code.
+   * Defaults to empty string in case this node is the root of the tree.
    */
-  void produceDot(TreeNode* node, TreeNode* parent = NULL);
+  void produceDot(TreeNode* node, TreeNode* parent = NULL, const std::string& parent_alias = "");
 
   /**
    * @brief Produces DOT code for the definition of the node.
@@ -113,13 +118,11 @@ private:
    * (Running, Idle, Failed etc) in order to give the correct color to each
    * node.
    *
-   * @attention It assumes that the names of every node in the tree are
-   * different.
-   * 
    * @param node A pointer to the node to be defined.
+   * @param alias The alias of the given node.
    * @returns The definition of the Node in DOT
    */
-  std::string defineNodeDot(TreeNode* node);
+  std::string defineNodeDot(TreeNode* node, const std::string& alias);
 
   /**
    * @brief Returns the alias of a node.
@@ -162,6 +165,8 @@ private:
    * @brief The rate at which the DotBt::dotbt_publisher_ will publish the tree.
    */
   ros::Rate loop_rate_;
+
+  std::vector<std::string> aliases;
 };
 }  // namespace BT
 
