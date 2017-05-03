@@ -19,13 +19,8 @@
 
 void Execute(BT::ControlNode* root, int TickPeriod_milliseconds)
 {
-    std::string bt_dotcode_topic = "/bt_dotcode";
-    double rate = 50;
-    ROS_INFO_STREAM("Start publishing the tree in topic: " << bt_dotcode_topic
-                    << " with rate: " << rate << " Hz");
-
     // Starts in another thread the drawing of the BT
-    BT::DotBt dotbt(root, bt_dotcode_topic, rate);
+    BT::DotBt dotbt(root);
     std::thread t(&BT::DotBt::publish, dotbt);
 
     root->ResetColorState();

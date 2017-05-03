@@ -34,6 +34,9 @@ DotBt::DotBt(TreeNode* root, const std::string& topic, double ros_rate, bool lef
   multiple_parents_(multiple_parents)
 {
   dotbt_publisher_ = n_.advertise<std_msgs::String>(topic_, 1);
+
+  ROS_INFO_STREAM("Visualization: Start publishing the tree in topic: "
+      << topic_ << " with rate: " << ros_rate << " Hz.");
 }
 
 DotBt::~DotBt() {}
