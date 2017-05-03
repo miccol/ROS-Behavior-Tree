@@ -103,7 +103,7 @@ void DotBt::produceDot(TreeNode* node, TreeNode* parent, const std::string& pare
   if (parent == NULL)
   {
     dot_file_ = "graph behavior_tree {\n";
-    aliases.clear();
+    aliases_.clear();
   }
 
   // Create an alias for naming the DOT object.
@@ -112,11 +112,11 @@ void DotBt::produceDot(TreeNode* node, TreeNode* parent, const std::string& pare
   // Search if this alias exists (the nodes has the same names or the node has
   // multiple parents. In this case change the alias in order to use a
   // different visualization instance for this case.
-  if (std::find(aliases.begin(), aliases.end(), alias) != aliases.end())
+  if (std::find(aliases_.begin(), aliases_.end(), alias) != aliases_.end())
   {
     alias += "x";
   }
-  aliases.push_back(alias);
+  aliases_.push_back(alias);
 
   // Add the definition of this node
   dot_file_ += defineNodeDot(node, alias) + "\n";

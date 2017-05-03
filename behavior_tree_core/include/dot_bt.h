@@ -98,7 +98,9 @@ private:
    * Initially defines the current node calling DotBt::produceDot and then if
    * the current node has a parent produces the DOT code for adding this node
    * as the child of its parent. If the node has children repeats this process
-   * recursively.
+   * recursively. It also checks if the produced alias of the node is already
+   * existing in order to visualize with a different instance nodes with
+   * multiple parents or nodes with the same name.
    *
    * @param node The current node.
    * @param parent The parent of the current node. Defaults to NULL for the
@@ -111,8 +113,7 @@ private:
   /**
    * @brief Produces DOT code for the definition of the node.
    *
-   * For the current node creates an alias name with DotBt::getAlias based on
-   * the node's name. This alias used as the DOT object of the node. Then
+   * The current node's alias is used as the DOT object of the node. Then
    * checks the type of the node (Action, Sequence etc) and gives the node the
    * correct shape and label. Finally it checks the status of the node
    * (Running, Idle, Failed etc) in order to give the correct color to each
@@ -166,7 +167,11 @@ private:
    */
   ros::Rate loop_rate_;
 
-  std::vector<std::string> aliases;
+  /**
+   * @brief Stores the aliases of each node of tree. It is used for avoiding
+   * conflicts due to nodes with the same name or multiple parents.
+   */
+  std::vector<std::string> aliases_;
 };
 }  // namespace BT
 
