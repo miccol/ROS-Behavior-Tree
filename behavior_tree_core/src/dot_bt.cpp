@@ -26,10 +26,11 @@
 
 namespace BT
 {
-DotBt::DotBt(TreeNode* root, const std::string& topic, double ros_rate, bool multiple_parents) :
+DotBt::DotBt(TreeNode* root, const std::string& topic, double ros_rate, bool left_right, bool multiple_parents) :
   root_(root),
   topic_(topic),
   loop_rate_(ros_rate),
+  left_right_(left_right),
   multiple_parents_(multiple_parents)
 {
   dotbt_publisher_ = n_.advertise<std_msgs::String>(topic_, 1);
@@ -104,6 +105,11 @@ void DotBt::produceDot(TreeNode* node, TreeNode* parent, const std::string& pare
   if (parent == NULL)
   {
     dot_file_ = "graph behavior_tree {\n";
+    if (left_right_)
+    {
+      dot_file_ += "rankdir=LR;\n";
+    }
+
     if (!multiple_parents_)
     {
       aliases_.clear();

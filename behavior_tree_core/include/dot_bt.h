@@ -69,6 +69,8 @@ public:
    * @param topic The name of the ROS topic to publish the tree. Defaults to
    * "/bt_dotcode".
    * @param ros_rate The rate of the publishing in Hz. Defaults to 50Hz.
+   * @param left_right Set true if a left to right visualization is desired.
+   * Defaults to true, i.e. top-down visualization
    * @param multiple_parents Set true if it is desired to visualize nodes with
    * multiple parents (or nodes with the same name) without duplication. It is
    * recommended to use the default (false) value for better results.
@@ -76,6 +78,7 @@ public:
   explicit DotBt(TreeNode* root,
                  const std::string& topic = "/bt_dotcode",
                  double ros_rate = 50,
+                 bool left_right = false,
                  bool multiple_parents = false);
 
   /**
@@ -179,6 +182,11 @@ private:
    * conflicts due to nodes with the same name or multiple parents.
    */
   std::vector<std::string> aliases_;
+
+  /**
+   * @brief True for left to right visualization. False for top to down.
+   */
+  bool left_right_;
 
   /**
    * @brief True if you want to visualize nodes with multiple parents without
