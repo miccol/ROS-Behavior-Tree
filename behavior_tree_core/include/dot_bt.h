@@ -36,10 +36,13 @@ namespace BT
  * describes the current BT running. It also provide ROS publisher for
  * publishing this code in a ROS topic. Then, the user can use the rqt_dot
  * plugin in order to visualize in real-time the current tree and the status of
- * each node. Regarding multi-parenting this class visualize the node multiple
- * times under its different parents, in order to have a straight-forward
- * visualization. Notice that in the implementation level the same node will be
- * ticked.
+ * each node. Regarding multi-parenting this class by default visualize the
+ * node multiple times under its different parents, in order to have a
+ * straight-forward visualization. Notice that in the implementation level the
+ * same node will be ticked. The class also provides the option to visualize
+ * the nodes with the same name as one node and the nodes with multiple parents
+ * as without replication (in order to detect visually these undesired
+ * replications).
  *
  * Find below an example of use:
  *
@@ -66,10 +69,14 @@ public:
    * @param topic The name of the ROS topic to publish the tree. Defaults to
    * "/bt_dotcode".
    * @param ros_rate The rate of the publishing in Hz. Defaults to 50Hz.
+   * @param multiple_parents Set true if it is desired to visualize nodes with
+   * multiple parents (or nodes with the same name) without duplication. It is
+   * recommended to use the default (false) value for better results.
    */
   explicit DotBt(TreeNode* root,
                  const std::string& topic = "/bt_dotcode",
-                 double ros_rate = 50);
+                 double ros_rate = 50,
+                 bool multiple_parents = false);
 
   /**
    * @brief An empty destructor.
@@ -172,6 +179,12 @@ private:
    * conflicts due to nodes with the same name or multiple parents.
    */
   std::vector<std::string> aliases_;
+
+  /**
+   * @brief True if you want to visualize nodes with multiple parents without
+   * duplication.
+   */
+  bool multiple_parents_;
 };
 }  // namespace BT
 
