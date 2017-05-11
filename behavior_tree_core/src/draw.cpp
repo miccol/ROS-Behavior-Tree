@@ -397,31 +397,36 @@ void updateTree(BT::TreeNode* tree, GLfloat x_pos, GLfloat y_pos, GLfloat y_offs
 
             if (children[i]->has_alias())
             {
-                // cheking if I need to halt the child (has alias)
-                for (unsigned int k=0; k < i; k++)
+                unsigned int k;
+                for (k = 0; k < i; k++)
                 {
-                    if (children[k] == children[i] && children[k]->get_status() == BT::HALTED )
-                    {
-                    }
-                    else
+
+                    if (children[k] == children[i] && children[k]->get_status() == BT::HALTED  )
                     {
                         color_child = false;
+                        break;
                     }
                 }
+
+//                if (k == j)
+//                {
+//                    DEBUG_STDOUT("NO PREVOUS ALIAS FOUND. NEED TO HALT FIRST ALIAS " << children_nodes_[j]-> get_name());
+//                    children_nodes_[j]->Halt();
+//                }
             }
 
 
             if (i > 0)
             {
                 updateTree(children[i], x_shift + children_x_end.at(i - 1) ,
-                           y_pos - y_offset  , y_offset, depth + 1, color_node && color_child);
+                           y_pos - y_offset  , y_offset, depth + 1, tree->get_status() != BT::HALTED && color_node && color_child);
                 draw_edge(x_pos + 0.015, y_pos, 0.02,
                           x_shift + children_x_end.at(i-1) + children_x_middle_relative.at(i),
                           y_pos - y_offset, 0.02);
             }
             else
             {
-                updateTree(children[i], x_shift , y_pos - y_offset  , y_offset, depth + 1, color_node && color_child);
+                updateTree(children[i], x_shift , y_pos - y_offset  , y_offset, depth + 1, tree->get_status() != BT::HALTED && color_node && color_child);
                 draw_edge(x_pos + 0.015, y_pos, 0.02,
                           x_shift + children_x_middle_relative.at(i), y_pos - y_offset, 0.02);
             }

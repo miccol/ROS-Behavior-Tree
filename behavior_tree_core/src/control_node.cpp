@@ -85,26 +85,31 @@ void BT::ControlNode::HaltChildren(int i)
                     DEBUG_STDOUT("ALIAS FOR CHILD " << children_nodes_[j]-> get_name());
 
                     // cheking if I need to halt the child (has alias)
-                    for (unsigned int k=0; k < j; k++)
+                    unsigned int k;
+
+                    for (k = 0; k < j; k++)
                     {
-                        if (children_nodes_[k] == children_nodes_[j] && children_nodes_[k]->get_status() == BT::HALTED )
+                        DEBUG_STDOUT("CHECKING FOR ALIAS OF " << children_nodes_[j]-> get_name() << " AT " << k);
+
+                        if (children_nodes_[k] == children_nodes_[j] && children_nodes_[k]->get_status() == BT::HALTED  )
                         {
-                            DEBUG_STDOUT("SENDING HALT TO ALIAS CHILD " << children_nodes_[j]-> get_name());
-                            children_nodes_[j]->Halt();
+                            DEBUG_STDOUT("FOUND PREVIOUS ALIAS FOR " << children_nodes_[j]-> get_name());
                             break;
                         }
-                        else
-                        {
-                            DEBUG_STDOUT("NOT SENDING HALT TO ALIAS CHILD " << children_nodes_[j]-> get_name());
-                        }
+                    }
+
+                    if (k == j)
+                    {
+                        DEBUG_STDOUT("NO PREVOUS ALIAS FOUND. NEED TO HALT FIRST ALIAS " << children_nodes_[j]-> get_name());
+                        children_nodes_[j]->Halt();
                     }
                 }
                 else
                 {
-                DEBUG_STDOUT("NO ALIAS FOR CHILD " << children_nodes_[j]-> get_name());
+                    DEBUG_STDOUT("NO ALIAS FOR CHILD " << children_nodes_[j]-> get_name());
 
-                DEBUG_STDOUT("SENDING HALT TO CHILD " << children_nodes_[j]-> get_name());
-                children_nodes_[j]->Halt();
+                    DEBUG_STDOUT("SENDING HALT TO CHILD " << children_nodes_[j]-> get_name());
+                    children_nodes_[j]->Halt();
                 }
             }
             else
