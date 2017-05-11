@@ -323,21 +323,38 @@ void drawCircle(float radius)
 }
 
 
-void updateTree(BT::TreeNode* tree, GLfloat x_pos, GLfloat y_pos, GLfloat y_offset, int depth )
+void updateTree(BT::TreeNode* tree, GLfloat x_pos, GLfloat y_pos, GLfloat y_offset, int depth, bool color_node)
 {
     BT::ControlNode* d = dynamic_cast<BT::ControlNode*> (tree);
     if (d == NULL)
     {
         // if it is a leaf node, draw it
-        draw_node(x_pos , (GLfloat) y_pos, tree->DrawType(), tree->get_name().c_str(), tree->get_color_status());
+        if (color_node)
+        {
+            draw_node(x_pos , (GLfloat) y_pos, tree->DrawType(), tree->get_name().c_str(), tree->get_color_status());
+        }
+        else
+        {
+            draw_node(x_pos , (GLfloat) y_pos, tree->DrawType(), tree->get_name().c_str(), BT::IDLE);
+        }
     }
     else
     {
         // if it is a control flow node, draw it and its children
-        draw_node((GLfloat) x_pos, (GLfloat) y_pos, tree->DrawType(),
-                  tree->get_name().c_str(), tree->get_color_status());
+//        draw_node((GLfloat) x_pos, (GLfloat) y_pos, tree->DrawType(),
+//                  tree->get_name().c_str(), tree->get_color_status());
+
+        if (color_node)
+        {
+            draw_node(x_pos , (GLfloat) y_pos, tree->DrawType(), tree->get_name().c_str(), tree->get_color_status());
+        }
+        else
+        {
+            draw_node(x_pos , (GLfloat) y_pos, tree->DrawType(), tree->get_name().c_str(), BT::IDLE);
+        }
+
         std::vector<BT::TreeNode*> children = d->GetChildren();
-        int M = d->GetChildrenNumber();
+        unsigned int M = d->GetChildrenNumber();
         std::vector<GLfloat> children_x_end;
         std::vector<GLfloat> children_x_middle_relative;
 
@@ -345,7 +362,7 @@ void updateTree(BT::TreeNode* tree, GLfloat x_pos, GLfloat y_pos, GLfloat y_offs
         // GLfloat max_x_start = 0;  // commented out as unused variable
         GLfloat current_x_end = 0;
 
-        for (int i = 0; i < M; i++)
+        for (unsigned int i = 0; i < M; i++)
         {
             if (children[i]->DrawType() != BT::ACTION && children[i]->DrawType() != BT::CONDITION)
             {
@@ -374,18 +391,37 @@ void updateTree(BT::TreeNode* tree, GLfloat x_pos, GLfloat y_pos, GLfloat y_offs
         GLfloat x_shift = x_pos - max_x_end/2;
         // GLfloat x_shift_new = 0;  // commented-out as unused variable
 
-        for (int i = 0; i < M; i++)
+        for (unsigned int i = 0; i < M; i++)
         {
+            bool color_child = true;
+
+            if (children[i]->has_alias())
+            {
+                // cheking if I need to halt the child (has alias)
+                for (unsigned int k=0; k < i; k++)
+                {
+                    if (children[k] == children[i] && children[k]->get_status() == BT::HALTED )
+                    {
+                    }
+                    else
+                    {
+                        color_child = false;
+                    }
+                }
+            }
+
+
             if (i > 0)
             {
-                updateTree(children[i], x_shift + children_x_end.at(i - 1) , y_pos - y_offset  , y_offset, depth + 1);
+                updateTree(children[i], x_shift + children_x_end.at(i - 1) ,
+                           y_pos - y_offset  , y_offset, depth + 1, color_node && color_child);
                 draw_edge(x_pos + 0.015, y_pos, 0.02,
                           x_shift + children_x_end.at(i-1) + children_x_middle_relative.at(i),
                           y_pos - y_offset, 0.02);
             }
             else
             {
-                updateTree(children[i], x_shift , y_pos - y_offset  , y_offset, depth + 1);
+                updateTree(children[i], x_shift , y_pos - y_offset  , y_offset, depth + 1, color_node && color_child);
                 draw_edge(x_pos + 0.015, y_pos, 0.02,
                           x_shift + children_x_middle_relative.at(i), y_pos - y_offset, 0.02);
             }
@@ -401,7 +437,7 @@ void display()
 {
     glClearColor(r_color, g_color, b_color, 0.1);    // clear the draw buffer .
     glClear(GL_COLOR_BUFFER_BIT);   // Erase everything
-    updateTree(tree, x , y, y_offset, 1);
+    updateTree(tree, x , y, y_offset, 1, true);
     glutSwapBuffers();
     glutPostRedisplay();
 }
@@ -510,6 +546,9 @@ void drawTree(BT::ControlNode* tree_)
 
     /***************************ENDOF BT VISUALIZATION ****************************/
 }
+
+
+
 
 
 

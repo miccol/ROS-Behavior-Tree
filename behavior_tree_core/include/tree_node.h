@@ -41,7 +41,7 @@
 
 #endif
 
-  // #define DEBUG  // uncomment this line if you want to print debug messages
+//   #define DEBUG  // uncomment this line if you want to print debug messages
 
 #ifdef DEBUG
   // #define DEBUG_STDERR(x) (std::cerr << (x))
@@ -105,6 +105,8 @@ class TreeNode
 private:
     // Node name
     std::string name_;
+    bool has_alias_;
+
 
 
 
@@ -176,6 +178,8 @@ public:
     void set_name(std::string new_name);
 
     NodeType get_type();
+    bool has_alias();
+    void set_has_alias(bool has_alias);
 };
 }  // namespace BT
 

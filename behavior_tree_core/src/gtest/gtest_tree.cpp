@@ -868,6 +868,7 @@ int main(int argc, char **argv)
 {
     ros::init(argc, argv, "BehaviorTree");
 
+    // testing::GTEST_FLAG(filter) = "ComplexSequence2ActionsTest.ConditionsTrue";
     testing::InitGoogleTest(&argc, argv);
     return RUN_ALL_TESTS();
 }

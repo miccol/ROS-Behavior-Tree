@@ -11,6 +11,7 @@
 */
 
 
+
 #include <control_node.h>
 #include <string>
 #include <vector>
@@ -28,14 +29,14 @@ BT::ControlNode::~ControlNode() {}
 
 void BT::ControlNode::AddChild(TreeNode* child)
 {
-//    // Checking if the child is not already present
-//    for (unsigned int i=0; i<children_nodes_.size(); i++)
-//    {
-//        if (children_nodes_[i] == child)
-//        {
-//            throw BehaviorTreeException("'" + child->get_name() + "' is already a '" + get_name() + "' child.");
-//        }
-//    }
+    // Checking if the child is not already present
+    for (unsigned int i=0; i<children_nodes_.size(); i++)
+    {
+        if (children_nodes_[i] == child)
+        {
+            child->set_has_alias(true);
+        }
+    }
 
     children_nodes_.push_back(child);
     children_states_.push_back(BT::IDLE);
@@ -79,8 +80,35 @@ void BT::ControlNode::HaltChildren(int i)
         {
             if (children_nodes_[j]->get_status() == BT::RUNNING)
             {
+
+
+                if (children_nodes_[j]->has_alias())
+                {
+                    DEBUG_STDOUT("ALIAS FOR CHILD " << children_nodes_[j]-> get_name());
+
+                    // cheking if I need to halt the child (has alias)
+                    for (unsigned int k=0; k < j; k++)
+                    {
+                        if (children_nodes_[k] == children_nodes_[j] && children_nodes_[k]->get_status() == BT::HALTED )
+                        {
+                            DEBUG_STDOUT("SENDING HALT TO ALIAS CHILD " << children_nodes_[j]-> get_name());
+                            children_nodes_[j]->Halt();
+                            break;
+                        }
+                        else
+                        {
+                            DEBUG_STDOUT("NOT SENDING HALT TO ALIAS CHILD " << children_nodes_[j]-> get_name());
+                        }
+                    }
+                }
+                else
+                {
+                DEBUG_STDOUT("NO ALIAS FOR CHILD " << children_nodes_[j]-> get_name());
+
                 DEBUG_STDOUT("SENDING HALT TO CHILD " << children_nodes_[j]-> get_name());
                 children_nodes_[j]->Halt();
+                }
+
             }
             else
             {
