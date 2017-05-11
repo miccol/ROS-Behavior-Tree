@@ -193,6 +193,8 @@ private:
    * duplication.
    */
   bool multiple_parents_;
+
+  int multiple_alias_solver_;
 };
 }  // namespace BT
 

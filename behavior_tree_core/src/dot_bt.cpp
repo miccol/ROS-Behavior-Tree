@@ -24,6 +24,16 @@
 #include <cctype>
 #include <algorithm>
 
+
+
+#include <boost/graph/adjacency_list.hpp>
+#include <boost/graph/vf2_sub_graph_iso.hpp>
+#include <boost/graph/graphviz.hpp>
+
+using namespace std;
+using namespace boost;
+
+
 namespace BT
 {
 DotBt::DotBt(TreeNode* root, const std::string& topic, double ros_rate, bool left_right, bool multiple_parents) :
@@ -31,7 +41,8 @@ DotBt::DotBt(TreeNode* root, const std::string& topic, double ros_rate, bool lef
   topic_(topic),
   loop_rate_(ros_rate),
   left_right_(left_right),
-  multiple_parents_(multiple_parents)
+  multiple_parents_(multiple_parents),
+  multiple_alias_solver_(0)
 {
   dotbt_publisher_ = n_.advertise<std_msgs::String>(topic_, 1);
 
@@ -120,19 +131,26 @@ void DotBt::produceDot(TreeNode* node, TreeNode* parent, const std::string& pare
   }
 
   // Create an alias for naming the DOT object.
-  std::string alias = getAlias(node->get_name());
+  std::string alias = getAlias(string(node->get_name()));
 
   // Search if this alias exists (the nodes has the same names or the node has
   // multiple parents. In this case change the alias in order to use a
   // different visualization instance for this case.
-  if (!multiple_parents_)
-  {
+
     if (std::find(aliases_.begin(), aliases_.end(), alias) != aliases_.end())
     {
-      alias += "x";
+      alias += to_string(multiple_alias_solver_++);
     }
     aliases_.push_back(alias);
-  }
+
+
+
+//  static const char alphanum[] =
+//      "0123456789"
+//      "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+//      "abcdefghijklmnopqrstuvwxyz";
+
+//   alias += alphanum[rand() % (sizeof(alphanum) - 1)];
 
   // Add the definition of this node
   dot_file_ += defineNodeDot(node, alias) + "\n";
@@ -148,7 +166,7 @@ void DotBt::produceDot(TreeNode* node, TreeNode* parent, const std::string& pare
   if (n != NULL)
   {
     std::vector<TreeNode *> children = n->GetChildren();
-    for (unsigned int i = 0; i < children.size(); i++)
+    for (unsigned int i = 0; i < n->GetChildrenNumber(); i++)
     {
       produceDot(children.at(i), node, alias);
     }
@@ -190,18 +208,20 @@ std::string DotBt::getDotFile()
   return dot_file_;
 }
 
+
 void DotBt::publish()
 {
-  std_msgs::String msg;
+    std_msgs::String msg;
 
-  // Start the loop for publishing the tree
-  while (ros::ok())
-  {
-    produceDot(root_);
-    msg.data = dot_file_;
-    dotbt_publisher_.publish(msg);
-    ros::spinOnce();
-    loop_rate_.sleep();
-  }
+    // Start the loop for publishing the tree
+    while (ros::ok())
+    {
+        produceDot(root_);
+        msg.data = dot_file_;
+
+        dotbt_publisher_.publish(msg);
+        ros::spinOnce();
+        loop_rate_.sleep();
+    }
 }
 }  // namespace BT
