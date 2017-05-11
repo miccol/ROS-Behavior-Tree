@@ -12,6 +12,8 @@
 
 
 #include<behavior_tree.h>
+#include <dot_bt.h>
+#include <ros/ros.h>
 
 
 
@@ -19,11 +21,12 @@ void Execute(BT::ControlNode* root, int TickPeriod_milliseconds)
 {
     std::cout << "Start Drawing!" << std::endl;
     // Starts in another thread the drawing of the BT
-    std::thread t(&drawTree, root);
+    BT::DotBt dotbt(root);
+    std::thread t(&BT::DotBt::publish, dotbt);
 
     root->ResetColorState();
 
-    while (true)
+    while (ros::ok())
     {
         DEBUG_STDOUT("Ticking the root node !");
 
