@@ -401,7 +401,7 @@ void updateTree(BT::TreeNode* tree, GLfloat x_pos, GLfloat y_pos, GLfloat y_offs
                 for (k = 0; k < i; k++)
                 {
 
-                    if (children[k] == children[i] && children[k]->get_status() == BT::HALTED  )
+                    if (children[k] == children[i] && (children[k]->get_status() == BT::HALTED || children[k]->get_status() == BT::IDLE) )
                     {
                         color_child = false;
                         break;
@@ -419,14 +419,14 @@ void updateTree(BT::TreeNode* tree, GLfloat x_pos, GLfloat y_pos, GLfloat y_offs
             if (i > 0)
             {
                 updateTree(children[i], x_shift + children_x_end.at(i - 1) ,
-                           y_pos - y_offset  , y_offset, depth + 1, tree->get_status() != BT::HALTED && color_node && color_child);
+                           y_pos - y_offset  , y_offset, depth + 1, (tree->get_status() != BT::HALTED && tree->get_status() != BT::IDLE  ) && color_node && color_child);
                 draw_edge(x_pos + 0.015, y_pos, 0.02,
                           x_shift + children_x_end.at(i-1) + children_x_middle_relative.at(i),
                           y_pos - y_offset, 0.02);
             }
             else
             {
-                updateTree(children[i], x_shift , y_pos - y_offset  , y_offset, depth + 1, tree->get_status() != BT::HALTED && color_node && color_child);
+                updateTree(children[i], x_shift , y_pos - y_offset  , y_offset, depth + 1, (tree->get_status() != BT::HALTED && tree->get_status() != BT::IDLE)  && color_node && color_child);
                 draw_edge(x_pos + 0.015, y_pos, 0.02,
                           x_shift + children_x_middle_relative.at(i), y_pos - y_offset, 0.02);
             }
