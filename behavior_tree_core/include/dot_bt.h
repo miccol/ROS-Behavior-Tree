@@ -25,6 +25,7 @@
 #include <ros/ros.h>
 #include <tree_node.h>
 #include <boost/algorithm/string.hpp>
+#include <vector>
 
 namespace BT
 {
@@ -165,7 +166,6 @@ private:
    * @brief The root of the Behavior Tree.
    */
   TreeNode* root_;
-
 
   /**
    * @brief Stores the name of the topic that DotBt::dotbt_publisher_ will publish.

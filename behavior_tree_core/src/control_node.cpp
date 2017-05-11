@@ -30,7 +30,7 @@ BT::ControlNode::~ControlNode() {}
 void BT::ControlNode::AddChild(TreeNode* child)
 {
     // Checking if the child is not already present
-    for (unsigned int i=0; i<children_nodes_.size(); i++)
+    for (unsigned int i = 0; i < children_nodes_.size(); i++)
     {
         if (children_nodes_[i] == child)
         {
@@ -80,8 +80,6 @@ void BT::ControlNode::HaltChildren(int i)
         {
             if (children_nodes_[j]->get_status() == BT::RUNNING)
             {
-
-
                 if (children_nodes_[j]->has_alias())
                 {
                     DEBUG_STDOUT("ALIAS FOR CHILD " << children_nodes_[j]-> get_name());
@@ -108,7 +106,6 @@ void BT::ControlNode::HaltChildren(int i)
                 DEBUG_STDOUT("SENDING HALT TO CHILD " << children_nodes_[j]-> get_name());
                 children_nodes_[j]->Halt();
                 }
-
             }
             else
             {
