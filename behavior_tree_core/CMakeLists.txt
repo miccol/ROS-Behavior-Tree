@@ -12,7 +12,6 @@ find_package(catkin REQUIRED COMPONENTS
   std_msgs
   roslaunch
   genmsg
-
 )
 
 

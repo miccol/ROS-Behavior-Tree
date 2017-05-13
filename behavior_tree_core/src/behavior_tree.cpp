@@ -22,6 +22,7 @@ void Execute(BT::ControlNode* root, int TickPeriod_milliseconds)
     std::cout << "Start Drawing!" << std::endl;
     // Starts in another thread the drawing of the BT
     std::thread t2(&drawTree, root);
+    t2.detach();
     BT::DotBt dotbt(root);
     std::thread t(&BT::DotBt::publish, dotbt);
 

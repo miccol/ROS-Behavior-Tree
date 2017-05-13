@@ -18,7 +18,7 @@ BT::TreeNode::TreeNode(std::string name) : tick_engine(0)
 {
     // Initialization
     name_ = name;
-    has_alias_ = false;
+    has_parent_ = false;
     is_state_updated_ = false;
     set_status(BT::IDLE);
 }
@@ -102,12 +102,12 @@ BT::NodeType BT::TreeNode::get_type()
     return type_;
 }
 
-bool BT::TreeNode::has_alias()
+bool BT::TreeNode::has_parent()
 {
-    return has_alias_;
+    return has_parent_;
 }
 
-void BT::TreeNode::set_has_alias(bool has_alias)
+void BT::TreeNode::set_has_parent(bool value)
 {
-    has_alias_ = has_alias;
+    has_parent_ = value;
 }

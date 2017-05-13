@@ -122,17 +122,16 @@ void DotBt::produceDot(TreeNode* node, TreeNode* parent, const std::string& pare
   // Create an alias for naming the DOT object.
   std::string alias = getAlias(node->get_name());
 
-  // Search if this alias exists (the nodes has the same names or the node has
-  // multiple parents. In this case change the alias in order to use a
+  // Search if this alias has . In this case change the alias in order to use a
   // different visualization instance for this case.
-  if (!multiple_parents_)
+
+
+  if (std::find(aliases_.begin(), aliases_.end(), alias) != aliases_.end())
   {
-    if (std::find(aliases_.begin(), aliases_.end(), alias) != aliases_.end())
-    {
-      alias += "x";
-    }
-    aliases_.push_back(alias);
+    alias += std::to_string(multiple_alias_solver_++);
   }
+    aliases_.push_back(alias);
+
 
   // Add the definition of this node
   dot_file_ += defineNodeDot(node, alias) + "\n";

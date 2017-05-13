@@ -105,7 +105,7 @@ class TreeNode
 private:
     // Node name
     std::string name_;
-    bool has_alias_;
+    bool has_parent_;
 
 
 
@@ -178,8 +178,8 @@ public:
     void set_name(std::string new_name);
 
     NodeType get_type();
-    bool has_alias();
-    void set_has_alias(bool has_alias);
+    bool has_parent();
+    void set_has_parent(bool value);
 };
 }  // namespace BT
 

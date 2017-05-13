@@ -11,7 +11,6 @@
 */
 
 
-
 #include <control_node.h>
 #include <string>
 #include <vector>
@@ -29,15 +28,14 @@ BT::ControlNode::~ControlNode() {}
 
 void BT::ControlNode::AddChild(TreeNode* child)
 {
-    // Checking if the child is not already present
-    for (unsigned int i = 0; i < children_nodes_.size(); i++)
-    {
-        if (children_nodes_[i] == child)
-        {
-            child->set_has_alias(true);
-        }
-    }
+    // Checking if the child has a parent already
 
+        if (child->has_parent())
+        {
+            throw BehaviorTreeException("'" + child->get_name() + " has a parent already. Please create different objects for multiple nodes. It makes the tinking/halting precedure easier.");
+        }
+
+    child->set_has_parent(true);
     children_nodes_.push_back(child);
     children_states_.push_back(BT::IDLE);
 }
@@ -80,37 +78,8 @@ void BT::ControlNode::HaltChildren(int i)
         {
             if (children_nodes_[j]->get_status() == BT::RUNNING)
             {
-                if (children_nodes_[j]->has_alias())
-                {
-                    DEBUG_STDOUT("ALIAS FOR CHILD " << children_nodes_[j]-> get_name());
-
-                    // cheking if I need to halt the child (has alias)
-                    unsigned int k;
-
-                    for (k = 0; k < j; k++)
-                    {
-                        DEBUG_STDOUT("CHECKING FOR ALIAS OF " << children_nodes_[j]-> get_name() << " AT " << k);
-
-                        if (children_nodes_[k] == children_nodes_[j] && children_nodes_[k]->get_status() == BT::HALTED  )
-                        {
-                            DEBUG_STDOUT("FOUND PREVIOUS ALIAS FOR " << children_nodes_[j]-> get_name());
-                            break;
-                        }
-                    }
-
-                    if (k == j)
-                    {
-                        DEBUG_STDOUT("NO PREVOUS ALIAS FOUND. NEED TO HALT FIRST ALIAS " << children_nodes_[j]-> get_name());
-                        children_nodes_[j]->Halt();
-                    }
-                }
-                else
-                {
-                    DEBUG_STDOUT("NO ALIAS FOR CHILD " << children_nodes_[j]-> get_name());
-
-                    DEBUG_STDOUT("SENDING HALT TO CHILD " << children_nodes_[j]-> get_name());
-                    children_nodes_[j]->Halt();
-                }
+                DEBUG_STDOUT("SENDING HALT TO CHILD " << children_nodes_[j]-> get_name());
+                children_nodes_[j]->Halt();
             }
             else
             {
@@ -135,4 +104,3 @@ int BT::ControlNode::Depth()
     }
     return 1 + depMax;
 }
-
