@@ -19,7 +19,7 @@ bibtex entry:
 `volume={33},` <br/>
 `number={2},` <br/>
 `pages={372-389},` <br/>
-`keywords={Computer architecture;Decision trees;High definition video;Robot control;Switches;Behavior trees (BTs);decision trees;finite state machines (FSMs);hybrid dynamical systems (HDSs);modularity;sequential behavior compositions;subsumption architecture}, ` <br\>
+`keywords={Computer architecture;Decision trees;High definition video;Robot control;Switches;Behavior trees (BTs);decision trees;finite state machines (FSMs);hybrid dynamical systems (HDSs);modularity;sequential behavior compositions;subsumption architecture}, ` <br/>
 `doi={10.1109/TRO.2016.2633567},` <br/>
 `ISSN={1552-3098},` <br/>
 `month={April},}`<br/>
