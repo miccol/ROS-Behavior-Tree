@@ -3,6 +3,12 @@ NEWS!
 The Preprint of our book titled "**Behavior Trees in Robotics and AI**" is available here: https://arxiv.org/abs/1709.00084
 
 
+NOTE:
+------
+The [YARP version](https://github.com/miccol/YARP-Behavior-Trees) of this library has a GUI as the following:
+![alt tag](https://github.com/miccol/YARP-Behavior-Trees/blob/master/YARPBTRun.JPG)
+
+
 ROS-Behavior-Tree ![License MIT](https://img.shields.io/dub/l/vibe-d.svg)
 ====
 ![Version](https://img.shields.io/badge/version-v1.3-orange.svg) <br/> 
