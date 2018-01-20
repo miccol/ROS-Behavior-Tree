@@ -45,6 +45,7 @@ void BT::ROSAction::WaitForTick()
         do
         {
             node_result = *(action_client_.getResult());  // checking the result
+            std::this_thread::sleep_for(std::chrono::milliseconds(10));
         }
         while (node_result.status == BT::RUNNING && get_status() != BT::HALTED);
 
