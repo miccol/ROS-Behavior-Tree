@@ -130,12 +130,15 @@ which the tree is published. The default topic is `/bt_dotcode`.
 ```
 rosrun rqt_dot rqt_dot
 ```
+NOTES
+-------
+In case you are puzzled about why a sequence (or fallback) node with 2 or more actions as children never get past the first action, see [this](https://github.com/miccol/ROS-Behavior-Tree/issues/16) discussion.
 
 LICENSE
 -------
 The MIT License (MIT)
 
-Copyright (c) 2014-2017 Michele Colledanchise
+Copyright (c) 2014-2018 Michele Colledanchise
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
