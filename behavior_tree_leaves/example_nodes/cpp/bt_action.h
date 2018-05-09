@@ -12,6 +12,8 @@
 #include <actionlib/server/simple_action_server.h>
 #include <behavior_tree_core/BTAction.h>
 
+#include <functional>   // std::bind
+
 enum Status {RUNNING, SUCCESS, FAILURE};  // BT return statuses
 
 class BTAction
@@ -32,7 +34,7 @@ public:
 };
 
 BTAction::BTAction(std::string name):
-        as_(name, boost::bind(&BTAction::execute_callback, this, _1), false),
+        as_(name, std::bind(&BTAction::execute_callback, this, _1), false),
         action_name_(name)
 {
     as_.start(); // Starts the action server
