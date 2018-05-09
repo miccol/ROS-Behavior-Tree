@@ -31,6 +31,7 @@ add_definitions(-Wall -lglut -lGL -std=c++0x)
 catkin_package(
   CATKIN_DEPENDS actionlib_msgs
   INCLUDE_DIRS include
+  LIBRARIES ${PROJECT_NAME}
 )
 
 
