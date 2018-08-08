@@ -4,7 +4,8 @@ NEWS!
 
 <img width="200" align="left" src="http://michelecolledanchise.com/wp-content/uploads/2018/05/btbook.jpg">
 
-Our book **Behavior Trees in Robotics and AI**, published by CRC Press Taylor & Francis, is available for purchase (ebook and hardcover) on the CRC Press Store or Amazon. The Preprint version (**free**) is available here: https://arxiv.org/abs/1709.00084
+Our book **Behavior Trees in Robotics and AI**, published by CRC Press Taylor & Francis, is available for purchase (ebook and hardcover) on the CRC Press Store or Amazon. The Preprint version (**free**) is available here: https://arxiv.org/abs/1709.00084<br><br>
+**Tutorials** available at https://btirai.github.io/
 
 
 
