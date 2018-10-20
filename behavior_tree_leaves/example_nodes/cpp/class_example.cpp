@@ -21,10 +21,11 @@ public:
 
     void execute_callback(const behavior_tree_core::BTGoalConstPtr &goal)
     {
-        if (start_condition)
-            set_status(SUCCESS);
-        else
-            set_status(FAILURE);
+        set_status(SUCCESS);
+        // if (start_condition)
+            // set_status(SUCCESS);
+        // else
+            // set_status(FAILURE);
     }
 };
 
