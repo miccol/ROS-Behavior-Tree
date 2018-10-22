@@ -22,12 +22,14 @@ int main(int argc, char **argv)
 
 
         BT::ROSAction* action = new BT::ROSAction("action");
+        BT::NegationNode* decorator = new BT::NegationNode("decorator");
         BT::ROSCondition* condition = new BT::ROSCondition("condition");
 
 
         BT:: SequenceNode* sequence1 = new BT::SequenceNode("seq1");
 
-        sequence1->AddChild(condition);
+        sequence1->AddChild(decorator);
+        decorator->AddChild(condition);
         sequence1->AddChild(action);
 
         Execute(sequence1, TickPeriod_milliseconds);  // from BehaviorTree.cpp

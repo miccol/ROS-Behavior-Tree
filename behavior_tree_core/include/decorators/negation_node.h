@@ -10,44 +10,23 @@
 *   WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-#ifndef BEHAVIOR_TREE_H
-#define BEHAVIOR_TREE_H
-
-
-
-
-
-#include <draw.h>
-
-#include <parallel_node.h>
-#include <fallback_node.h>
-#include <sequence_node.h>
+#ifndef NEGATION_NODE_H
+#define NEGATION_NODE_H
 
 #include <decorator_node.h>
-#include <decorators/negation_node.h>
-
-#include <sequence_node_with_memory.h>
-#include <fallback_node_with_memory.h>
-
-
-#include <actions/action_test_node.h>
-#include <conditions/condition_test_node.h>
-#include <actions/ros_action.h>
-#include <conditions/ros_condition.h>
-
-
-#include <exceptions.h>
-
 #include <string>
-#include <map>
 
-#include <typeinfo>
-#include <math.h>       /* pow */
+namespace BT
+{
+class NegationNode : public DecoratorNode
+{
+public:
+    // Constructor
+    explicit NegationNode(std::string name);
+    ~NegationNode();
+    BT::ReturnStatus Tick();
+    BT::ReturnStatus convert(BT::ReturnStatus input);
+};
+}  // namespace BT
 
-#include "ros/ros.h"
-#include "std_msgs/UInt8.h"
-
-void Execute(BT::ControlNode* root, int TickPeriod_milliseconds);
-
-
-#endif  // BEHAVIOR_TREE_H
+#endif  // NEGATION_NODE_H

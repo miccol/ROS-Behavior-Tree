@@ -74,6 +74,7 @@ src/action_node.cpp
 src/behavior_tree.cpp
 src/condition_node.cpp
 src/control_node.cpp
+src/decorators/negation_node.cpp
 #src/decorator_retry_node.cpp
 #src/decorator_negation_node.cpp
 src/draw.cpp
@@ -83,6 +84,7 @@ src/tick_engine.cpp
 src/parallel_node.cpp
 src/fallback_node.cpp
 src/sequence_node.cpp
+src/decorator_node.cpp
 src/fallback_node_with_memory.cpp
 src/sequence_node_with_memory.cpp
 src/tree_node.cpp
